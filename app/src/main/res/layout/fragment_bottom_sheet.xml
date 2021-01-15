@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:maxHeight="400dp"
+    android:minHeight="185dp"
+    android:background="@drawable/shape_bottom_sheet">
+
+<!--    设备显示列表-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+<!--    添加主控设备按钮-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:drawableLeft="@mipmap/ic_add_white"
+        android:drawableTint="@android:color/background_dark"
+        android:text="@string/add_device"
+        android:paddingLeft="10dp"
+        android:clickable="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/ripple_background"/>
+
+<!--    取消-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@android:string/cancel"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:background="@drawable/ripple_background"/>
+
+</LinearLayout>

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Smartwasp</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+
+    <string name="error_empty_data">数据为空</string>
+    <string name="error_empty_request">空请求</string>
+    <string name="error_request_cancel">请求取消</string>
+    <string name="error_net_connect">网络连接错误</string>
+    <string name="error_net_unknown">网络未知错误</string>
+    <string name="error_request">请求数据错误</string>
+    <string name="try_again">请重试</string>
+
+    <string name="tab_dialog">对话</string>
+    <string name="tab_find">发现</string>
+    <string name="tab_skill">技能</string>
+    <string name="tab_home">家居</string>
+    <string name="tab_mall">商城</string>
+    <string name="tab_mime">我的</string>
+    <string name="title_login">小黄蜂登录</string>
+    <string name="add_device">添加主控设备</string>
+    <string name="scan_device">扫码添加</string>
+    <string name="words1">小黄蜂智能音箱</string>
+    <string name="words2">带你进入全新世界</string>
+    <string name="camera_per">扫码需要摄像头权限</string>
+    <string name="exit_again">再按一次退出</string>
+    <string name="tip_device">设备信息</string>
+    <string name="tip_zone">设备位置</string>
+    <string name="tip_music">音乐畅听</string>
+    <string name="tip_music_enabled">已开通</string>
+    <string name="tip_music_disEnabled">未开通</string>
+    <string name="keep_wake_up_tip">持续交互</string>
+    <string name="keep_wake_up">在一次唤醒后,可以保持一段时间内无需唤醒便可以直接与设备交互,交互跟自然</string>
+    <string name="unBind">解除绑定</string>
+    <string name="page_tip"></string>
+
+</resources>

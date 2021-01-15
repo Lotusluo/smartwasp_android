@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="tittle" type="String" />
+        <variable name="rightIcon" type="android.graphics.drawable.Drawable" />
+        <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <!--    视图容器-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<!--        toobar-->
+        <include
+            android:id="@+id/toolbar"
+            app:tittle="@{tittle}"
+            app:rightIcon="@{rightIcon}"
+            app:leftIcon="@{leftIcon}"
+            app:onclickListener="@{onclickListener}"
+            layout="@layout/layout_toolbar" />
+
+<!--        容器-->
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

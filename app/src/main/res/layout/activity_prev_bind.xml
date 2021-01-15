@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="tittle" type="String" />
+        <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/smartwasp_white"
+        tools:context=".activity.PrevBindActivity">
+
+<!--        toobar-->
+        <include
+            android:id="@+id/toolbar"
+            app:tittle="@{tittle}"
+            app:leftIcon="@{leftIcon}"
+            app:onclickListener="@{onclickListener}"
+            layout="@layout/layout_toolbar" />
+
+<!--        开始扫码-->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/scanBtn"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/shape_mask_bg_radius10"
+            android:onClick="@{onclickListener}"
+            android:text="@string/scan_device"
+            android:textColor="@color/smartwasp_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!--设备显示页-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@id/scanBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/smartwasp_blue"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#FFF"/>
+                
+            </LinearLayout>
+
+            <com.smartwasp.assistant.app.widget.BezelImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/smartwasp_logo"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                app:maskDrawable="@drawable/shape_mask_bg_radius10"/>
+
+            <com.smartwasp.assistant.app.widget.BezelImageView
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:src="@mipmap/ic_sound_box"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                app:maskDrawable="@drawable/shape_mask_bg_radius20"/>
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@string/words1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/smartwasp_blue"
+                android:layout_marginBottom="40dp"
+                android:layout_gravity="center_horizontal|bottom"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@string/words2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/dark_light"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center_horizontal|bottom"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

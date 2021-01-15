@@ -1,0 +1,17 @@
+<resources>
+
+<!--    圆角矩形图样式-->
+    <declare-styleable name="BezelImageView">
+        <attr name="maskDrawable" format="reference" />
+        <attr name="borderDrawable" format="reference" />
+    </declare-styleable>
+
+    <!-- 公共Toolbar高度属性-->
+    <attr name="toolbarSize" format="dimension"/>
+    <!-- 公共TabBar高度属性-->
+    <attr name="tabbarSize" format="dimension"/>
+    <!-- 公共Toolbar标题大小-->
+    <attr name="toolbarTitleSize" format="dimension"/>
+    <!-- 公共Toolbar背景颜色-->
+    <attr name="toolbarColor" format="color"/>
+</resources>
