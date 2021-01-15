@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="deviceBean"
+            type="com.smartwasp.assistant.app.bean.DeviceBean" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+        <import type="android.view.View" alias="View"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/toolbar1"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/toolbarSize"
+        android:background="?attr/toolbarColor"
+        android:gravity="center_vertical">
+
+        <!--            设备状态图标-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/icon_device_status"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="20dp"
+            android:visibility="@{deviceBean==null?View.GONE:View.VISIBLE}"
+            android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
+            android:backgroundTint="@color/device_status_color"/>
+
+        <!--            设备名称-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:text="@{deviceBean.alias}"
+            android:textSize="16sp"
+            android:padding="4dp"
+            android:visibility="@{deviceBean==null?View.GONE:View.VISIBLE}"
+            android:drawableRight="@mipmap/ic_triangle_down"
+            android:textColor="#000"
+            android:clickable="true"
+            android:onClick="@{onclickListener}"
+            android:background="@drawable/ripple_background_transparent"/>
+
+        <!--            请添加设备-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/device_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:padding="4dp"
+            android:textSize="16sp"
+            android:visibility="@{deviceBean==null?View.VISIBLE:View.GONE}"
+            android:text="@string/add_device1"
+            android:textColor="@color/smartwasp_blue"
+            android:clickable="true"
+            android:onClick="@{onclickListener}"
+            android:background="@drawable/ripple_background_transparent"/>
+
+    </LinearLayout>
+
+</layout>

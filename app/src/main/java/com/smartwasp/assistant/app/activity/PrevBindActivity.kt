@@ -49,7 +49,7 @@ class PrevBindActivity : BaseActivity<PrevBindModel,ActivityPrevBindBinding>() {
         //请求绑定成功
         if(requestCode == REQUEST_BIND_RESULT_CODE && resultCode == Activity.RESULT_OK){
             //开始设置绑定的设备
-            SmartApp.NEED_MINE_REFRESH_DEVICES = true
+            SmartApp.NEED_MAIN_REFRESH_DEVICES = true
             finish()
             return
         }

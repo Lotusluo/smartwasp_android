@@ -28,7 +28,6 @@
         <!-- 快速启动页 -->
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

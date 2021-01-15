@@ -29,15 +29,16 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
     override val layoutResID: Int = R.layout.activity_web_view
 
     //webView类型
-    private var mType:String? = null;
+    private var mType:String? = null
+
+    //注册的webView
+    private var webViewTag:String? = null
 
     /**
      * 讯飞交互页Activity
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= 23)
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         webview.settings.javaScriptEnabled = true
         webview.settings.blockNetworkImage = false
         webview.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
@@ -45,7 +46,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
         //检测是否直接有跳转的tag
         val webTag = intent.getStringExtra(IFLYOS.EXTRA_TAG)
         //注册registerWebView与openWebPage是在View中使用IFlyHomeSDK的地方，其余均在VM中
-        val webViewTag = IFlyHome.register(webview, object : IFlyHomeCallback() {
+        webViewTag = IFlyHome.register(webview, object : IFlyHomeCallback() {
             override fun updateHeaderColor(color: String) {
                 onUpdateHeader(color)
             }
@@ -56,7 +57,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
              * 页面中需要打开新页面时回调
              */
             override fun openNewPage(tag: String, params: String?) {
-                Logger.e("openNewPage:$tag,$params")
+                Logger.d("openNewPage:$tag,$params")
             }
             override fun closePage() { finish() }
             override fun getWebViewClient(): WebViewClient? {
@@ -93,7 +94,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
 
             //准备跳转到讯飞集成页
             if(!mayBePage.isNullOrEmpty()){
-                readyToDefault(mayBePage,type!!,webViewTag,mayBeDeviceID)
+                readyToDefault(mayBePage,type!!,webViewTag!!,mayBeDeviceID)
                 return
             }
         }
@@ -168,6 +169,26 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
      */
     override fun onToolbarIconClick(v:View){
 
+    }
+
+    /**
+     * 恢复
+     */
+    override fun onResume() {
+        super.onResume()
+        webViewTag?.let {
+            IFlyHome.resumeWebView(it)
+        }
+    }
+
+    /**
+     * 暂停
+     */
+    override fun onPause() {
+        super.onPause()
+        webViewTag?.let {
+            IFlyHome.pauseWebView(it)
+        }
     }
 
     /**

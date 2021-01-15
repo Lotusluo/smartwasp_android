@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Smartwasp" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/smartwasp_blue</item>
         <item name="colorPrimaryVariant">@android:color/background_light</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -41,6 +41,11 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- 底层弹出框样式 -->
+    <style name="CommonWindowStyle.BottomSheet">
+        <item name="android:backgroundDimAmount">.4</item>
     </style>
 
 <!--    tabbar字体样式-->

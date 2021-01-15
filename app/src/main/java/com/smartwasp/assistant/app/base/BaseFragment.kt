@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -102,6 +103,35 @@ abstract class BaseFragment<
         return mBinding.root
     }
 
+    /**
+     * 设置标题
+     * @param tittle 标题字符串
+     */
+    fun setTittle(tittle:String){
+        mBinding.setVariable(BR.tittle,tittle)
+    }
+
+    /**
+     * 设置右侧按钮图标
+     * @param resID 资源ID
+     * @param position 图标位置
+     * @param tiny 渲染样式
+     */
+    fun setToolBarIcon(resID:Int,position:Int = 1,tiny:Int = 0){
+        val icon = if(resID > 0) resources.getDrawable(resID) else null
+        if(tiny > 0 && null != icon){
+            DrawableCompat.setTint(icon,tiny)
+        }
+        when(position){
+            1->{
+                mBinding.setVariable(BR.leftIcon,icon)
+            }
+            2->{
+                mBinding.setVariable(BR.rightIcon,icon)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d("onCreate")
@@ -130,8 +160,11 @@ abstract class BaseFragment<
      */
     final override fun onClick(v: View){
         when(v.id){
-            R.id.toolbar_right_icon ->{
-            }else ->{
+            R.id.toolbar_right_icon,
+            R.id.toolbar_left_icon ->{
+                onToolbarIconClick(v)
+            }
+            else ->{
                 onButtonClick(v)
             }
         }
@@ -142,6 +175,26 @@ abstract class BaseFragment<
      */
     open fun onButtonClick(v: View){
 
+    }
+
+    /**
+     * 右侧按钮点击
+     */
+    open fun onToolbarIconClick(v: View){
+        when(v.id){
+            R.id.toolbar_left_icon->{
+                if(!interceptLeftButton()){
+                    Logger.e("fragment back!")
+                }
+            }
+        }
+    }
+
+    /**
+     * 是否拦截左侧按钮
+     */
+    open fun interceptLeftButton():Boolean{
+        return false
     }
 
     /**

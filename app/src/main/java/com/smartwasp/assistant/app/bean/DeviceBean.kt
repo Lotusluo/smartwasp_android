@@ -60,4 +60,14 @@ data class DeviceBean(var alias:String = "",
         this.zone = deviceInfoBean.zone
         this.status = deviceInfoBean.status
     }
+
+    /**
+     * 判定两个对象是否相等
+     * @param other 比较对象
+     */
+    override fun equals(other: Any?): Boolean {
+        other ?: return false
+        if(other !is DeviceBean) return false
+        return other.device_id == other.device_id
+    }
 }

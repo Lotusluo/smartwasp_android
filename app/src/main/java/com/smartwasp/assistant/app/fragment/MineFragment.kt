@@ -2,6 +2,7 @@ package com.smartwasp.assistant.app.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.DeviceSetActivity
 import com.smartwasp.assistant.app.activity.PrevBindActivity
-import com.smartwasp.assistant.app.base.BaseFragment
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.test.BindDevices
@@ -31,7 +32,7 @@ import kotlinx.android.synthetic.main.fragment_mine.*
  * Created by luotao on 2021/1/11 15:44
  * E-Mail Address：gtkrockets@163.com
  */
-class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBinding>() {
+class MineFragment private constructor():MainChildFragment<MineModel,FragmentMineBinding>() {
     companion object{
         fun newsInstance():MineFragment{
             return MineFragment()
@@ -42,32 +43,21 @@ class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBind
     override val layoutResID:Int = R.layout.fragment_mine
 
     /**
-     * 获取绑定的设备
+     * 通知绑定的设备的改变
      */
-    @SuppressLint("FragmentLiveDataObserve")
-    private fun getBindDevices(){
-        val flag = LoadingUtil.create(requireActivity() as AppCompatActivity,null)
-        mViewModel.cancelAskDevStatus(this)
-        mViewModel.getBindDevices().observe(this, Observer {
-            LoadingUtil.dismiss(flag)
-            SmartApp.NEED_MINE_REFRESH_DEVICES = false
-            if(it.isSuccess){
-                onRenderBindDevices(it.getOrNull())
-            }else{
-                //todo 获取该账号绑定的设备失败
-                //暂时默认没有设备
-                onRenderBindDevices(null)
-            }
-        })
+    fun notifyDeviceChanged(){
+        onRenderBindDevices(bindDevices)
     }
 
     /**
      * 渲染绑定的设备
      */
     private fun onRenderBindDevices(devices: BindDevices?) {
+        mViewModel.cancelAskDevStatus(this)
         mPosition = 0
-        val deviceBeans:MutableList<DeviceBean> = devices?.user_devices ?: kotlin.run {
-            ArrayList<DeviceBean>()
+        val deviceBeans:MutableList<DeviceBean> =  ArrayList()
+        devices?.user_devices?.let {
+            deviceBeans.addAll(it)
         }
         deviceBeans.add(0,DeviceBean())
         banner.adapter = object : BannerAdapter<DeviceBean,DeviceViewHolder>(deviceBeans){
@@ -94,7 +84,7 @@ class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBind
         banner.addBannerLifecycleObserver(this)
         banner.currentItem = 1
         if(deviceBeans.size > 1){
-            banner.currentItem = 2
+            banner.currentItem = deviceBeans.indexOf(currentDevice)
             mPosition = 1
             askDeviceStatus()
         }
@@ -136,7 +126,8 @@ class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBind
         val deviceBean = adapter.getData(deviceInfoBean.position) as DeviceBean
         deviceBean.copyFromDeviceInfo(deviceInfoBean)
         //todo Cannot call this method in a scroll callback. Scroll callbacks mightbe run during a measure & layout pass where you cannot change theRecyclerView data. Any method call that might change the structureof the RecyclerView or the adapter contents should be postponed tothe next frame.
-        adapter.notifyItemChanged(deviceBean.position + 1)
+//        adapter.notifyItemChanged(deviceBean.position + 1)
+        adapter.notifyDataSetChanged()
     }
 
     /**
@@ -160,11 +151,8 @@ class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBind
      */
     override fun onResume() {
         super.onResume()
-        if(SmartApp.NEED_MINE_REFRESH_DEVICES){
-            getBindDevices()
-        }else{
-            askDeviceStatus()
-        }
+        askDeviceStatus()
+        SmartApp.DOS_MINE_FRAGMENT_SHOWN = true
     }
 
     /**
@@ -172,7 +160,21 @@ class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBind
      */
     override fun onStop() {
         super.onStop()
+//        不可见的时候取消轮询设备是否在线
         mViewModel.cancelAskDevStatus(this)
+        SmartApp.DOS_MINE_FRAGMENT_SHOWN = false
+    }
+
+    /**
+     *加载设备视图数据
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.post {
+            setToolBarIcon(R.mipmap.ic_user_edit,1)
+            setTittle(getString(R.string.tab_mime))
+            notifyDeviceChanged()
+        }
     }
 
     /**
@@ -180,14 +182,13 @@ class MineFragment private constructor():BaseFragment<MineModel,FragmentMineBind
      */
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
+        SmartApp.DOS_MINE_FRAGMENT_SHOWN = !hidden
         if(hidden){
+//        不可见的时候取消轮询设备是否在线
             mViewModel.cancelAskDevStatus(this)
         }else{
-            if(SmartApp.NEED_MINE_REFRESH_DEVICES){
-                getBindDevices()
-            }else{
-                askDeviceStatus()
-            }
+//            呈现的时候轮询设备是否在线
+            askDeviceStatus()
         }
     }
 

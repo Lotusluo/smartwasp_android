@@ -2,6 +2,7 @@ package com.smartwasp.assistant.app.base
 
 import android.app.ActivityManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -45,6 +46,8 @@ abstract class BaseActivity<
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 23)
+            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         layoutResID?.let {
             setContentView(it)
@@ -196,7 +199,6 @@ abstract class BaseActivity<
                 mBinding.setVariable(BR.rightIcon,icon)
             }
         }
-
     }
 
     /**
@@ -218,7 +220,19 @@ abstract class BaseActivity<
      * 右侧按钮点击
      */
     open fun onToolbarIconClick(v: View){
+        when(v.id){
+            R.id.toolbar_left_icon->{
+                if(!interceptLeftButton())
+                    finish()
+            }
+        }
+    }
 
+    /**
+     * 是否拦截左侧按钮
+     */
+    open fun interceptLeftButton():Boolean{
+        return false
     }
 
     /**

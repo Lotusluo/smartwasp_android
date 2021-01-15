@@ -10,6 +10,7 @@ import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.ResponseCallback
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
+import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.test.BindDevices
 import com.smartwasp.assistant.app.util.AppExecutors
@@ -35,7 +36,7 @@ open class AskDeviceModel(application: Application):BaseViewModel(application) {
      * @param device 设备信息
      * @param delayInSeconds 轮询时间
      */
-    fun askDevStatus(device:DeviceBean,delayInSeconds:Long = 10):MutableLiveData<Result<DeviceBean>>?{
+    fun askDevStatus(device:DeviceBean,delayInSeconds:Long = 20):MutableLiveData<Result<DeviceBean>>?{
         cancelAskDevStatus()
         if(device.isHeader())
             return null
@@ -60,9 +61,14 @@ open class AskDeviceModel(application: Application):BaseViewModel(application) {
      * 询问设备状态动作
      */
     private var askDevStatusJob = Runnable {
-        askDevStatus(mDevice!!)
+        mDevice?.let {
+            askDevStatus(it)
+        }
         if(isAskingDeferred)
             return@Runnable
+        if(this is MainViewModel && SmartApp.DOS_MINE_FRAGMENT_SHOWN)
+           return@Runnable
+        Logger.e("askDevStatusJob:${this}")
         isAskingDeferred = true
         IFlyHome.getDeviceDetail(mDevice!!.device_id,object :ResponseCallback{
             override fun onFailure(call: Call<String>, t: Throwable) {

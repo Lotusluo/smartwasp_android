@@ -22,26 +22,5 @@ import retrofit2.Response
  * E-Mail Address：gtkrockets@163.com
  */
 class MineModel(application: Application):AskDeviceModel(application) {
-    /**
-     * 获取账号绑定的设备(第一个为添加设备)
-     */
-    fun getBindDevices():LiveData<Result<BindDevices>> {
-        //todo 全部使用IFlyHome处理result
-        val bindDevicesData = MutableLiveData<Result<BindDevices>>()
-        IFlyHome.getUserDevices(object : ResponseCallback {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                bindDevicesData.postValue(Result.failure(Throwable("Err")))
-            }
 
-            override fun onResponse(response: Response<String>) {
-                if (response.isSuccessful) {
-                    val deviceBeans = Gson().fromJson<BindDevices>(response.body(), object : TypeToken<BindDevices>() {}.type)
-                    bindDevicesData.postValue(Result.success(deviceBeans))
-                } else {
-                    bindDevicesData.postValue(Result.failure(Throwable("empty")))
-                }
-            }
-        })
-        return bindDevicesData
-    }
 }

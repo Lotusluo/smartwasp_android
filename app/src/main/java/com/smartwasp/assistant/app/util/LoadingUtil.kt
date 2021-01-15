@@ -15,7 +15,6 @@ import java.util.*
 object LoadingUtil {
 
     private var loading:AlertDialog? = null
-    private var flag:Int = 0
 
     /**
      * 创建一个全局的加载显示控件
@@ -24,14 +23,8 @@ object LoadingUtil {
      * @param cancelable 是否能够取消
      * @return 返回对话框码
      */
-    fun create(activity:AppCompatActivity,cancelListener:(()->Unit)? = null,cancelable:Boolean = false,forceCloseable: Boolean = true):Int{
-        loading?.let {
-            if(forceCloseable){
-                it.dismiss()
-            }else{
-                return 0
-            }
-        }
+    fun create(activity:AppCompatActivity,cancelListener:(()->Unit)? = null,cancelable:Boolean = false){
+        dismiss()
         val mLoading = AlertDialog
                 .Builder(activity,R.style.CommonWindowStyle)
                 .setView(R.layout.layout_loading)
@@ -39,26 +32,18 @@ object LoadingUtil {
                 .create()
         mLoading.show()
         mLoading.setOnCancelListener {
-            dismiss(flag)
+            dismiss()
             cancelListener?.let { it() }
         }
         loading = mLoading
-        flag = UUID.randomUUID().hashCode()
-        return flag
+//        flag = UUID.randomUUID().hashCode()
     }
 
     /**
      * 销毁加载框
-     * @param _flag 产生的对话框码
      */
-    fun dismiss(_flag:Int = 0){
+    fun dismiss(){
         loading?.let {
-            if(_flag == 0){
-                flag = 0
-            }else{
-                if(_flag != flag)
-                    return
-            }
             it.dismiss()
         }
     }

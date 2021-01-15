@@ -55,7 +55,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public class Banner<T, BA extends BannerAdapter> extends FrameLayout implements BannerLifecycleObserver {
     public static final int INVALID_VALUE = -1;
     private ViewPager2 mViewPager2;
-//    private AutoLoopTask mLoopTask;
+    private AutoLoopTask mLoopTask;
     private OnPageChangeListener mOnPageChangeListener;
     private BA mAdapter;
     private Indicator mIndicator;
@@ -129,7 +129,7 @@ public class Banner<T, BA extends BannerAdapter> extends FrameLayout implements 
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop() / 2;
         mCompositePageTransformer = new CompositePageTransformer();
         mPageChangeCallback = new BannerOnPageChangeCallback();
-//        mLoopTask = new AutoLoopTask(this);
+        mLoopTask = new AutoLoopTask(this);
         mViewPager2 = new ViewPager2(context);
         mViewPager2.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mViewPager2.setOffscreenPageLimit(1);
@@ -407,7 +407,7 @@ public class Banner<T, BA extends BannerAdapter> extends FrameLayout implements 
                 }
                 int next = (banner.getCurrentItem() + 1) % count;
                 banner.setCurrentItem(next);
-//                banner.postDelayed(banner.mLoopTask, banner.mLoopTime);
+                banner.postDelayed(banner.mLoopTask, banner.mLoopTime);
             }
         }
     }
@@ -650,10 +650,10 @@ public class Banner<T, BA extends BannerAdapter> extends FrameLayout implements 
      * 开始轮播
      */
     public Banner start() {
-//        if (mIsAutoLoop) {
-//            stop();
-//            postDelayed(mLoopTask, mLoopTime);
-//        }
+        if (mIsAutoLoop) {
+            stop();
+            postDelayed(mLoopTask, mLoopTime);
+        }
         return this;
     }
 
@@ -661,9 +661,9 @@ public class Banner<T, BA extends BannerAdapter> extends FrameLayout implements 
      * 停止轮播
      */
     public Banner stop() {
-//        if (mIsAutoLoop) {
-//            removeCallbacks(mLoopTask);
-//        }
+        if (mIsAutoLoop) {
+            removeCallbacks(mLoopTask);
+        }
         return this;
     }
 

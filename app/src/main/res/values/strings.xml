@@ -29,6 +29,7 @@
     <string name="tab_mime">我的</string>
     <string name="title_login">小黄蜂登录</string>
     <string name="add_device">添加主控设备</string>
+    <string name="add_device1">请添加设备</string>
     <string name="scan_device">扫码添加</string>
     <string name="words1">小黄蜂智能音箱</string>
     <string name="words2">带你进入全新世界</string>
@@ -42,6 +43,8 @@
     <string name="keep_wake_up_tip">持续交互</string>
     <string name="keep_wake_up">在一次唤醒后,可以保持一段时间内无需唤醒便可以直接与设备交互,交互跟自然</string>
     <string name="unBind">解除绑定</string>
+    <string name="unBindTip">是否解除绑定?</string>
+    <string name="tip">提示</string>
     <string name="page_tip"></string>
 
 </resources>

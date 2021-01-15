@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.iflytek.home.sdk.IFlyHome
 import com.smartwasp.assistant.app.BR
@@ -49,12 +50,15 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
         refresh()
     }
 
+    /**
+     * 是否刷新数据
+     */
     private fun refresh(){
         if(SmartApp.NEED_REFRESH_DEVICES_DETAIL){
             intent.getStringExtra(IFLYOS.DEVICE_ID)?.let {
-                SmartApp.NEED_REFRESH_DEVICES_DETAIL = false
                 LoadingUtil.create(this,null)
                 mViewModel.askDevStatus(it).observe(this, Observer {result->
+                    SmartApp.NEED_REFRESH_DEVICES_DETAIL = false
                     LoadingUtil.dismiss()
                     if(result.isSuccess){
                         deviceBean = result.getOrNull()?.apply {
@@ -108,6 +112,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                 when(result){
                     IFLYOS.OK->{
                         SmartApp.NEED_REFRESH_DEVICES_DETAIL = true
+                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
                         refresh()
                     }
                     IFLYOS.ERROR->{
@@ -127,6 +132,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                 //修改设备位置
                 deviceBean?.let {
                     SmartApp.NEED_REFRESH_DEVICES_DETAIL = true
+                    SmartApp.NEED_MAIN_REFRESH_DEVICES = true
                     startActivity(Intent(this@DeviceSetActivity,WebViewActivity::class.java).apply {
                         putExtra(IFLYOS.EXTRA_PAGE, IFlyHome.DEVICE_ZONE)
                         putExtra(IFLYOS.EXTRA_TYPE,IFLYOS.TYPE_PAGE)
@@ -145,22 +151,30 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
             }
             R.id.unBindBtn->{
                 //解除绑定
-                LoadingUtil.create(this,null)
-                intent.getStringExtra(IFLYOS.DEVICE_ID)?.let {
-                    LoadingUtil.create(this,null)
-                    mViewModel.unBind(it).observe(this, Observer {result->
-                        LoadingUtil.dismiss()
-                        when(result){
-                            IFLYOS.OK->{
-                                SmartApp.NEED_MINE_REFRESH_DEVICES = true
-                                finish()
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.tip)
+                        .setMessage(R.string.unBindTip)
+                        .setNegativeButton(android.R.string.cancel,null)
+                        .setPositiveButton(android.R.string.ok){_,_->
+                            LoadingUtil.create(this,null)
+                            intent.getStringExtra(IFLYOS.DEVICE_ID)?.let {
+                                LoadingUtil.create(this,null)
+                                mViewModel.unBind(it).observe(this, Observer {result->
+                                    LoadingUtil.dismiss()
+                                    when(result){
+                                        IFLYOS.OK->{
+                                            SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+                                            finish()
+                                        }
+                                        IFLYOS.ERROR->{
+                                            LoadingUtil.showToast(this,getString(R.string.try_again))
+                                        }
+                                    }
+                                })
                             }
-                            IFLYOS.ERROR->{
-                                LoadingUtil.showToast(this,getString(R.string.try_again))
-                            }
+
                         }
-                    })
-                }
+                        .show()
             }
         }
     }

@@ -34,12 +34,12 @@ class SmartApp : Application() {
             Process.killProcess(Process.myPid())
             exitProcess(cmd)
         }
-        //我的页面是否需要刷新绑定的设备
-        var NEED_MINE_REFRESH_DEVICES:Boolean = true
         //首页是否需要刷新绑定的设备
         var NEED_MAIN_REFRESH_DEVICES:Boolean = true
         //是否需要刷新绑定的设备的详细信息
         var NEED_REFRESH_DEVICES_DETAIL:Boolean = true
+        //“我的页面”是否呈交互态
+        var DOS_MINE_FRAGMENT_SHOWN:Boolean = false
     }
 
     /**

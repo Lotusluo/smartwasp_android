@@ -1,6 +1,5 @@
 package com.smartwasp.assistant.app.fragment
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.test.BindDevices
-import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBinding
 import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBottomBinding
 import com.smartwasp.assistant.app.util.IFLYOS
 import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
@@ -36,16 +34,12 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
-    }
-
     /**
      * 生成
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.CommonWindowStyle)
+        setStyle(STYLE_NO_FRAME, R.style.CommonWindowStyle_BottomSheet)
     }
 
     /**
@@ -61,6 +55,14 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onRenderDevices()
+        sheet_cancel_btn.setOnClickListener {
+            dismissAllowingStateLoss()
+        }
+        //todo 临时写法
+        sheet_device_add.setOnClickListener {
+            (activity as? MainActivity?)?.onButtonClick(it)
+            dismissAllowingStateLoss()
+        }
     }
 
     /**
@@ -99,7 +101,7 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
     /**
      * 重新定位
      */
-    fun resize(){
+    private fun resize(){
         (dialog as? BottomSheetDialog?)?.let {
             val bottomSheet = it.delegate.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             bottomSheet?.layoutParams?.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -129,7 +131,9 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
             itemViewBinding = DataBindingUtil.bind(itemView)
             itemViewBinding?.deviceBean = null
             itemView.setOnClickListener {
-                Logger.e(deviceBean.device_id)
+                it.setTag(R.id.extra_device,deviceBean)
+                (activity as MainActivity?)?.onButtonClick(it)
+                dismissAllowingStateLoss()
             }
         }
         fun invalidate(data: DeviceBean){
@@ -139,6 +143,10 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
                 it.deviceBean = data
                 it.deviceName.isSelected = data.isOnline()
                 it.iconDeviceStatus.isSelected = data.isOnline()
+                it.deviceSelected.visibility = View.VISIBLE
+                (activity as? MainActivity)?.currentDevice?.let {cur->
+                    it.deviceSelected.visibility  = if(deviceBean == cur) View.VISIBLE else View.GONE
+                }
             }
         }
     }

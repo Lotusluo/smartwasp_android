@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="deviceBean"
+            type="com.smartwasp.assistant.app.bean.DeviceBean" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+        <import type="android.view.View" alias="View"/>
+    </data>
+
+<!--    视图容器-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include
+            android:id="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:onclickListener="@{onclickListener}"
+            app:deviceBean="@{deviceBean}"
+            layout="@layout/layout_device_header"/>
+
+<!--        浏览器-->
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

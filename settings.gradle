@@ -1,1 +1,1 @@
-include ':app', ':zxing-core', ':banner', ':switchButton'
+include ':app', ':zxing-core', ':banner', ':switchButton', ':blurredview'

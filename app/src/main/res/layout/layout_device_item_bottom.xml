@@ -19,7 +19,9 @@
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="50dp"
-       android:gravity="center_vertical">
+       android:gravity="center_vertical"
+       android:clickable="true"
+       android:background="@drawable/ripple_background_smartwasp_white">
 
        <!--            设备状态图标-->
        <androidx.appcompat.widget.AppCompatTextView
@@ -39,14 +41,19 @@
            android:id="@+id/device_name"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:drawableRight="@mipmap/ic_choose"
-           android:drawableTint="@color/smartwasp_blue"
-           android:drawablePadding="10dp"
-           android:ellipsize="end"
-           android:text="@{deviceBean.name}"
-           android:layout_marginEnd="10dp"
+           android:text="@{deviceBean.alias}"
            android:textSize="16sp"
            android:textColor="@color/device_text_color" />
+
+<!--       勾选框-->
+       <androidx.appcompat.widget.AppCompatTextView
+           android:id="@+id/device_selected"
+           android:background="@mipmap/ic_choose"
+           android:backgroundTint="@color/smartwasp_blue"
+           android:layout_marginLeft="10dp"
+           android:visibility="gone"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"/>
 
        <!--        设备状态-->
        <androidx.appcompat.widget.AppCompatTextView
