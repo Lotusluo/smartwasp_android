@@ -85,9 +85,9 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                     }
                     it.startsWith(IFLYOS.ERROR) -> {
                         //todo 登录失败
-                        Logger.d("login error!")
+                        Logger.e("login error!")
                     }
-                    it.startsWith(IFLYOS.EXTRA_TAG) -> {
+                    it.startsWith(IFLYOS.EXTRA) -> {
                         //需要跳转讯飞交互页
                         val tag = it.substring(IFLYOS.EXTRA.length + 1)
                         startActivity(Intent(this@MainActivity,WebViewActivity::class.java).apply {
@@ -202,10 +202,12 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      */
     override fun onResume() {
         super.onResume()
-        if(SmartApp.NEED_MAIN_REFRESH_DEVICES){
-            askBindDevices()
-        }else{
-            askDeviceStatus()
+        SmartApp.userBean?.let {
+            if(SmartApp.NEED_MAIN_REFRESH_DEVICES){
+                askBindDevices()
+            }else{
+                askDeviceStatus()
+            }
         }
     }
 
@@ -214,7 +216,9 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      */
     override fun onStop() {
         super.onStop()
-        mViewModel.cancelAskDevStatus(this)
+        SmartApp.userBean?.let {
+            mViewModel.cancelAskDevStatus(this)
+        }
     }
 
     /**

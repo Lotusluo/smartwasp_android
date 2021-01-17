@@ -70,17 +70,17 @@ class DialogFragment private constructor():MainChildFragment<DialogModel,Fragmen
      * @param deviceID 设备ID
      */
     fun notifyOpenDialog(){
-        currentDevice?.let {
-            webViewTag?.let {webView->
-                val params = HashMap<String, String>()
-                params["deviceId"] = it.device_id
-                IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
-            }
-            webview.visibility = View.VISIBLE
-        }?: kotlin.run {
-            //todo 没有deviceID
-            webview.visibility = View.GONE
-        }
+//        currentDevice?.let {
+//            webViewTag?.let {webView->
+//                val params = HashMap<String, String>()
+//                params["deviceId"] = it.device_id
+//                IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
+//            }
+//            webview.visibility = View.VISIBLE
+//        }?: kotlin.run {
+//            //todo 没有deviceID
+//            webview.visibility = View.GONE
+//        }
     }
 
     /**

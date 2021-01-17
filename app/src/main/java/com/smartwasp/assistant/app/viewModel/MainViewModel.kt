@@ -100,7 +100,7 @@ class MainViewModel(application: Application):AskDeviceModel(application) {
     fun getBindDevices():LiveData<Result<BindDevices>>{
         //todo 全部使用IFlyHome处理result
         val bindDevicesData = MutableLiveData<Result<BindDevices>>()
-        IFlyHome.getUserDevices(object :ResponseCallback{
+        val result = IFlyHome.getUserDevices(object :ResponseCallback{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 bindDevicesData.postValue(Result.failure(Throwable("Err")))
             }

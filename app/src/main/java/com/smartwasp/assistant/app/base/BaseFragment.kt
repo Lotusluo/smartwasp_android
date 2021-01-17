@@ -2,10 +2,12 @@ package com.smartwasp.assistant.app.base
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -139,6 +141,26 @@ abstract class BaseFragment<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            requireView().setOnApplyWindowInsetsListener { _, insets ->
+                //状态栏
+                val statusBars = insets.getInsets(WindowInsets.Type.statusBars())
+                requireView().findViewById<View>(R.id.topInset)?.let {
+                    it.layoutParams.height = statusBars.bottom - statusBars.top
+                }
+                //导航栏
+                val navigationBars = insets.getInsets(WindowInsets.Type.navigationBars())
+                //键盘
+                val ime = insets.getInsets(WindowInsets.Type.ime())
+                insets
+            }
+        }else{
+            val resource = requireActivity().resources
+            val resourceId = resource.getIdentifier("status_bar_height","dimen", "android")
+            requireView().findViewById<View>(R.id.topInset)?.let {
+                it.layoutParams.height = resource.getDimensionPixelOffset(resourceId)
+            }
+        }
         Logger.d("onViewCreated")
     }
 

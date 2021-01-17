@@ -2,6 +2,7 @@ package com.smartwasp.assistant.app.base
 
 import android.app.ActivityManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -46,8 +47,7 @@ abstract class BaseActivity<
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= 23)
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        initStatusBar()
         manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         layoutResID?.let {
             setContentView(it)
@@ -57,11 +57,25 @@ abstract class BaseActivity<
             //默认返回图标
             setToolBarIcon(R.mipmap.ic_navback)
         }
-        window.statusBarColor = resources.getColor(R.color.smartwasp_white)
         createModelView()
         Logger.d("onCreate:${this}")
     }
 
+    /**
+     * 初始化状态栏样式
+     */
+    private fun initStatusBar(){
+        //设置沉浸状态栏
+        if (Build.VERSION.SDK_INT >= 21) {
+            val decorView = window.decorView
+            val option = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+            decorView.systemUiVisibility = option
+            window.statusBarColor = Color.TRANSPARENT
+        }
+        //设置状态栏文字反向颜色
+        if (Build.VERSION.SDK_INT >= 23)
+            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    }
 
     /**
      * 通过反射加载mViewModel
