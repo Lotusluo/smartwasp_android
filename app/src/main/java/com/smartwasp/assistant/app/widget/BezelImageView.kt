@@ -77,6 +77,8 @@ class BezelImageView @JvmOverloads constructor(
         canvas.restoreToCount(sc)
     }
 
+
+
     override fun drawableStateChanged() {
         super.drawableStateChanged()
         if(null != mMaskDrawable && mMaskDrawable!!.isStateful){

@@ -21,7 +21,7 @@
        android:layout_height="50dp"
        android:gravity="center_vertical"
        android:clickable="true"
-       android:background="@drawable/ripple_background_smartwasp_white">
+       android:background="@drawable/ripple_background_white">
 
        <!--            设备状态图标-->
        <androidx.appcompat.widget.AppCompatTextView

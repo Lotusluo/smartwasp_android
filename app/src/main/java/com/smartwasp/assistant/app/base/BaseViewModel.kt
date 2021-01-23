@@ -2,9 +2,11 @@ package com.smartwasp.assistant.app.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 /**

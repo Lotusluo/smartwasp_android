@@ -1,14 +1,11 @@
 package com.smartwasp.assistant.app.fragment
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.Logger
@@ -17,11 +14,10 @@ import com.smartwasp.assistant.app.activity.DeviceSetActivity
 import com.smartwasp.assistant.app.activity.PrevBindActivity
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.test.BindDevices
+import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.databinding.FragmentMineBinding
 import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBinding
 import com.smartwasp.assistant.app.util.IFLYOS
-import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.viewModel.MineModel
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
@@ -45,7 +41,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     /**
      * 通知绑定的设备的改变
      */
-    fun notifyDeviceChanged(){
+    fun notifyBindDevicesChanged(){
         onRenderBindDevices(bindDevices)
     }
 
@@ -54,7 +50,6 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      */
     private fun onRenderBindDevices(devices: BindDevices?) {
         mViewModel.cancelAskDevStatus(this)
-        mPosition = 0
         val deviceBeans:MutableList<DeviceBean> =  ArrayList()
         devices?.user_devices?.let {
             deviceBeans.addAll(it)
@@ -84,50 +79,24 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         banner.addBannerLifecycleObserver(this)
         banner.currentItem = 1
         if(deviceBeans.size > 1){
-            banner.currentItem = deviceBeans.indexOf(currentDevice)
-            mPosition = 1
-            askDeviceStatus()
+            banner.currentItem = deviceBeans.indexOf(currentDevice) + 1
         }
         //todo 探寻impl中用到interface哪个方法就实现哪个
         banner.addOnPageChangeListener(object:OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-            override fun onPageSelected(position: Int) {
-                mPosition = position
-                askDeviceStatus()
-            }
-        })
-    }private var mPosition = 0
-
-    /**
-     * 开始轮询当前设备在线状态
-     */
-    @SuppressLint("FragmentLiveDataObserve")
-    private fun askDeviceStatus(){
-        mViewModel.cancelAskDevStatus(this)
-        banner.adapter ?: return
-        val deviceBean = banner.adapter.getData(mPosition) as DeviceBean
-        if(deviceBean.isHeader()) return
-        deviceBean.position = mPosition
-        mViewModel.askDevStatus(deviceBean,1)?.observe(this, Observer {
-            if(it.isSuccess){
-                it.getOrNull()?.let { deviceInfoBean -> onRenderBindDevice(deviceInfoBean) }
-            }
+            override fun onPageSelected(position: Int) {}
         })
     }
 
     /**
-     * 渲染最新的设备信息
-     * @param deviceInfoBean 设备信息
-     * 暂时只更新离在线状态
+     * 设备变更
      */
-    private fun onRenderBindDevice(deviceInfoBean:DeviceBean){
-        val adapter = banner.adapter
-        val deviceBean = adapter.getData(deviceInfoBean.position) as DeviceBean
-        deviceBean.copyFromDeviceInfo(deviceInfoBean)
-        //todo Cannot call this method in a scroll callback. Scroll callbacks mightbe run during a measure & layout pass where you cannot change theRecyclerView data. Any method call that might change the structureof the RecyclerView or the adapter contents should be postponed tothe next frame.
-//        adapter.notifyItemChanged(deviceBean.position + 1)
-        adapter.notifyDataSetChanged()
+    override fun notifyCurDeviceChanged() {
+        super.notifyCurDeviceChanged()
+        banner.adapter?.let {adapter->
+            adapter.notifyDataSetChanged()
+        }
     }
 
     /**
@@ -147,11 +116,17 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     }
 
     /**
+     * 左侧导航按钮点击
+     */
+    override fun onNavigatorClick(){
+
+    }
+
+    /**
      * 页面呈交互状态
      */
     override fun onResume() {
         super.onResume()
-        askDeviceStatus()
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = true
     }
 
@@ -171,9 +146,9 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.post {
-            setToolBarIcon(R.mipmap.ic_user_edit,1)
+            setToolBarIcon(R.mipmap.ic_login_out,R.color.smartwasp_blue)
             setTittle(getString(R.string.tab_mime))
-            notifyDeviceChanged()
+            notifyBindDevicesChanged()
         }
     }
 
@@ -188,7 +163,6 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
             mViewModel.cancelAskDevStatus(this)
         }else{
 //            呈现的时候轮询设备是否在线
-            askDeviceStatus()
         }
     }
 

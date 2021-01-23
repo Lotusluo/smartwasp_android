@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
+        <variable
+            name="deviceBean"
+            type="com.smartwasp.assistant.app.bean.DeviceBean" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/toolbarSize"
+        android:background="?attr/toolbarColor"
+        android:gravity="center_vertical">
+
+        <!--    左侧图标-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/toolbar_left_icon"
+            android:src="@{leftIcon}"
+            android:scaleType="fitCenter"
+            android:onClick="@{onclickListener}"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:layout_marginLeft="6dp"
+            android:tint="@color/smartwasp_blue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+        <!--    标题-->
+        <LinearLayout
+            android:id="@+id/toolbar_title"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--            设备状态图标-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/icon_device_status"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
+                android:backgroundTint="@color/device_status_color"/>
+
+            <!--            设备名称-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/device_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{deviceBean.alias}"
+                android:layout_marginStart="10dp"
+                android:textSize="16sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+
+        <!--        音乐效果-->
+        <com.kyleduo.switchbutton.VoicePlayingIcon
+            android:id="@+id/media_icon"
+            android:layout_width="22dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:onClick="@{onclickListener}"
+            android:layout_gravity="center_vertical|end"
+            app:pointer_color="#FF5280FF" />
+
+    </FrameLayout>
+
+
+</layout>

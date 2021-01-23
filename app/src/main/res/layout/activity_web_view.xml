@@ -5,7 +5,6 @@
 
     <data>
         <variable name="tittle" type="String" />
-        <variable name="rightIcon" type="android.graphics.drawable.Drawable" />
         <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
         <variable
             name="onclickListener"
@@ -21,7 +20,6 @@
         <include
             android:id="@+id/toolbar"
             app:tittle="@{tittle}"
-            app:rightIcon="@{rightIcon}"
             app:leftIcon="@{leftIcon}"
             app:onclickListener="@{onclickListener}"
             layout="@layout/layout_toolbar" />

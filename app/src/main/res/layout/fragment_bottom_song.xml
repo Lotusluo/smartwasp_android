@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/shape_bottom_sheet">
+
+    <!--    标题-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sheet_play_tip"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/smartwasp_dark"/>
+
+    <!--    取消-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sheet_play_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/play"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:background="@drawable/ripple_background"/>
+
+<!--    取消-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sheet_cancel_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@android:string/cancel"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:background="@drawable/ripple_background"/>
+
+</LinearLayout>

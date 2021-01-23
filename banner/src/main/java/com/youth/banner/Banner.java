@@ -227,37 +227,37 @@ public class Banner<T, BA extends BannerAdapter> extends FrameLayout implements 
         }
         return super.dispatchTouchEvent(ev);
     }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (!getViewPager2().isUserInputEnabled() || !isIntercept) {
-            return super.onInterceptTouchEvent(event);
-        }
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mStartX = event.getX();
-                mStartY = event.getY();
-                getParent().requestDisallowInterceptTouchEvent(true);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float endX = event.getX();
-                float endY = event.getY();
-                float distanceX = Math.abs(endX - mStartX);
-                float distanceY = Math.abs(endY - mStartY);
-                if (getViewPager2().getOrientation() == HORIZONTAL) {
-                    mIsViewPager2Drag = distanceX > mTouchSlop && distanceX > distanceY;
-                } else {
-                    mIsViewPager2Drag = distanceY > mTouchSlop && distanceY > distanceX;
-                }
-                getParent().requestDisallowInterceptTouchEvent(mIsViewPager2Drag);
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                getParent().requestDisallowInterceptTouchEvent(false);
-                break;
-        }
-        return super.onInterceptTouchEvent(event);
-    }
+//
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent event) {
+//        if (!getViewPager2().isUserInputEnabled() || !isIntercept) {
+//            return super.onInterceptTouchEvent(event);
+//        }
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                mStartX = event.getX();
+//                mStartY = event.getY();
+//                getParent().requestDisallowInterceptTouchEvent(true);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                float endX = event.getX();
+//                float endY = event.getY();
+//                float distanceX = Math.abs(endX - mStartX);
+//                float distanceY = Math.abs(endY - mStartY);
+//                if (getViewPager2().getOrientation() == HORIZONTAL) {
+//                    mIsViewPager2Drag = distanceX > mTouchSlop && distanceX > distanceY;
+//                } else {
+//                    mIsViewPager2Drag = distanceY > mTouchSlop && distanceY > distanceX;
+//                }
+//                getParent().requestDisallowInterceptTouchEvent(mIsViewPager2Drag);
+//                break;
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_CANCEL:
+//                getParent().requestDisallowInterceptTouchEvent(false);
+//                break;
+//        }
+//        return super.onInterceptTouchEvent(event);
+//    }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {

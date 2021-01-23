@@ -1,4 +1,4 @@
-package com.smartwasp.assistant.app.bean.test
+package com.smartwasp.assistant.app.bean
 
 import com.smartwasp.assistant.app.bean.DeviceBean
 import java.io.Serializable

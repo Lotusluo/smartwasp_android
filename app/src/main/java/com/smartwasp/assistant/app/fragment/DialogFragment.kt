@@ -11,6 +11,8 @@ import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeCallback
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.base.addFragmentByTag
+import com.smartwasp.assistant.app.bean.ItemBean
 import com.smartwasp.assistant.app.databinding.FragmentDialogBinding
 import com.smartwasp.assistant.app.viewModel.DialogModel
 import kotlinx.android.synthetic.main.activity_web_view.*
@@ -59,28 +61,29 @@ class DialogFragment private constructor():MainChildFragment<DialogModel,Fragmen
                             Logger.e("onReceivedError:${error?.description}")
                         }
                     }
-
                 }
             }
         })
     }
 
     /**
-     * 打开设备对话框
-     * @param deviceID 设备ID
+     * 通知选择的设备变更
      */
-    fun notifyOpenDialog(){
-//        currentDevice?.let {
-//            webViewTag?.let {webView->
-//                val params = HashMap<String, String>()
-//                params["deviceId"] = it.device_id
-//                IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
-//            }
-//            webview.visibility = View.VISIBLE
-//        }?: kotlin.run {
-//            //todo 没有deviceID
-//            webview.visibility = View.GONE
-//        }
+    override fun notifyCurDeviceChanged(){
+        super.notifyCurDeviceChanged()
+        if(isResumed){
+            currentDevice?.let {
+                webViewTag?.let {webView->
+                    val params = HashMap<String, String>()
+                    params["deviceId"] = it.device_id
+                    IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
+                }
+                webview.visibility = View.VISIBLE
+            }?: kotlin.run {
+                //todo 没有deviceID
+                webview.visibility = View.GONE
+            }
+        }
     }
 
     /**

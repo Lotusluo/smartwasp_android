@@ -2,7 +2,6 @@ package com.smartwasp.assistant.app.viewModel
 
 import android.app.Application
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -12,7 +11,6 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.test.BindDevices
 import com.smartwasp.assistant.app.util.AppExecutors
 import kotlinx.coroutines.*
 import retrofit2.Call
@@ -37,12 +35,13 @@ open class AskDeviceModel(application: Application):BaseViewModel(application) {
      * @param delayInSeconds 轮询时间
      */
     fun askDevStatus(device:DeviceBean,delayInSeconds:Long = 20):MutableLiveData<Result<DeviceBean>>?{
-        cancelAskDevStatus()
-        if(device.isHeader())
-            return null
-        mDevice = device
-        AppExecutors.get().mainThread().executeDelay(askDevStatusJob,delayInSeconds * 1000)
-        return askDeferred
+//        cancelAskDevStatus()
+//        if(device.isHeader())
+//            return null
+//        mDevice = device
+//        AppExecutors.get().mainThread().executeDelay(askDevStatusJob,delayInSeconds * 1000)
+//        return askDeferred
+        return null
     }
 
     /**

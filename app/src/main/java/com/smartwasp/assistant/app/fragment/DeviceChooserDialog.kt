@@ -14,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.test.BindDevices
+import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBottomBinding
 import com.smartwasp.assistant.app.util.IFLYOS
 import kotlinx.android.synthetic.main.fragment_bottom_sheet.*

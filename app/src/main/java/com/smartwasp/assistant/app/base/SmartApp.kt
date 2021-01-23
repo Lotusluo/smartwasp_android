@@ -2,12 +2,19 @@ package com.smartwasp.assistant.app.base
 
 import android.app.Application
 import android.os.Process
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.iflytek.home.sdk.IFlyHome
+import com.iflytek.home.sdk.push.OsPushService
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.bean.DeviceBean
+import com.smartwasp.assistant.app.bean.MusicStateBean
+import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.bean.UserBean
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.NetWorkUtil
@@ -25,10 +32,15 @@ import kotlin.system.exitProcess
  */
 class SmartApp : Application() {
     companion object{
-        lateinit var app:Application
+        lateinit var app:SmartApp
             private set
 
+        //登录的用户数据
         var userBean:UserBean? = null
+        //是否已经登录
+        fun isLogin():Boolean{
+            return null != userBean
+        }
 
         fun finish(cmd:Int = 0){
             Process.killProcess(Process.myPid())
@@ -40,6 +52,89 @@ class SmartApp : Application() {
         var NEED_REFRESH_DEVICES_DETAIL:Boolean = true
         //“我的页面”是否呈交互态
         var DOS_MINE_FRAGMENT_SHOWN:Boolean = false
+
+        /**
+         * 离在线与媒体消息订阅回调
+         */
+        val subscribeCallback = object : OsPushService.SubscribeCallback() {
+
+            /**
+             * 音乐播放状态改变
+             * @param deviceId
+             * @param message
+             */
+            override fun onMediaStateMessage(deviceId: String, message: String) {
+                super.onMediaStateMessage(deviceId, message)
+                if(!message.isNullOrEmpty()){
+                    try {
+                        val stateBeans = Gson().fromJson<StatusBean<MusicStateBean>>(message, object: TypeToken<StatusBean<MusicStateBean>>(){}.type)
+                        stateBeans.data.device_id = deviceId
+                        mediaStateObservers.forEach {
+                            it.postValue(stateBeans)
+                        }
+                    }catch (e:Throwable){
+                    }
+                }
+            }
+
+            /**
+             * 设备离在线状态改变
+             * @param userId
+             * @param message
+             */
+            override fun onDeviceStateMessage(userId: String, message: String) {
+                super.onDeviceStateMessage(userId, message)
+                if(!message.isNullOrEmpty()){
+                    try {
+                        val stateBeans = Gson().fromJson<StatusBean<DeviceBean>>(message, object: TypeToken<StatusBean<DeviceBean>>(){}.type)
+                        devStateObservers.forEach {
+                            it.postValue(stateBeans)
+                        }
+                    }catch (e:Throwable){
+
+                    }
+                }
+            }
+        }
+        //设备状态观察者列表
+        private val devStateObservers:MutableList<MutableLiveData<StatusBean<DeviceBean>>> = mutableListOf()
+        //媒体状态列表
+        private val mediaStateObservers:MutableList<MutableLiveData<StatusBean<MusicStateBean>>> = mutableListOf()
+        /**
+         * 注册设备状态观察
+         * @param liveData
+         */
+        fun addDevStateObserver(liveData: MutableLiveData<StatusBean<DeviceBean>>){
+            if(devStateObservers.contains(liveData))
+                return
+            devStateObservers.add(liveData)
+        }
+
+        /**
+         * 移除设备状态观察
+         * @param liveData
+         */
+        fun removeDevObserver(liveData: MutableLiveData<StatusBean<DeviceBean>>){
+            devStateObservers.remove(liveData)
+        }
+
+        /**
+         * 注册媒体状态观察
+         * @param liveData
+         */
+        fun addMediaObserver(liveData: MutableLiveData<StatusBean<MusicStateBean>>){
+            if(mediaStateObservers.contains(liveData))
+                return
+            mediaStateObservers.add(liveData)
+        }
+
+        /**
+         * 移除媒体状态观察
+         * @param liveData
+         */
+        fun removeMediaObserver(liveData: MutableLiveData<StatusBean<MusicStateBean>>){
+            mediaStateObservers.remove(liveData)
+        }
     }
 
     /**

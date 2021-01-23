@@ -1,5 +1,6 @@
 package com.smartwasp.assistant.app.util
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -23,7 +24,7 @@ object LoadingUtil {
      * @param cancelable 是否能够取消
      * @return 返回对话框码
      */
-    fun create(activity:AppCompatActivity,cancelListener:(()->Unit)? = null,cancelable:Boolean = false){
+    fun create(activity:Activity,cancelListener:(()->Unit)? = null,cancelable:Boolean = false){
         dismiss()
         val mLoading = AlertDialog
                 .Builder(activity,R.style.CommonWindowStyle)

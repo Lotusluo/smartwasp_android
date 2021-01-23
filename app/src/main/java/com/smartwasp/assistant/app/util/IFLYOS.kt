@@ -10,6 +10,7 @@ object IFLYOS {
     const val ERROR = "error"
     const val OK = "ok"
     const val DEVICE_ID = "device_id"
+    const val GROUP_ID = "group_id"
     const val EXTRA = "extra"
     const val EXTRA_TAG = "extra_tag"
     const val EXTRA_TYPE = "extra_type"

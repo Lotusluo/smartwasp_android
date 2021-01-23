@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
+        <variable
+            name="deviceBean"
+            type="com.smartwasp.assistant.app.bean.DeviceBean" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/smartwasp_white"
+        tools:context=".activity.PrevBindActivity">
+
+<!--        toobar-->
+        <include
+            android:id="@+id/toolbar"
+            app:leftIcon="@{leftIcon}"
+            app:deviceBean="@{deviceBean}"
+            app:onclickListener="@{onclickListener}"
+            layout="@layout/layout_toolbar_device" />
+
+        <!--设备显示页-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <!--            歌单图片-->
+            <com.smartwasp.assistant.app.widget.BezelImageView
+                android:id="@+id/bezelImageView"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:scaleType="fitXY"
+                app:maskDrawable="@drawable/shape_mask_bg_radius10" />
+
+        </androidx.cardview.widget.CardView>
+
+        <com.kyleduo.switchbutton.MarqueeTextView
+            android:id="@+id/mediaName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="-------------------------------------------------------"
+            android:textColor="#000"
+            android:textSize="22sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mediaArt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/smartwasp_dark"
+            android:text="----"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mediaName"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnPre"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/ripple_background_transparent"
+            android:src="@mipmap/ic_skip_previous_black_24dp"
+            android:clickable="true"
+            android:onClick="@{onclickListener}"
+            app:layout_constraintBottom_toBottomOf="@+id/btnPlayer"
+            app:layout_constraintEnd_toStartOf="@+id/btnPlayer"
+            app:layout_constraintTop_toTopOf="@+id/btnPlayer" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnPlayer"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ripple_background_transparent"
+            android:src="@drawable/music_play_selector"
+            android:clickable="true"
+            android:onClick="@{onclickListener}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mediaArt" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnAft"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/ripple_background_transparent"
+            android:src="@mipmap/ic_skip_next_black_24dp"
+            android:clickable="true"
+            android:onClick="@{onclickListener}"
+            app:layout_constraintBottom_toBottomOf="@+id/btnPlayer"
+            app:layout_constraintStart_toEndOf="@+id/btnPlayer"
+            app:layout_constraintTop_toTopOf="@+id/btnPlayer" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnPlayer">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@mipmap/ic_sound_min_black_24dp"
+                app:tint="@color/smartwasp_dark"/>
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxHeight="6dp"
+                android:progressDrawable="@drawable/seek_progress"
+                android:thumb="@mipmap/abc_btn_switch"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@mipmap/ic_sound_max_black_24dp"
+                app:tint="@color/smartwasp_dark"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

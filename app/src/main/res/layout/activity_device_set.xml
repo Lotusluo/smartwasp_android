@@ -11,7 +11,6 @@
             type="com.smartwasp.assistant.app.bean.DeviceBean" />
         <variable name="tittle" type="String" />
         <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
-        <variable name="rightIcon" type="android.graphics.drawable.Drawable" />
         <variable
             name="onclickListener"
             type="android.view.View.OnClickListener" />
@@ -29,7 +28,6 @@
             android:id="@+id/toolbar"
             app:tittle="@{tittle}"
             app:leftIcon="@{leftIcon}"
-            app:rightIcon="@{rightIcon}"
             app:onclickListener="@{onclickListener}"
             layout="@layout/layout_toolbar" />
 

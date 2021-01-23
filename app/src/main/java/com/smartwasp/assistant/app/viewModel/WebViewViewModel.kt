@@ -29,7 +29,7 @@ class WebViewViewModel(application: Application):BaseViewModel(application) {
      */
     fun openAuthorizePage(webView:WebView,url:String):LiveData<String>{
         val authorizeData = MutableLiveData<String>()
-        IFlyHome.openAuthorizePage(webView, url,object: AuthResultCallback {
+        val result = IFlyHome.openAuthorizePage(webView, url,object: AuthResultCallback {
             override fun onFailed(params: String) {
                 authorizeData.postValue(IFLYOS.ERROR)
             }
@@ -37,6 +37,9 @@ class WebViewViewModel(application: Application):BaseViewModel(application) {
                 authorizeData.postValue(IFLYOS.OK)
             }
         })
+        if(result != IFlyHome.RESULT_OK){
+            authorizeData.postValue(IFLYOS.ERROR)
+        }
         return authorizeData
     }
 }

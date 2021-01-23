@@ -1,6 +1,5 @@
 package com.smartwasp.assistant.app.base
 
-import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -18,10 +17,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
-import kotlinx.coroutines.cancel
+import com.smartwasp.assistant.app.util.ScreenUtil
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.reflect.ParameterizedType
+
 
 /**
  * Created by luotao on 2021/1/9 11:44
@@ -116,22 +116,14 @@ abstract class BaseFragment<
     /**
      * 设置右侧按钮图标
      * @param resID 资源ID
-     * @param position 图标位置
      * @param tiny 渲染样式
      */
-    fun setToolBarIcon(resID:Int,position:Int = 1,tiny:Int = 0){
-        val icon = if(resID > 0) resources.getDrawable(resID) else null
-        if(tiny > 0 && null != icon){
+    fun setToolBarIcon(resID:Int,tiny:Int = 0){
+        val icon = resources.getDrawable(resID)
+        if(tiny > 0){
             DrawableCompat.setTint(icon,tiny)
         }
-        when(position){
-            1->{
-                mBinding.setVariable(BR.leftIcon,icon)
-            }
-            2->{
-                mBinding.setVariable(BR.rightIcon,icon)
-            }
-        }
+        mBinding.setVariable(BR.leftIcon,icon)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,27 +133,10 @@ abstract class BaseFragment<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            requireView().setOnApplyWindowInsetsListener { _, insets ->
-                //状态栏
-                val statusBars = insets.getInsets(WindowInsets.Type.statusBars())
-                requireView().findViewById<View>(R.id.topInset)?.let {
-                    it.layoutParams.height = statusBars.bottom - statusBars.top
-                }
-                //导航栏
-                val navigationBars = insets.getInsets(WindowInsets.Type.navigationBars())
-                //键盘
-                val ime = insets.getInsets(WindowInsets.Type.ime())
-                insets
-            }
-        }else{
-            val resource = requireActivity().resources
-            val resourceId = resource.getIdentifier("status_bar_height","dimen", "android")
-            requireView().findViewById<View>(R.id.topInset)?.let {
-                it.layoutParams.height = resource.getDimensionPixelOffset(resourceId)
-            }
-        }
         Logger.d("onViewCreated")
+        requireView().findViewById<View>(R.id.topInset)?.let {
+            it.layoutParams.height = ScreenUtil.statusHeight(requireContext())
+        }
     }
 
     override fun onDestroyView() {
@@ -182,9 +157,8 @@ abstract class BaseFragment<
      */
     final override fun onClick(v: View){
         when(v.id){
-            R.id.toolbar_right_icon,
             R.id.toolbar_left_icon ->{
-                onToolbarIconClick(v)
+                onNavigatorClick()
             }
             else ->{
                 onButtonClick(v)
@@ -200,16 +174,10 @@ abstract class BaseFragment<
     }
 
     /**
-     * 右侧按钮点击
+     * 左侧按钮点击
      */
-    open fun onToolbarIconClick(v: View){
-        when(v.id){
-            R.id.toolbar_left_icon->{
-                if(!interceptLeftButton()){
-                    Logger.e("fragment back!")
-                }
-            }
-        }
+    open fun onNavigatorClick(){
+
     }
 
     /**
@@ -274,4 +242,18 @@ abstract class BaseFragment<
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().commit()
+}
+
+/**
+ * ##################### supportChildFragmentManager 拓展函数#####################
+ */
+fun Fragment.addFragmentByTag(frameId:Int,fragment:Fragment){
+    val tag = fragment::class.java.simpleName
+    if(null != childFragmentManager.findFragmentByTag(tag))
+        return
+    childFragmentManager.inTransaction {
+        setCustomAnimations(R.anim.fragment_fade_enter,0,0,R.anim.fragment_fade_exit)
+        add(frameId,fragment,tag)
+        addToBackStack(null)
+    }
 }

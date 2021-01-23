@@ -40,4 +40,26 @@ object ScreenUtil {
             }
         }
     }
+
+    /**
+     * 获取状态栏高度
+     * @param context
+     */
+    fun statusHeight(context: Context):Int{
+        val resource = context.resources
+        val resourceId = resource.getIdentifier("status_bar_height","dimen", "android")
+        return resource.getDimensionPixelOffset(resourceId)
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+//            requireView().setOnApplyWindowInsetsListener { _, insets ->
+//                //状态栏
+//                val statusBars = insets.getInsets(WindowInsets.Type.statusBars())
+//                onTopInset(statusBars.bottom - statusBars.top)
+//                //导航栏
+//                val navigationBars = insets.getInsets(WindowInsets.Type.navigationBars())
+//                //键盘
+//                val ime = insets.getInsets(WindowInsets.Type.ime())
+//                insets
+//            }
+//        }
+    }
 }

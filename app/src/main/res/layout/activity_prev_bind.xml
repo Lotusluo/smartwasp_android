@@ -31,7 +31,7 @@
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/shape_mask_bg_radius10"
+            android:background="@drawable/shape_mask_bg_radius10_blue"
             android:onClick="@{onclickListener}"
             android:text="@string/scan_device"
             android:textColor="@color/smartwasp_white"

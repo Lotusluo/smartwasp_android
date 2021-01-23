@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="bean2"
+            type="com.smartwasp.assistant.app.bean.SongBean" />
+        <variable
+            name="bean2Pos"
+            type="String" />
+        <import type="android.view.View" alias="View"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/ripple_background">
+<!--        歌曲名称-->
+<!--        显示int position-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@{bean2Pos}"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/smartwasp_dark"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_name"
+                android:text="@{bean2.name}"
+                android:textSize="16sp"
+                android:textColor="@color/song_text_color"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@{bean2.artist}"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/smartwasp_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+<!--        操作-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnPlayer"
+            android:src="@mipmap/ic_more"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            app:tint="@color/smartwasp_dark"
+            android:clickable="true"
+            android:background="@drawable/ripple_background_transparent"/>
+    </LinearLayout>
+</layout>

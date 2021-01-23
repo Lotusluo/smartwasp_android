@@ -15,7 +15,10 @@
 
     <color name="smartwasp_yellow">#FFFFE401</color>
     <color name="smartwasp_yellow_light">#FFFFF59D</color>
+    <color name="smartwasp_yellow1">#FFB2B09F</color>
     <color name="smartwasp_white">#FFF4F7FA</color>
     <color name="smartwasp_blue">#FF5280FF</color>
+    <color name="smartwasp_blue1">#FF36446F</color>
     <color name="smartwasp_dark">#FFB8B8B8</color>
+    <color name="smartwasp_dark1">#ECEAEA</color>
 </resources>

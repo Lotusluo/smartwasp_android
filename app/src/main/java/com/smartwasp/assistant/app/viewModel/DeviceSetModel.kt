@@ -1,7 +1,6 @@
 package com.smartwasp.assistant.app.viewModel
 
 import android.app.Application
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -11,10 +10,7 @@ import com.iflytek.home.sdk.callback.ResponseCallback
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.test.BindDevices
-import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.IFLYOS
-import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -30,7 +26,7 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
      */
     fun updateAlias(deviceId:String,alias:String):LiveData<String>{
         val aliasData = MutableLiveData<String>()
-        IFlyHome.updateDeviceInfo(deviceId, alias, null, null, null, object:ResponseCallback{
+        val result = IFlyHome.updateDeviceInfo(deviceId, alias, null, null, null, object:ResponseCallback{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 aliasData.postValue(IFLYOS.ERROR)
             }
@@ -42,6 +38,9 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
                 }
             }
         })
+        if(result != IFlyHome.RESULT_OK){
+            aliasData.postValue(IFLYOS.ERROR)
+        }
         return aliasData
     }
 
@@ -52,7 +51,7 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
      */
     fun updateLongWake(deviceId:String,isLongWake:Boolean):LiveData<String>{
         val longWakeData = MutableLiveData<String>()
-        IFlyHome.updateDeviceInfo(deviceId, null, null, isLongWake, null, object:ResponseCallback{
+        val result = IFlyHome.updateDeviceInfo(deviceId, null, null, isLongWake, null, object:ResponseCallback{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 longWakeData.postValue(IFLYOS.ERROR)
             }
@@ -65,6 +64,9 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
                 }
             }
         })
+        if(result != IFlyHome.RESULT_OK){
+            longWakeData.postValue(IFLYOS.ERROR)
+        }
         return longWakeData
     }
 
@@ -74,7 +76,7 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
      */
     fun unBind(deviceId:String):LiveData<String>{
         val unBindData = MutableLiveData<String>()
-        IFlyHome.deleteUserDevice(deviceId, object:ResponseCallback{
+        val result = IFlyHome.deleteUserDevice(deviceId, object:ResponseCallback{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 unBindData.postValue(IFLYOS.ERROR)
             }
@@ -86,6 +88,9 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
                 }
             }
         })
+        if(result != IFlyHome.RESULT_OK){
+            unBindData.postValue(IFLYOS.ERROR)
+        }
         return unBindData
     }
 
@@ -95,19 +100,26 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
      */
     fun askDevStatus(deviceID:String):MutableLiveData<Result<DeviceBean>>{
         val devStatusData = MutableLiveData<Result<DeviceBean>>()
-        IFlyHome.getDeviceDetail(deviceID,object :ResponseCallback{
+        val result = IFlyHome.getDeviceDetail(deviceID,object :ResponseCallback{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 devStatusData.postValue(Result.failure(Throwable("Err")))
             }
             override fun onResponse(response: Response<String>) {
                 if(response.isSuccessful){
-                    val deviceInfoBean = Gson().fromJson<DeviceBean>(response.body(), object: TypeToken<DeviceBean>(){}.type)
-                    devStatusData.postValue(Result.success(deviceInfoBean))
+                    try {
+                        val deviceInfoBean = Gson().fromJson<DeviceBean>(response.body(), object: TypeToken<DeviceBean>(){}.type)
+                        devStatusData.postValue(Result.success(deviceInfoBean))
+                    }catch (e:Throwable){
+                        devStatusData.postValue(Result.failure(Throwable("Err")))
+                    }
                 }else{
                     devStatusData.postValue(Result.failure(Throwable("empty")))
                 }
             }
         })
+        if(result != IFlyHome.RESULT_OK){
+            devStatusData.postValue(Result.failure(Throwable("Err")))
+        }
         return devStatusData
     }
 }

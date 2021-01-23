@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.smartwasp.assistant.app"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -132,7 +132,9 @@ dependencies {
     // 二维码扫描
     implementation project(':zxing-core')
     implementation 'com.google.zxing:core:3.3.2'
+//    自定义控件
     implementation project(':banner')
     implementation project(':switchButton')
     implementation project(':blurredview')
+    implementation project(':magicindicator')
 }

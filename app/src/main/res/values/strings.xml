@@ -20,6 +20,7 @@
     <string name="error_net_unknown">网络未知错误</string>
     <string name="error_request">请求数据错误</string>
     <string name="try_again">请重试</string>
+    <string name="offline">设备处于离线状态</string>
 
     <string name="tab_dialog">对话</string>
     <string name="tab_find">发现</string>
@@ -46,5 +47,15 @@
     <string name="unBindTip">是否解除绑定?</string>
     <string name="tip">提示</string>
     <string name="page_tip"></string>
-
+    <string name="play">播放</string>
+    <string name="more">更多</string>
+    <string name="un_open">暂未开放</string>
+    <string name="play_all">播放全部</string>
+    <string name="no_more">------已经到底了------</string>
+    <string name="err_">加载失败,请退出重试</string>
+    <string name="plz_add">请先添加设备</string>
+    <string name="plz_wait">请稍后</string>
+    <string name="login_err">登录失败,请重试</string>
+    <string name="bind_devices_err">绑定设备失败</string>
+    <string name="get_devices_err">获取该账号绑定的设备失败</string>
 </resources>

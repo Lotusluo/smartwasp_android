@@ -2,6 +2,7 @@ package com.smartwasp.assistant.app.base
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.util.LoadingUtil
+import me.jessyan.autosize.AutoSizeCompat
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
@@ -55,18 +57,21 @@ abstract class BaseActivity<
             mBinding.lifecycleOwner = this
             mBinding.setVariable(BR.onclickListener,this)
             //默认返回图标
-            setToolBarIcon(R.mipmap.ic_navback)
+            setNavigator(R.mipmap.ic_navback)
         }
         createModelView()
         Logger.d("onCreate:${this}")
     }
 
+
     /**
      * 初始化状态栏样式
+     * @param flag 是否沉浸式
      */
-    private fun initStatusBar(){
+    protected fun initStatusBar(flag:Boolean = false){
+        window.statusBarColor = resources.getColor(R.color.smartwasp_white)
         //设置沉浸状态栏
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21 && flag) {
             val decorView = window.decorView
             val option = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
             decorView.systemUiVisibility = option
@@ -97,6 +102,11 @@ abstract class BaseActivity<
     override fun onStart() {
         super.onStart()
         Logger.d("onStart:${this}")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Logger.d("onRestart:${this}")
     }
 
     /**
@@ -193,26 +203,14 @@ abstract class BaseActivity<
     /**
      * 设置右侧按钮图标
      * @param resID 资源ID
-     * @param position 图标位置
      * @param tiny 渲染样式
      */
-    fun setToolBarIcon(resID:Int,position:Int = 1,tiny:Int = 0){
-        if(resID == 0){
-            mBinding.setVariable(BR.rightIcon,null)
-            return
-        }
+    fun setNavigator(resID:Int,tiny:Int = 0){
         val icon = resources.getDrawable(resID)
         if(tiny > 0){
             DrawableCompat.setTint(icon,tiny)
         }
-        when(position){
-            1->{
-                mBinding.setVariable(BR.leftIcon,icon)
-            }
-            2->{
-                mBinding.setVariable(BR.rightIcon,icon)
-            }
-        }
+        mBinding.setVariable(BR.leftIcon,icon)
     }
 
     /**
@@ -220,9 +218,8 @@ abstract class BaseActivity<
      */
     final override fun onClick(v: View){
         when(v.id){
-            R.id.toolbar_right_icon,
             R.id.toolbar_left_icon ->{
-                onToolbarIconClick(v)
+                onNavigatorClick()
             }
             else ->{
                 onButtonClick(v)
@@ -233,13 +230,9 @@ abstract class BaseActivity<
     /**
      * 右侧按钮点击
      */
-    open fun onToolbarIconClick(v: View){
-        when(v.id){
-            R.id.toolbar_left_icon->{
-                if(!interceptLeftButton())
-                    finish()
-            }
-        }
+    open fun onNavigatorClick(){
+        if(!interceptLeftButton())
+            finish()
     }
 
     /**
@@ -273,6 +266,15 @@ abstract class BaseActivity<
         return super.onKeyDown(keyCode, event)
     }
 
+
+    /**
+     * 针对AutoSize布局混乱的问题解决
+     */
+    override fun getResources(): Resources {
+        AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
+        return super.getResources()
+    }
+
 }
 
 /**
@@ -282,7 +284,9 @@ fun FragmentActivity.addFragmentByTag(frameId: Int,fragment: Fragment){
     val tag = fragment::class.java.simpleName
     if(null != supportFragmentManager.findFragmentByTag(tag))
         return
-    supportFragmentManager.inTransaction { add(frameId, fragment,tag) }
+    supportFragmentManager.inTransaction {
+        add(frameId, fragment,tag)
+    }
 }
 
 fun FragmentActivity.showFragment(fragment: Fragment) {

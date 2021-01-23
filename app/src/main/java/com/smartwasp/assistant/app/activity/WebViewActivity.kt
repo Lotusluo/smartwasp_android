@@ -1,12 +1,12 @@
 package com.smartwasp.assistant.app.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.*
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeCallback
@@ -108,14 +108,17 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
     private fun readyToUrl(url:String,type:String){
         when(type){
             IFLYOS.TYPE_BIND->{
-                setToolBarIcon(R.mipmap.ic_close)
+                setNavigator(R.mipmap.ic_close)
                 mViewModel.openAuthorizePage(webview,url).observe(this, Observer {
                     if(it.startsWith(IFLYOS.OK)){
                         //绑定设备成功
                         setResult(Activity.RESULT_OK)
                         finish()
                     }else{
-                        //todo 绑定设备失败
+                        AlertDialog.Builder(this)
+                                .setMessage(R.string.bind_devices_err)
+                                .setPositiveButton(android.R.string.ok,null)
+                                .show()
                     }
                 })
             }
@@ -133,7 +136,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
      * @param deviceID 设备ID
      */
     private fun readyToDefault(page:String,type:String,webViewTag:String,deviceID:String?){
-        setToolBarIcon(R.mipmap.ic_close)
+        setNavigator(R.mipmap.ic_close)
         setTittle(getString(
                 when(page){
                     IFlyHome.DEVICE_ZONE->{
@@ -162,13 +165,6 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
             toolbar.visibility = View.GONE
             window.statusBarColor = Color.parseColor(color)
         }
-    }
-
-    /**
-     * 右侧按钮点击
-     */
-    override fun onToolbarIconClick(v:View){
-
     }
 
     /**

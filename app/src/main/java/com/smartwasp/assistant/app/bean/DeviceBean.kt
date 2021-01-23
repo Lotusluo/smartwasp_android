@@ -14,13 +14,16 @@ data class DeviceBean(var alias:String = "",
                       var device_id:String = "-1",
                       var image:String = "",
                       var continous_mode:Boolean = false,
+                      var name:String = "",
+                      var zone:String = "",
+                      @SerializedName(value = "status",alternate = ["state"])
+                      var status:String = "",
                       @SerializedName(value = "music",alternate = ["music_access"])
                       var music:ContentBean? = null,
-                      var name:String = "",
-                      var status:String = "",
-                      var zone:String = "",
                       @Expose(serialize = false, deserialize = false)
-                      var position:Int = 0):Serializable{
+                      var position:Int = 0,
+                      @Expose(serialize = false, deserialize = false)
+                      var timestamp:String = "0"):Serializable{
     /**
      * 获取设备状态
      */
@@ -49,25 +52,12 @@ data class DeviceBean(var alias:String = "",
     }
 
     /**
-     * 将设备信息赋值到此Bean上
-     * 注意deviceInfoBean中缺少client_id与device_id
-     * @param deviceInfoBean 设备信息
-     */
-    fun copyFromDeviceInfo(deviceInfoBean: DeviceBean){
-        this.image = deviceInfoBean.image
-        this.alias = deviceInfoBean.alias
-        this.name = deviceInfoBean.name
-        this.zone = deviceInfoBean.zone
-        this.status = deviceInfoBean.status
-    }
-
-    /**
      * 判定两个对象是否相等
      * @param other 比较对象
      */
     override fun equals(other: Any?): Boolean {
         other ?: return false
         if(other !is DeviceBean) return false
-        return other.device_id == other.device_id
+        return other.device_id == device_id
     }
 }
