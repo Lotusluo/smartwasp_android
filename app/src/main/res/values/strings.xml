@@ -32,6 +32,7 @@
     <string name="add_device">添加主控设备</string>
     <string name="add_device1">请添加设备</string>
     <string name="scan_device">扫码添加</string>
+    <string name="fresh_device">刷新设备</string>
     <string name="words1">小黄蜂智能音箱</string>
     <string name="words2">带你进入全新世界</string>
     <string name="camera_per">扫码需要摄像头权限</string>
@@ -57,5 +58,7 @@
     <string name="plz_wait">请稍后</string>
     <string name="login_err">登录失败,请重试</string>
     <string name="bind_devices_err">绑定设备失败</string>
-    <string name="get_devices_err">获取该账号绑定的设备失败</string>
+    <string name="get_devices_err">获取绑定设备失败</string>
+    <string name="empty_devices">暂无设备</string>
+    <string name="exit_confirm">是否退出登录?</string>
 </resources>

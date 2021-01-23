@@ -135,6 +135,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                     //需要跳转讯飞交互页
                     LoadingUtil.dismiss()
                     val tag = it.substring(IFLYOS.EXTRA.length + 1)
+                    Logger.e("tag:$tag")
                     startActivity(Intent(this@MainActivity,WebViewActivity::class.java).apply {
                         putExtra(IFLYOS.EXTRA_TAG,tag)
                         putExtra(IFLYOS.EXTRA_TYPE,IFLYOS.TYPE_LOGIN)
@@ -241,6 +242,10 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 }?: kotlin.run {
                     LoadingUtil.showToast(this,getString(R.string.plz_add))
                 }
+            }
+            R.id.device_fresh->{
+                //刷新设备列表
+                askBindDevices()
             }
         }
     }

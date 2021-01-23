@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.DeviceSetActivity
 import com.smartwasp.assistant.app.activity.PrevBindActivity
@@ -17,7 +18,9 @@ import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.databinding.FragmentMineBinding
 import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBinding
+import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.IFLYOS
+import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.viewModel.MineModel
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
@@ -119,7 +122,25 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      * 左侧导航按钮点击
      */
     override fun onNavigatorClick(){
-
+        AlertDialog.Builder(requireContext())
+                .setMessage(R.string.exit_confirm)
+                .setNegativeButton(android.R.string.cancel,null)
+                .setPositiveButton(android.R.string.ok) {
+                    _, _ ->
+                    LoadingUtil.create(requireActivity())
+                    mViewModel.loginOut().observe(this, Observer {
+                        if(it == IFLYOS.OK){
+                            ConfigUtils.removeAll()
+                            requireView().postDelayed({
+                                 SmartApp.restart()
+                            },1000)
+                        }else{
+                            LoadingUtil.dismiss()
+                            LoadingUtil.showToast(requireContext(),getString(R.string.try_again))
+                        }
+                    })
+                }
+                .show()
     }
 
     /**

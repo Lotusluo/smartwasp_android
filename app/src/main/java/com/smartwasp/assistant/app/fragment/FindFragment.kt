@@ -1,5 +1,6 @@
 package com.smartwasp.assistant.app.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
@@ -75,9 +76,15 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
         swipeRefreshLayout.setOnRefreshListener {
             notifyCurDeviceChanged()
         }
-
+        hotArea1.setOnClickListener {
+            //取消刷新
+            swipeRefreshLayout.isRefreshing = false
+            it.visibility = View.GONE
+        }
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.BaseOnOffsetChangedListener<AppBarLayout> {
             _: AppBarLayout, position: Int ->
+            if(swipeRefreshLayout.isRefreshing)
+                return@BaseOnOffsetChangedListener
             swipeRefreshLayout.isEnabled = position >= 0
         })
         scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{
@@ -92,14 +99,17 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
     /**
      * 通知选择的设备变更
      */
+    @SuppressLint("FragmentLiveDataObserve")
     override fun notifyCurDeviceChanged(){
         super.notifyCurDeviceChanged()
-        if(isResumed){
+        swipeRefreshLayout?.let {swipeRefreshLayout->
             mViewModel.cancel()
             swipeRefreshLayout.isRefreshing = true
+            hotArea1.visibility = View.VISIBLE
             currentDevice?.let {
-                mViewModel.getFindData(it.device_id).observe(this, Observer {findBean->
+                mViewModel.getFindData(it.device_id).observe(this@FindFragment, Observer {findBean->
                     swipeRefreshLayout.isRefreshing = false
+                    hotArea1.visibility = View.GONE
                     if(findBean.isSuccess){
                         card.alpha = 1f
                         linearLayout.alpha = 1f
@@ -116,7 +126,8 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                     }
                 })
             }?: kotlin.run {
-//                swipeRefreshLayout.isRefreshing = false
+                swipeRefreshLayout.isRefreshing = false
+                hotArea1.visibility = View.GONE
                 requireContext()?.let {
                     AlertDialog.Builder(it)
                             .setMessage(R.string.add_device1)

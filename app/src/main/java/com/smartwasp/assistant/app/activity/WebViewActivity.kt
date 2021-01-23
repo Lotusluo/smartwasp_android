@@ -48,7 +48,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
         //注册registerWebView与openWebPage是在View中使用IFlyHomeSDK的地方，其余均在VM中
         webViewTag = IFlyHome.register(webview, object : IFlyHomeCallback() {
             override fun updateHeaderColor(color: String) {
-                onUpdateHeader(color)
+                window.statusBarColor = Color.parseColor(color)
             }
             override fun updateTitle(title: String) {
                 setTittle(title)
@@ -97,6 +97,11 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
                 readyToDefault(mayBePage,type!!,webViewTag!!,mayBeDeviceID)
                 return
             }
+        }
+
+        if(mType == IFLYOS.TYPE_LOGIN){
+            toolbar.visibility = View.GONE
+
         }
     }
 
@@ -153,17 +158,6 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
             val params = HashMap<String, String>()
             params["deviceId"] = deviceID
             IFlyHome.openWebPage(webViewTag, page, params).toString()
-        }
-    }
-
-    /**
-     * 更新Toolbar及statusBar颜色
-     */
-    private fun onUpdateHeader(color: String) {
-        if(mType == IFLYOS.TYPE_LOGIN){
-            //隐藏toolbar
-            toolbar.visibility = View.GONE
-            window.statusBarColor = Color.parseColor(color)
         }
     }
 

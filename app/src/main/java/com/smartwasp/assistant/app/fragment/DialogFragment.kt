@@ -69,19 +69,15 @@ class DialogFragment private constructor():MainChildFragment<DialogModel,Fragmen
     /**
      * 通知选择的设备变更
      */
-    override fun notifyCurDeviceChanged(){
+    override fun notifyCurDeviceChanged() {
         super.notifyCurDeviceChanged()
-        if(isResumed){
+        webViewTag?.let { webView ->
             currentDevice?.let {
-                webViewTag?.let {webView->
-                    val params = HashMap<String, String>()
-                    params["deviceId"] = it.device_id
-                    IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
-                }
-                webview.visibility = View.VISIBLE
-            }?: kotlin.run {
-                //todo 没有deviceID
-                webview.visibility = View.GONE
+                val params = HashMap<String, String>()
+                params["deviceId"] = it.device_id
+                IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
+            } ?: kotlin.run {
+
             }
         }
     }

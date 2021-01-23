@@ -154,7 +154,6 @@ class SimpleRecyclerHelper<
         }else{
             dataBeans.addAll(songs)
             adapter.notifyItemInserted(changedItem)
-            adapter.notifyDataSetChanged()
             if(songs.size % ONE_PAGE_SIZE != 0){
                 onUpdateMoreStyle()
             }

@@ -60,7 +60,7 @@ abstract class MainChildFragment<VM: BaseViewModel,BD: ViewDataBinding>: BaseFra
      */
     override fun onButtonClick(v: View){
         when(v.id){
-            R.id.device_name,R.id.media_icon,R.id.device_add->{
+            R.id.device_name,R.id.media_icon,R.id.device_add,R.id.device_fresh->{
                 (activity as MainActivity?)?.let {
                     it.onButtonClick(v)
                 }

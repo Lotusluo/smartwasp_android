@@ -1,6 +1,7 @@
 package com.smartwasp.assistant.app.base
 
 import android.app.Application
+import android.content.Intent
 import android.os.Process
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
@@ -45,6 +46,14 @@ class SmartApp : Application() {
         fun finish(cmd:Int = 0){
             Process.killProcess(Process.myPid())
             exitProcess(cmd)
+        }
+
+        fun restart() {
+            app.packageManager.getLaunchIntentForPackage(app.packageName)?.let {
+                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                app.startActivity(it)
+                finish(0)
+            }
         }
         //首页是否需要刷新绑定的设备
         var NEED_MAIN_REFRESH_DEVICES:Boolean = true
@@ -163,6 +172,7 @@ class SmartApp : Application() {
             val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null)
             keyUserId?.let {
                 userBean = SerializableUtils.readObject(it) as UserBean?
+                Logger.e("userBean:$userBean")
             }
         }
     }
