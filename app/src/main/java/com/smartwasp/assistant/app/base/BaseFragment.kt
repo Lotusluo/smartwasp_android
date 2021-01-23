@@ -146,6 +146,7 @@ abstract class BaseFragment<
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
+        Logger.d("onHiddenChanged:$hidden")
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

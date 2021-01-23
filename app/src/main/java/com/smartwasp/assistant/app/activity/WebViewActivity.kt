@@ -39,9 +39,9 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        webview.settings.javaScriptEnabled = true
-        webview.settings.blockNetworkImage = false
-        webview.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+//        webview.settings.javaScriptEnabled = true
+//        webview.settings.blockNetworkImage = false
+//        webview.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         mType = intent.getStringExtra(IFLYOS.EXTRA_TYPE)
         //检测是否直接有跳转的tag
         val webTag = intent.getStringExtra(IFLYOS.EXTRA_TAG)

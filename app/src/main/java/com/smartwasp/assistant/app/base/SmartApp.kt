@@ -172,7 +172,7 @@ class SmartApp : Application() {
             val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null)
             keyUserId?.let {
                 userBean = SerializableUtils.readObject(it) as UserBean?
-                Logger.e("userBean:$userBean")
+                Logger.d("userBean:$userBean")
             }
         }
     }

@@ -176,6 +176,12 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                     fragments[index]
                 }
             }
+            3->{
+                fragments[index] ?: kotlin.run {
+                    fragments[index] = SkillFragment.newsInstance()
+                    fragments[index]
+                }
+            }
             5 ->{
                 fragments[index] ?: kotlin.run {
                     fragments[index] = MineFragment.newsInstance()
