@@ -1,7 +1,9 @@
 package com.smartwasp.assistant.app.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
@@ -10,6 +12,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.iflytek.home.sdk.IFlyHome
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
@@ -19,10 +22,13 @@ import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.databinding.ActivityMainBinding
 import com.smartwasp.assistant.app.fragment.*
+import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.StatusBarUtil
 import com.smartwasp.assistant.app.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.layout_tabbar.*
 /**
  * Created by luotao on 2021/1/7 15:00
@@ -30,7 +36,6 @@ import kotlinx.android.synthetic.main.layout_tabbar.*
  * APP主界面
  */
 class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
-
     //布局文件
     override val layoutResID: Int = R.layout.activity_main
     //设备状态观察者
@@ -43,10 +48,36 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StatusBarUtil.transparencyBar(this)
+        SmartApp.activity = this
         initObserver()
-        initStatusBar(true)
         setTabIconStyle()
         login()
+    }
+
+    /**
+     * 销毁
+     */
+    override fun onDestroy() {
+        mViewModel.clearBinder(this)
+        super.onDestroy()
+        SmartApp.activity = null
+    }
+
+    private var lastExitTime:Long = 0
+    /**
+     * 回退拦截
+     */
+    override fun interceptLeftButton():Boolean{
+        if(super.interceptLeftButton())
+            return true
+        return if (System.currentTimeMillis() - lastExitTime > 2000) {
+            LoadingUtil.showToast(this,getString(R.string.exit_again))
+            lastExitTime = System.currentTimeMillis()
+            true
+        } else{
+            false
+        }
     }
 
     /**
@@ -135,7 +166,6 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                     //需要跳转讯飞交互页
                     LoadingUtil.dismiss()
                     val tag = it.substring(IFLYOS.EXTRA.length + 1)
-                    Logger.e("tag:$tag")
                     startActivity(Intent(this@MainActivity,WebViewActivity::class.java).apply {
                         putExtra(IFLYOS.EXTRA_TAG,tag)
                         putExtra(IFLYOS.EXTRA_TYPE,IFLYOS.TYPE_LOGIN)
@@ -163,34 +193,19 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         if(currentTabID == tabID)
             return
         val index = tabID - 1
-        val fragment:MainChildFragment<*,*>? = when(tabID){
-            1->{
+        val tabFragment:MainChildFragment<*,*>? =
                 fragments[index] ?: kotlin.run {
-                    fragments[index] = DialogFragment.newsInstance()
+                    fragments[index] = when(tabID){
+                        1 -> DialogFragment.newsInstance()
+                        2 -> FindFragment.newsInstance()
+                        3 -> SkillFragment.newsInstance()
+                        4 -> SmartFragment.newsInstance()
+                        5 -> MineFragment.newsInstance()
+                        else -> null
+                    }
                     fragments[index]
-                }
-            }
-            2->{
-                fragments[index] ?: kotlin.run {
-                    fragments[index] = FindFragment.newsInstance()
-                    fragments[index]
-                }
-            }
-            3->{
-                fragments[index] ?: kotlin.run {
-                    fragments[index] = SkillFragment.newsInstance()
-                    fragments[index]
-                }
-            }
-            5 ->{
-                fragments[index] ?: kotlin.run {
-                    fragments[index] = MineFragment.newsInstance()
-                    fragments[index]
-                }
-            }
-            else ->{null}
         }
-        fragment?.let {
+        tabFragment?.let {
             (tabbar as LinearLayout).children.forEach { view->view.isSelected = false}
             if(currentTabID > 0){
                 fragments[currentTabID - 1]?.let {fragment->
@@ -223,6 +238,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         tagDevice?.let {
 //            if(currentDevice != it)
                 currentDevice = it
+            ConfigUtils.putString(ConfigUtils.KEY_DEVICE_ID,currentDevice?.device_id)
             return
         }
         when(v.id){
@@ -238,21 +254,27 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 startActivity(Intent(this,PrevBindActivity::class.java))
             }
             R.id.media_icon->{
-                //跳转音乐播放界面
-                currentDevice?.let {
-                    mViewModel.subscribeMediaStatus(it.device_id)
-                    startActivity(Intent(this,MusicActivity::class.java).apply {
-                        putExtra(IFLYOS.DEVICE_ID,currentDevice)
-                        putExtra(IFLYOS.EXTRA,mediaState)
-                    })
-                }?: kotlin.run {
-                    LoadingUtil.showToast(this,getString(R.string.plz_add))
-                }
+                turnToMusic()
             }
             R.id.device_fresh->{
                 //刷新设备列表
                 askBindDevices()
             }
+        }
+    }
+
+    /**
+     * 跳转音乐播放界面
+     */
+    fun turnToMusic(){
+        //跳转音乐播放界面
+        currentDevice?.let {
+            mViewModel.subscribeMediaStatus(it.device_id)
+            startActivity(Intent(this,MusicActivity::class.java).apply {
+                putExtra(IFLYOS.DEVICE_ID,currentDevice)
+            })
+        }?: kotlin.run {
+            LoadingUtil.showToast(this,getString(R.string.plz_add))
         }
     }
 
@@ -325,12 +347,29 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                     if(deviceList.size>0){
                         currentDevice?.let {cur->
                             if(!deviceList.contains(cur)){
-                                //如果不为空并且不在设备列表中默认选择第一个
-                                currentDevice = deviceList[0]
+                                //如果不为空并且不在设备列表中默认选择最后一个
+                                currentDevice = deviceList.lastOrNull()
+                            }else{
+                                //存在设备信息更新
+                                val device = deviceList[deviceList.indexOf(cur)]
+                                if(!cur.isSameStatus(device)){
+                                    currentDevice = device
+                                }
                             }
                         }?: kotlin.run {
-                            //如果currentDevice为空默认选择第一个
-                            currentDevice = deviceList[0]
+                            //如果currentDevice为空默认选择最后一个
+                            ConfigUtils.getString(ConfigUtils.KEY_DEVICE_ID,null)?.let {saveID->
+                                deviceList.forEach {device->
+                                    if(device.device_id == saveID){
+                                        currentDevice = device
+                                        return@run
+                                    }
+                                }
+                            }?: kotlin.run {
+                                currentDevice = deviceList.lastOrNull()
+                                ConfigUtils.putString(ConfigUtils.KEY_DEVICE_ID,currentDevice?.device_id)
+                            }
+
                         }
                     }else{
                         //未绑定设备
