@@ -63,7 +63,7 @@ class SimpleRecyclerHelper<
         }
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if(dataBeans.size > position && isA<SimpleViewHolder<*,*>>(holder)){
-                (holder as SimpleViewHolder<T,*>).invalidate(dataBeans[position],position)
+                (holder as SimpleViewHolder<T,*>).invalidate(dataBeans[position],position,selectedBean)
                 return
             }
             if(noMore && isA<MoreViewHolder>(holder)){
@@ -106,14 +106,26 @@ class SimpleRecyclerHelper<
     }
 
     /**
-     * 通知
+     * 通知数据改变
+     * @param bean 如果为空 则表示从第一个数据开始
      */
-    fun notifyDataChanged(data:T){
-        if(dataBeans.contains(data)){
-            val index = dataBeans.indexOf(data)
-            adapter.notifyItemChanged(dataBeans.indexOf(data))
+    fun notifyDataChanged(bean:T? = null){
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
+        selectedBean = bean
+        if(null == selectedBean && dataBeans.size > 0){
+            selectedBean = dataBeans[0]
         }
-    }
+        layoutManager?.let {
+            val firstIndex = it.findFirstVisibleItemPosition()
+            val lastIndex = it.findLastVisibleItemPosition()
+            for (index in firstIndex..lastIndex){
+                val holder = recyclerView.findViewHolderForAdapterPosition(index)
+                holder?.let {holder->
+                    (holder as? SimpleViewHolder<T,*> )?.onDataChanged(bean)
+                }
+            }
+        }
+    }private var selectedBean:T? = null
 
     /**
      * 加载下一页
@@ -153,7 +165,7 @@ class SimpleRecyclerHelper<
             return
         }else{
             dataBeans.addAll(songs)
-            adapter.notifyItemInserted(changedItem)
+            adapter.notifyItemRangeChanged(changedItem,songs.size)
             if(songs.size % ONE_PAGE_SIZE != 0){
                 onUpdateMoreStyle()
             }
@@ -204,15 +216,17 @@ class SimpleRecyclerHelper<
         /**
          * 渲染数据
          * @param data
+         * @param position
+         * @param compare
          * 数据为空并且viewType为MORE的情况为more控件
          */
-        internal fun invalidate(data: T?,position: Int){
+        internal fun invalidate(data: T?,position: Int,compare:T?=null){
             bean = data
             pos = position
-            onDataChanged()
+            onDataChanged(compare)
         }
 
-        abstract fun onDataChanged()
+        abstract fun onDataChanged(compare:T?)
     }
 
     class MoreViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){

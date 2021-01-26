@@ -53,11 +53,11 @@ android {
             signingConfig signingConfigs.config
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             buildConfigField("String", "BASE_URL", "\"" + project.BASE_URL_RELEASE + "\"")
             buildConfigField("String", "BASE_FILE_URL", "\"" + project.BASE_FILE_URL_RELEASE + "\"")
             zipAlignEnabled true
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }

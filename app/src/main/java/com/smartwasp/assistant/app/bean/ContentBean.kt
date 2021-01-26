@@ -9,8 +9,20 @@ import java.io.Serializable
  * 内容bean
  */
 data class ContentBean(@SerializedName(value = "enable",alternate = ["music_access"])
-                       var enable:Boolean,
+                       var enable:Boolean = false,
                        val redirect_url:String,
                        @SerializedName(value = "text",alternate = ["name"])
-                       var text:String,
-                       var value:String):Serializable
+                       var text:String = "",
+                       var value:String):Serializable{
+
+
+    /**
+     * 判定两个对象是否相等
+     * @param other 比较对象
+     */
+    override fun equals(other: Any?): Boolean {
+        other ?: return false
+        if(other !is ContentBean) return false
+        return other.enable == enable && other.text == text
+    }
+}

@@ -1,12 +1,10 @@
 package com.smartwasp.assistant.app.base
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -17,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.util.ScreenUtil
+import com.smartwasp.assistant.app.util.StatusBarUtil
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.reflect.ParameterizedType
@@ -50,6 +48,25 @@ abstract class BaseFragment<
         mModelClass.let {
             mViewModel = ViewModelProviders.of(this).get(it as Class<VM>)
         }
+    }
+
+    /**
+     * 拦截返回键
+     * @return 是否拦截
+     */
+    open fun interceptLeftButton():Boolean{
+        childFragmentManager.fragments.forEach {
+            (it as? BaseFragment<*,*>)?.let {baseFragment ->
+               if(baseFragment.interceptLeftButton()){
+                   return true
+               }
+            }
+        }
+        if(childFragmentManager.backStackEntryCount > 0){
+            childFragmentManager.popBackStack()
+            return true
+        }
+        return false
     }
 
     override fun onAttach(context: Context) {
@@ -135,7 +152,7 @@ abstract class BaseFragment<
         super.onViewCreated(view, savedInstanceState)
         Logger.d("onViewCreated")
         requireView().findViewById<View>(R.id.topInset)?.let {
-            it.layoutParams.height = ScreenUtil.statusHeight(requireContext())
+            it.layoutParams.height = StatusBarUtil.getStatusBarHeight(requireContext())
         }
     }
 
@@ -179,13 +196,6 @@ abstract class BaseFragment<
      */
     open fun onNavigatorClick(){
 
-    }
-
-    /**
-     * 是否拦截左侧按钮
-     */
-    open fun interceptLeftButton():Boolean{
-        return false
     }
 
     /**

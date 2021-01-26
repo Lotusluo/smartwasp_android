@@ -52,6 +52,16 @@ data class DeviceBean(var alias:String = "",
     }
 
     /**
+     * 比较两个相同设备是否相同的状态
+     * @param compare 比较的设备
+     */
+    fun isSameStatus(compare:DeviceBean):Boolean{
+        if(!equals(compare))
+            return false
+        return compare?.music?.equals(music) == true
+    }
+
+    /**
      * 判定两个对象是否相等
      * @param other 比较对象
      */

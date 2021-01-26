@@ -9,7 +9,7 @@ object ConfigUtils {
     private const val PREF_NAME = "com.smartwasp.assistant.app.CONFIG"
 
     const val KEY_USER_ID = "user_id"
-
+    const val KEY_DEVICE_ID = "device_id"
     private var pref: SharedPreferences? = null
 
     private val listeners = HashSet<OnConfigChangedListener>()

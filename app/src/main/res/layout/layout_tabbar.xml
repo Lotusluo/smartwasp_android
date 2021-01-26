@@ -48,7 +48,7 @@
             android:id="@+id/tab_mall"
             android:tag="4"
             android:drawableTop="@mipmap/ic_tabbar_house"
-            android:text="@string/tab_mall"
+            android:text="@string/tab_home"
             android:onClick="@{onclickListener}"
             style="@style/TabBarTextStyle"/>
 

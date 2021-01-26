@@ -4,18 +4,20 @@ package com.smartwasp.assistant.app.fragment
 import com.iflytek.home.sdk.IFlyHome
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.databinding.FragmentDialogBinding
 import com.smartwasp.assistant.app.viewModel.DialogModel
 
+
 /**
- * Created by luotao on 2021/1/15 13:39
+ * Created by luotao on 2021/1/26 10:37
  * E-Mail Address：gtkrockets@163.com
  */
-class DialogFragment private constructor():WebViewMajorFragment<DialogModel,FragmentDialogBinding>() {
+class SmartFragment private constructor(): WebViewMajorFragment<DialogModel,FragmentDialogBinding>() {
 
     companion object{
-        fun newsInstance():DialogFragment{
-            return DialogFragment()
+        fun newsInstance():SmartFragment{
+            return SmartFragment()
         }
     }
 
@@ -31,10 +33,19 @@ class DialogFragment private constructor():WebViewMajorFragment<DialogModel,Frag
             SmartApp.activity?.currentDevice?.let {
                 val params = HashMap<String, String>()
                 params["deviceId"] = it.device_id
-                IFlyHome.openWebPage(webView, IFlyHome.DIALOGUE, params).toString()
+                IFlyHome.openWebPage(webView, IFlyHome.CONTROLLED_DEVICES, params).toString()
             } ?: kotlin.run {
 
             }
         }
+    }
+
+    /**
+     * 打开新页面
+     * @param tag
+     * @param params
+     */
+    override fun openNewPage1(tag: String, params: String?) {
+        addFragmentByTag(R.id.container,WebViewMinorFragment.newsInstance(tag = tag))
     }
 }

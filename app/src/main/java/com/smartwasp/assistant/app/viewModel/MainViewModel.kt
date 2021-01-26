@@ -173,11 +173,22 @@ class MainViewModel(application: Application):AskDeviceModel(application) {
      * @param activity
      */
     fun initBinder(activity: MainActivity){
-        service ?: kotlin.run {
+        service?.let {
+            subscribeDeviceStatus()
+        } ?: kotlin.run {
             val intent = Intent(activity, PushService::class.java)
             activity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         }
-        subscribeDeviceStatus()
+    }
+
+    /**
+     * 清除binder
+     */
+    fun clearBinder(activity: MainActivity){
+        try {
+            activity.unbindService(serviceConnection)
+        }catch (e :Throwable){}
+        service = null
     }
 
     @Volatile

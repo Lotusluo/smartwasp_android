@@ -61,4 +61,9 @@
     <string name="get_devices_err">获取绑定设备失败</string>
     <string name="empty_devices">暂无设备</string>
     <string name="exit_confirm">是否退出登录?</string>
+    <string name="ic_routines">快捷指令</string>
+    <string name="ic_alarm">我的闹钟</string>
+    <string name="ic_about">关于我们</string>
+    <string name="ic_about_content">小黄蜂在线</string>
+    <string name="ic_content">内容账号</string>
 </resources>

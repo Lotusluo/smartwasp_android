@@ -13,6 +13,7 @@ import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.push.OsPushService
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
@@ -33,9 +34,6 @@ import kotlin.system.exitProcess
  */
 class SmartApp : Application() {
     companion object{
-        lateinit var app:SmartApp
-            private set
-
         //登录的用户数据
         var userBean:UserBean? = null
         //是否已经登录
@@ -74,6 +72,7 @@ class SmartApp : Application() {
              */
             override fun onMediaStateMessage(deviceId: String, message: String) {
                 super.onMediaStateMessage(deviceId, message)
+                Logger.e("onMediaStateMessage:$message")
                 if(!message.isNullOrEmpty()){
                     try {
                         val stateBeans = Gson().fromJson<StatusBean<MusicStateBean>>(message, object: TypeToken<StatusBean<MusicStateBean>>(){}.type)
@@ -93,6 +92,7 @@ class SmartApp : Application() {
              */
             override fun onDeviceStateMessage(userId: String, message: String) {
                 super.onDeviceStateMessage(userId, message)
+                Logger.e("onDeviceStateMessage:$message")
                 if(!message.isNullOrEmpty()){
                     try {
                         val stateBeans = Gson().fromJson<StatusBean<DeviceBean>>(message, object: TypeToken<StatusBean<DeviceBean>>(){}.type)
@@ -104,6 +104,8 @@ class SmartApp : Application() {
                     }
                 }
             }
+
+
         }
         //设备状态观察者列表
         private val devStateObservers:MutableList<MutableLiveData<StatusBean<DeviceBean>>> = mutableListOf()
@@ -144,6 +146,9 @@ class SmartApp : Application() {
         fun removeMediaObserver(liveData: MutableLiveData<StatusBean<MusicStateBean>>){
             mediaStateObservers.remove(liveData)
         }
+        lateinit var app:SmartApp
+            private set
+        var activity:MainActivity? = null
     }
 
     /**
@@ -153,7 +158,7 @@ class SmartApp : Application() {
         super.onCreate()
         app = this
         //讯飞初始化
-        IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.STANDARD)
+        IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.CUSTOM_TOKEN)
         //设置支持的https协议
         System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3")
         //今日头条适配方案
@@ -167,6 +172,13 @@ class SmartApp : Application() {
         Logger.addLogAdapter(AndroidLogAdapter())
         //初始化配置
         ConfigUtils.init(app)
+        //模拟
+        IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
+        if(ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null).isNullOrEmpty()){
+            val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")
+            SmartApp.userBean = userBean
+            ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
+        }
         //恢复用户ID
         GlobalScope.launch(Dispatchers.IO) {
             val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null)

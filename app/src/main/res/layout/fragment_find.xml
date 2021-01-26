@@ -80,6 +80,7 @@
                             android:textColor="@color/smartwasp_yellow1"
                             android:paddingStart="30dp"
                             android:paddingEnd="10dp"
+                            android:onClick="@{onclickListener}"
                             android:background="@drawable/shape_mask_bg_radius40"
                             app:layout_scrollFlags="scroll"/>
 

@@ -10,9 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.iflytek.home.sdk.IFlyHome
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.DeviceSetActivity
 import com.smartwasp.assistant.app.activity.PrevBindActivity
+import com.smartwasp.assistant.app.activity.WebViewActivity
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
@@ -45,7 +48,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      * 通知绑定的设备的改变
      */
     fun notifyBindDevicesChanged(){
-        onRenderBindDevices(bindDevices)
+        onRenderBindDevices(SmartApp.activity?.bindDevices)
     }
 
     /**
@@ -82,7 +85,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         banner.addBannerLifecycleObserver(this)
         banner.currentItem = 1
         if(deviceBeans.size > 1){
-            banner.currentItem = deviceBeans.indexOf(currentDevice) + 1
+            banner.currentItem = deviceBeans.indexOf(SmartApp.activity?.currentDevice) + 1
         }
         //todo 探寻impl中用到interface哪个方法就实现哪个
         banner.addOnPageChangeListener(object:OnPageChangeListener{
@@ -159,6 +162,41 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
 //        不可见的时候取消轮询设备是否在线
         mViewModel.cancelAskDevStatus(this)
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = false
+    }
+
+    /**
+     * 按钮点击
+     * @param v
+     */
+    override fun onButtonClick(v: View){
+        super.onButtonClick(v)
+        when(v.id){
+            R.id.btnRoutines->{
+                onTurnToPage(IFlyHome.TRAINING_PLAN)
+            }
+            R.id.btnAlarm->{
+                onTurnToPage(IFlyHome.CLOCKS)
+            }
+            R.id.btnContent->{
+                onTurnToPage(IFlyHome.ACCOUNTS)
+            }
+        }
+    }
+
+    /**
+     * 跳转讯飞集成页
+     * @param pageIndex 讯飞集成页
+     */
+    private fun onTurnToPage(pageIndex:String){
+        SmartApp.activity?.currentDevice?.let {
+            startActivity(Intent(requireContext(), WebViewActivity::class.java).apply {
+                putExtra(IFLYOS.EXTRA_PAGE,pageIndex)
+                putExtra(IFLYOS.EXTRA_TYPE,IFLYOS.TYPE_PAGE)
+                putExtra(IFLYOS.DEVICE_ID,it.device_id)
+            })
+        }?: kotlin.run {
+            LoadingUtil.showToast(requireContext(),getString(R.string.add_device1))
+        }
     }
 
     /**

@@ -54,7 +54,7 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
         media_icon.visibility = View.GONE
         mBinding.deviceBean = currentDevice
         icon_device_status.isSelected = currentDevice.isOnline()
-        currentMedia = intent.getSerializableExtra(IFLYOS.EXTRA) as StatusBean<MusicStateBean>?
+        currentMedia = SmartApp.activity?.mediaState
         initObserver()
         mViewModel.deviceID = currentDevice.device_id
         mViewModel.mediaControl.observe(this, Observer {

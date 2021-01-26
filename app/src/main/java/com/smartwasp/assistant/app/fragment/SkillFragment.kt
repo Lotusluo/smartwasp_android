@@ -3,6 +3,7 @@ package com.smartwasp.assistant.app.fragment
 
 import com.iflytek.home.sdk.IFlyHome
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.databinding.FragmentDialogBinding
 import com.smartwasp.assistant.app.viewModel.DialogModel
@@ -29,7 +30,7 @@ class SkillFragment private constructor(): WebViewMajorFragment<DialogModel,Frag
     override fun notifyCurDeviceChanged() {
         super.notifyCurDeviceChanged()
         webViewTag?.let { webView ->
-            currentDevice?.let {
+            SmartApp.activity?.currentDevice?.let {
                 val params = HashMap<String, String>()
                 params["deviceId"] = it.device_id
                 IFlyHome.openWebPage(webView, IFlyHome.SKILLS, params).toString()

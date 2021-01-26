@@ -47,9 +47,6 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.statusBarColor = Color.TRANSPARENT
-
         if (savedInstanceState != null) {
             mFlash = savedInstanceState.getBoolean(FLASH_STATE, false)
             mAutoFocus = savedInstanceState.getBoolean(AUTO_FOCUS_STATE, true)

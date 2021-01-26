@@ -42,7 +42,9 @@ abstract class WebViewMajorFragment<
         //注册registerWebView与openWebPage是在View中使用IFlyHomeSDK的地方，其余均在VM中
         return IFlyHome.register(webview, object : IFlyHomeCallback() {
             override fun updateHeaderColor(color: String) {}
-            override fun updateTitle(title: String) {}
+            override fun updateTitle(title: String) {
+                setTittle(title)
+            }
             /**
              * 页面中需要打开新页面时回调
              */
@@ -58,6 +60,7 @@ abstract class WebViewMajorFragment<
                     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                         super.onReceivedError(view, request, error)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                            onReceivedError:net::ERR_NAME_NOT_RESOLVED
                             Logger.e("onReceivedError:${error?.description}")
                         }
                     }

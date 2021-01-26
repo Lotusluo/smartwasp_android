@@ -2,18 +2,12 @@ package com.smartwasp.assistant.app.fragment
 
 import android.view.View
 import androidx.databinding.ViewDataBinding
-import com.iflytek.home.sdk.IFlyHome
-import com.kyleduo.switchbutton.VoicePlayingIcon
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.activity.MainActivity
+import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.BaseFragment
 import com.smartwasp.assistant.app.base.BaseViewModel
-import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.BindDevices
-import com.smartwasp.assistant.app.bean.MusicStateBean
-import com.smartwasp.assistant.app.bean.StatusBean
+import com.smartwasp.assistant.app.base.SmartApp
 import kotlinx.android.synthetic.main.layout_device_header.*
 
 /**
@@ -21,47 +15,14 @@ import kotlinx.android.synthetic.main.layout_device_header.*
  * E-Mail Address：gtkrockets@163.com
  */
 abstract class MainChildFragment<VM: BaseViewModel,BD: ViewDataBinding>: BaseFragment<VM,BD>(){
-
-    /**
-     * 获取当前选中设备
-     */
-    protected val currentDevice:DeviceBean?
-    get() {
-        (activity as MainActivity?)?.let {
-            return it.currentDevice
-        }
-        return null
-    }
-
-    /**
-     * 获取当前账户绑定的设备
-     */
-    protected val bindDevices: BindDevices?
-        get() {
-            (activity as MainActivity?)?.let {
-                return it.bindDevices
-            }
-            return null
-        }
-
-    /**
-     * 获取当前设备媒体状态
-     */
-    protected val mediaState: StatusBean<MusicStateBean>?
-        get() {
-            (activity as MainActivity?)?.let {
-                return it.mediaState
-            }
-            return null
-        }
-
     /**
      * 按钮点击
+     * @param v
      */
     override fun onButtonClick(v: View){
         when(v.id){
             R.id.device_name,R.id.media_icon,R.id.device_add,R.id.device_fresh->{
-                (activity as MainActivity?)?.let {
+                (activity as BaseActivity<*,*>)?.let {
                     it.onButtonClick(v)
                 }
             }
@@ -74,9 +35,11 @@ abstract class MainChildFragment<VM: BaseViewModel,BD: ViewDataBinding>: BaseFra
      */
     open fun notifyCurDeviceChanged(){
         deviceUIChanged = false
+        if(!isResumed || isHidden)
+            return
         icon_device_status?.let {status->
             deviceUIChanged = true
-            currentDevice?.let {
+            SmartApp.activity?.currentDevice?.let {
                 mBinding.setVariable(BR.deviceBean,it)
                 status.isSelected =it.isOnline()
             }
@@ -90,7 +53,7 @@ abstract class MainChildFragment<VM: BaseViewModel,BD: ViewDataBinding>: BaseFra
         mediaUIChanged = true
         media_icon?.let {music->
             mediaUIChanged = false
-            mediaState?.data?.music_player?.let {
+            SmartApp.activity?.mediaState?.data?.music_player?.let {
                 if (it.playing)music.start()
                 else music.stop()
             }?: kotlin.run {
@@ -114,20 +77,27 @@ abstract class MainChildFragment<VM: BaseViewModel,BD: ViewDataBinding>: BaseFra
         notifyMediaChanged()
     }
 
-
+    /**
+     * 停止
+     */
     override fun onStop() {
         super.onStop()
         media_icon?.stop()
     }
 
+    /**
+     * 是否被隐藏
+     * @param hidden
+     */
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         media_icon?.let {
             if(hidden) it.stop()
             else {
+                if(!deviceUIChanged)
+                    notifyCurDeviceChanged()
                 notifyMediaChanged()
             }
         }
     }
-
 }

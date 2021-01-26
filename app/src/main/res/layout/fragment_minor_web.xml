@@ -5,6 +5,7 @@
 
     <data>
         <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
+        <variable name="tittle" type="String" />
         <variable
             name="onclickListener"
             type="android.view.View.OnClickListener" />
@@ -31,6 +32,7 @@
             android:layout_height="?attr/toolbarSize"
             app:onclickListener="@{onclickListener}"
             app:leftIcon="@{leftIcon}"
+            app:tittle="@{tittle}"
             layout="@layout/layout_toolbar"
             app:layout_constraintTop_toBottomOf="@id/topInset"/>
 

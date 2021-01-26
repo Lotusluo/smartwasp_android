@@ -19,6 +19,7 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.StatusBarUtil
 import me.jessyan.autosize.AutoSizeCompat
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -49,7 +50,9 @@ abstract class BaseActivity<
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initStatusBar()
+        StatusBarUtil.transparencyBar(this)
+        StatusBarUtil.setLightStatusBar(this,true,true)
+        StatusBarUtil.setStatusBarColor(this,R.color.smartwasp_white)
         manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         layoutResID?.let {
             setContentView(it)
@@ -61,25 +64,6 @@ abstract class BaseActivity<
         }
         createModelView()
         Logger.d("onCreate:${this}")
-    }
-
-
-    /**
-     * 初始化状态栏样式
-     * @param flag 是否沉浸式
-     */
-    protected fun initStatusBar(flag:Boolean = false){
-        window.statusBarColor = resources.getColor(R.color.smartwasp_white)
-        //设置沉浸状态栏
-        if (Build.VERSION.SDK_INT >= 21 && flag) {
-            val decorView = window.decorView
-            val option = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-            decorView.systemUiVisibility = option
-            window.statusBarColor = Color.TRANSPARENT
-        }
-        //设置状态栏文字反向颜色
-        if (Build.VERSION.SDK_INT >= 23)
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 
     /**
@@ -239,6 +223,17 @@ abstract class BaseActivity<
      * 是否拦截左侧按钮
      */
     open fun interceptLeftButton():Boolean{
+        supportFragmentManager.fragments.forEach {
+            (it as? BaseFragment<*,*>)?.let {baseFragment ->
+                if(baseFragment.interceptLeftButton()){
+                    return true
+                }
+            }
+        }
+        if(supportFragmentManager.backStackEntryCount > 0){
+            supportFragmentManager.popBackStack()
+            return true
+        }
         return false
     }
 
@@ -249,23 +244,18 @@ abstract class BaseActivity<
 
     }
 
-    private var lastExitTime:Long = 0
+    /**
+     * 按键点击
+     * @param keyCode
+     * @param event
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK){
-            val info: ActivityManager.RunningTaskInfo = manager.getRunningTasks(1)[0]
-            if(info.numActivities <= 1){
-                if (System.currentTimeMillis() - lastExitTime > 2000) {
-                    LoadingUtil.showToast(this,getString(R.string.exit_again))
-                    lastExitTime = System.currentTimeMillis()
-                } else {
-                    SmartApp.finish()
-                }
-                return true
-            }
+            onNavigatorClick()
+            return true
         }
         return super.onKeyDown(keyCode, event)
     }
-
 
     /**
      * 针对AutoSize布局混乱的问题解决

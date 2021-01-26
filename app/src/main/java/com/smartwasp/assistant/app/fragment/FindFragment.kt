@@ -2,6 +2,7 @@ package com.smartwasp.assistant.app.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.WebViewActivity
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.bean.BannerBean
@@ -30,6 +32,7 @@ import com.smartwasp.assistant.app.bean.ItemBean
 import com.smartwasp.assistant.app.databinding.FragmentFindBinding
 import com.smartwasp.assistant.app.databinding.LayoutFindGroupBinding
 import com.smartwasp.assistant.app.databinding.LayoutFindItemBinding
+import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.viewModel.FindModel
 import com.smartwasp.assistant.app.widget.BezelImageView
@@ -60,6 +63,25 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
     companion object{
         fun newsInstance():FindFragment{
             return FindFragment()
+        }
+    }
+
+    /**
+     * 按钮点击
+     * @param v
+     */
+    override fun onButtonClick(v: View) {
+        super.onButtonClick(v)
+        when(v.id){
+            R.id.card ->{
+                SmartApp.activity?.currentDevice?.music?.let {
+                    startActivity(Intent(requireActivity(), WebViewActivity::class.java).apply {
+                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+                        putExtra(IFLYOS.EXTRA_URL, it?.redirect_url)
+                        putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
+                    })
+                }
+            }
         }
     }
 
@@ -106,7 +128,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
             mViewModel.cancel()
             swipeRefreshLayout.isRefreshing = true
             hotArea1.visibility = View.VISIBLE
-            currentDevice?.let {
+            SmartApp.activity?.currentDevice?.let {
                 mViewModel.getFindData(it.device_id).observe(this@FindFragment, Observer {findBean->
                     swipeRefreshLayout.isRefreshing = false
                     hotArea1.visibility = View.GONE
@@ -273,7 +295,19 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
      * @param itemView 视图
      */
     inner class NetImageHolder(itemView:View): RecyclerView.ViewHolder(itemView){
+        private lateinit var bean:BannerBean
+        init {
+            itemView.setOnClickListener {
+                SmartApp.activity?.currentDevice?.music?.let {
+                    startActivity(Intent(requireActivity(), WebViewActivity::class.java).apply {
+                        putExtra(IFLYOS.EXTRA_URL, bean?.url)
+                        putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
+                    })
+                }
+            }
+        }
         fun invalidate(data: BannerBean){
+            bean = data
             Glide.with(itemView)
                     .load(data.image)
                     .dontAnimate()

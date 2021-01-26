@@ -10,15 +10,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.ItemBean
 import com.smartwasp.assistant.app.bean.SongBean
 import com.smartwasp.assistant.app.databinding.FragmentMusicItemBinding
 import com.smartwasp.assistant.app.databinding.LayoutSongItemBinding
 import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.ScreenUtil
 import com.smartwasp.assistant.app.util.SimpleRecyclerHelper
+import com.smartwasp.assistant.app.util.StatusBarUtil
 import com.smartwasp.assistant.app.viewModel.MusicModel
 import kotlinx.android.synthetic.main.fragment_music_item.*
 import kotlinx.android.synthetic.main.layout_song_item.view.*
@@ -39,15 +39,24 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
     }
 
     /**
-     * 视图
+     * 创建视图
      * @param view
      * @param savedInstanceState
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        StatusBarUtil.setLightStatusBar(requireActivity(),false,true)
         initHeader()
         initImage()
         initRecyclerView()
+    }
+
+    /**
+     * 销毁视图
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        StatusBarUtil.setLightStatusBar(requireActivity(),true,true)
     }
 
     /**
@@ -58,7 +67,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
             val icBack = resources.getDrawable(R.mipmap.ic_navback)
             DrawableCompat.setTint(icBack,resources.getColor(R.color.smartwasp_blue))
             navigationIcon = icBack
-            (layoutParams as ViewGroup.MarginLayoutParams).topMargin = ScreenUtil.statusHeight(requireContext())
+            (layoutParams as ViewGroup.MarginLayoutParams).topMargin = StatusBarUtil.getStatusBarHeight(requireContext())
             setNavigationOnClickListener {
                 parentFragmentManager.popBackStack()
             }
@@ -67,7 +76,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
         mBinding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.BaseOnOffsetChangedListener<AppBarLayout> {
             appBar: AppBarLayout, position: Int ->
             requireContext()?.let {
-                val fittedHeight = appBar.measuredHeight - mBinding.toolbar.measuredHeight - ScreenUtil.statusHeight(it)
+                val fittedHeight = appBar.measuredHeight - mBinding.toolbar.measuredHeight - StatusBarUtil.getStatusBarHeight(it)
                 val limitedHeight = fittedHeight / 2
                 val absPosition = abs(position)
                 mBinding.titleVisible = absPosition >= limitedHeight
@@ -106,7 +115,9 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                     }
                 })
             }
+            notifyDataChanged(SmartApp.activity?.mediaState?.data?.music)
             loadMoreInit()
+
         }
     }private var simpleRecyclerHelper:SimpleRecyclerHelper<SongBean,LayoutSongItemBinding,SongViewHolder>? = null
 
@@ -121,11 +132,11 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
             itemView.setOnClickListener {
                 if(checkOffline())
                     return@setOnClickListener
-                currentDevice?.let {
+                SmartApp.activity?.currentDevice?.let {
                     mViewModel.playMedia(it.device_id,bean?.id,itemBean.id).observe(this@MusicItemFragment,
                             Observer {result->
                                 if(result.isSuccess){
-
+                                    simpleRecyclerHelper?.notifyDataChanged(bean)
                                 }else{
                                     this@MusicItemFragment.requireContext()?.let {context->
                                         LoadingUtil.showToast(context,context.getString(R.string.try_again))
@@ -140,18 +151,21 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                 }
             }
         }
-        override fun onDataChanged() {
+        override fun onDataChanged(compare: SongBean?) {
             itemViewBinding?.let {
                 it.bean2 = bean
                 it.bean2Pos = (pos + 1).toString()
-                it.tvName.isSelected = mediaState?.data?.music?.id == bean?.id
+                it.tvName.isSelected =
+                        if(null != compare) compare?.id == bean?.id
+                        else SmartApp.activity?.mediaState?.data?.music?.id == bean?.id
+
             }
         }
     }
 
     //提示框
     private fun checkOffline():Boolean{
-        currentDevice?.let {
+        SmartApp.activity?.currentDevice?.let {
             if(!it.isOnline()){
                 this@MusicItemFragment.requireContext()?.let {context->
                     LoadingUtil.showToast(context,context.getString(R.string.offline))
@@ -168,7 +182,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
     override fun notifyMediaChanged() {
         super.notifyMediaChanged()
         //确定是否需要刷新某个Holder
-        mediaState?.data?.music?.let {
+        SmartApp.activity?.mediaState?.data?.music?.let {
             simpleRecyclerHelper?.notifyDataChanged(it)
         }
     }
@@ -182,11 +196,11 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
             return
         when(v.id){
             R.id.playAll ->{
-                currentDevice?.let {
+                SmartApp.activity?.currentDevice?.let {
                     mViewModel.playMedia(it.device_id,"",itemBean.id).observe(this@MusicItemFragment,
                             Observer {result->
                                 if(result.isSuccess){
-
+                                    simpleRecyclerHelper?.notifyDataChanged()
                                 }else{
                                     this@MusicItemFragment.requireContext()?.let {context->
                                         LoadingUtil.showToast(context,context.getString(R.string.try_again))
@@ -196,12 +210,12 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                 }
             }
             R.id.sheet_play_btn ->{
-                currentDevice?.let {
+                SmartApp.activity?.currentDevice?.let {
                      (v.getTag(R.id.extra_tag) as SongBean?)?.let {song->
                         mViewModel.playMedia(it.device_id,song.id,itemBean.id).observe(this@MusicItemFragment,
                                 Observer {result->
                                     if(result.isSuccess){
-
+                                        simpleRecyclerHelper?.notifyDataChanged(song)
                                     }else{
                                         this@MusicItemFragment.requireContext()?.let {context->
                                             LoadingUtil.showToast(context,context.getString(R.string.try_again))
