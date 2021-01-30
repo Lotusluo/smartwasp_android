@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Smartwasp</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">小黄蜂在线</string>
+    <string name="wifi_list">选择网络</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -31,11 +31,14 @@
     <string name="title_login">小黄蜂登录</string>
     <string name="add_device">添加主控设备</string>
     <string name="add_device1">请添加设备</string>
-    <string name="scan_device">扫码添加</string>
+    <string name="scan_device">扫码授权</string>
+    <string name="ap_device">无屏授权测试</string>
+    <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>
     <string name="words1">小黄蜂智能音箱</string>
     <string name="words2">带你进入全新世界</string>
     <string name="camera_per">扫码需要摄像头权限</string>
+    <string name="ap_per">配网需要位置信息权限</string>
     <string name="exit_again">再按一次退出</string>
     <string name="tip_device">设备信息</string>
     <string name="tip_zone">设备位置</string>
@@ -46,6 +49,7 @@
     <string name="keep_wake_up">在一次唤醒后,可以保持一段时间内无需唤醒便可以直接与设备交互,交互跟自然</string>
     <string name="unBind">解除绑定</string>
     <string name="unBindTip">是否解除绑定?</string>
+    <string name="nextStep">下一步</string>
     <string name="tip">提示</string>
     <string name="page_tip"></string>
     <string name="play">播放</string>
@@ -66,4 +70,23 @@
     <string name="ic_about">关于我们</string>
     <string name="ic_about_content">小黄蜂在线</string>
     <string name="ic_content">内容账号</string>
+    <string name="music_disEnabled">请开通音乐</string>
+    <string name="music_enabled">已开通音乐</string>
+    <string name="checkUpdate">检查更新</string>
+    <string name="prev_bind_tittle">开始配网</string>
+    <string name="prev_bind_tittle1">设备进入配网模式引导</string>
+    <string name="prev_bind_subTittle"></string>
+    <string name="prev_bind_subTittle1">接通电源，设备开机，长按静音键，进入配网模式</string>
+    <string name="prev_bind_subTittle_a">配网成功</string>
+    <string name="prev_bind_subTittle_a1">设备正在配网</string>
+    <string name="ap_step_1">选择设备工作Wi-Fi</string>
+    <string name="ap_step_1_1">暂不支持连接5G Wi-Fi</string>
+    <string name="wifiTip">选取可见的网络</string>
+    <string name="wifiName">Wi-Fi名称</string>
+    <string name="wifiPassWd">Wi-Fi密码</string>
+    <string name="wifiInfoErr">请正确输入Wi-Fi信息</string>
+    <string name="ap_step_3">请选择</string>
+    <string name="ap_step_3_1">热点</string>
+    <string name="ap_step_3_2">刷新</string>
+    <string name="ap_step_3_3">没有搜索到热点，请确认设备已进入联网模式</string>
 </resources>

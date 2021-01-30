@@ -157,8 +157,7 @@ class SmartApp : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
-        //讯飞初始化
-        IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.CUSTOM_TOKEN)
+
         //设置支持的https协议
         System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3")
         //今日头条适配方案
@@ -172,6 +171,8 @@ class SmartApp : Application() {
         Logger.addLogAdapter(AndroidLogAdapter())
         //初始化配置
         ConfigUtils.init(app)
+        //讯飞初始化
+        IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.CUSTOM_TOKEN)
         //模拟
         IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
         if(ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null).isNullOrEmpty()){

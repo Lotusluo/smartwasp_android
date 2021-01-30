@@ -11,11 +11,12 @@
             type="android.view.View.OnClickListener" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:orientation="vertical"
         android:background="@color/smartwasp_white"
+        android:fitsSystemWindows="true"
         tools:context=".activity.PrevBindActivity">
 
 <!--        toobar-->
@@ -26,90 +27,181 @@
             app:onclickListener="@{onclickListener}"
             layout="@layout/layout_toolbar" />
 
-<!--        开始扫码-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/scanBtn"
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/shape_mask_bg_radius10_blue"
-            android:onClick="@{onclickListener}"
-            android:text="@string/scan_device"
-            android:textColor="@color/smartwasp_white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <!--设备显示页-->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             app:cardCornerRadius="16dp"
             app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@id/scanBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
+            app:cardUseCompatPadding="true">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline1"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+<!--                上半部蓝色底-->
                 <View
+                    android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="@color/smartwasp_blue"/>
+                    android:background="@color/smartwasp_blue"
+                    app:layout_constraintBottom_toBottomOf="@id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+<!--                下半部白底-->
                 <View
+                    android:id="@+id/view1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="#FFF"/>
-                
-            </LinearLayout>
+                    android:background="@android:color/white"
+                    app:layout_constraintTop_toTopOf="@id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <com.smartwasp.assistant.app.widget.BezelImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@mipmap/smartwasp_logo"
-                android:scaleType="fitXY"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                app:maskDrawable="@drawable/shape_mask_bg_radius10"/>
+<!--                小黄蜂LOGO-->
+                <com.smartwasp.assistant.app.widget.BezelImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/smartwasp_logo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:maskDrawable="@drawable/shape_mask_bg_radius10" />
 
-            <com.smartwasp.assistant.app.widget.BezelImageView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:src="@mipmap/ic_sound_box"
-                android:scaleType="fitXY"
-                android:layout_gravity="center"
-                app:maskDrawable="@drawable/shape_mask_bg_radius20"/>
+<!--                有屏扫码授权-->
+                <com.smartwasp.assistant.app.widget.BezelImageView
+                    android:id="@+id/bezelImageView2"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_screen_box"
+                    android:layout_marginBottom="26dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:maskDrawable="@drawable/shape_mask_bg_radius20" />
 
+<!--                有屏扫码点击-->
+                <View
+                    android:id="@+id/scanBtn"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:background="@drawable/normal_status_drawable20"
+                    android:clickable="true"
+                    android:onClick="@{onclickListener}"
+                    app:layout_constraintBottom_toBottomOf="@id/bezelImageView2"
+                    app:layout_constraintEnd_toEndOf="@id/bezelImageView2"
+                    app:layout_constraintStart_toStartOf="@id/bezelImageView2"
+                    app:layout_constraintTop_toTopOf="@id/bezelImageView2" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/words1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/smartwasp_blue"
-                android:layout_marginBottom="40dp"
-                android:layout_gravity="center_horizontal|bottom"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/scan_device"
+                    app:layout_constraintEnd_toEndOf="@id/bezelImageView2"
+                    app:layout_constraintStart_toStartOf="@id/bezelImageView2"
+                    app:layout_constraintTop_toBottomOf="@id/bezelImageView2" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/words2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/dark_light"
-                android:layout_marginBottom="15dp"
-                android:layout_gravity="center_horizontal|bottom"/>
+<!--                无屏AP授权-->
+                <com.smartwasp.assistant.app.widget.BezelImageView
+                    android:id="@+id/bezelImageView3"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:layout_marginBottom="26dp"
+                    android:src="@mipmap/ic_screen_box1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:maskDrawable="@drawable/shape_mask_bg_radius20" />
+
+<!--                无屏AP点击-->
+                <View
+                    android:id="@+id/ApBtn"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:background="@drawable/normal_status_drawable20"
+                    android:clickable="true"
+                    android:onClick="@{onclickListener}"
+                    app:layout_constraintBottom_toBottomOf="@id/bezelImageView3"
+                    app:layout_constraintEnd_toEndOf="@id/bezelImageView3"
+                    app:layout_constraintStart_toStartOf="@id/bezelImageView3"
+                    app:layout_constraintTop_toTopOf="@id/bezelImageView3" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/ap_device"
+                    app:layout_constraintEnd_toEndOf="@id/bezelImageView3"
+                    app:layout_constraintStart_toStartOf="@id/bezelImageView3"
+                    app:layout_constraintTop_toBottomOf="@id/bezelImageView3" />
+
+<!--                文案一-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/appCompatTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/words2"
+                    android:textColor="@color/dark_light"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+ <!--                文案二-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/words1"
+                    android:textColor="@color/smartwasp_blue"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/appCompatTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:elevation="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
 
 </layout>

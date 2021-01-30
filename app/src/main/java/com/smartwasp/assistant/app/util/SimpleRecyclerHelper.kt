@@ -72,9 +72,6 @@ class SimpleRecyclerHelper<
         }
     }
 
-    //判断泛型
-    inline fun <reified T> isA(value: Any) = value is T
-
     //数据列表
     private var dataBeans:MutableList<T?> = mutableListOf()
     //初始化RecyclerView
@@ -236,3 +233,6 @@ class SimpleRecyclerHelper<
         }
     }
 }
+
+//判断泛型
+inline fun <reified T> isA(value: Any) = value is T

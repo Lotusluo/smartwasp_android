@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
  * Created by luotao on 2021/1/8 10:22
  * E-Mail Address：gtkrockets@163.com
  */
-open class BaseViewModel(application:Application): AndroidViewModel(application), CoroutineScope {
+abstract class BaseViewModel(application:Application): AndroidViewModel(application), CoroutineScope {
 
     //协程的工作
     private var job: Job = Job()

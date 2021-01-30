@@ -27,6 +27,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        Android P 为 Android 9；Android Q 为 Android 10；Android R 为 Android 11
         val controller = ViewCompat.getWindowInsetsController(window.decorView)
         controller?.also {
             it.hide(WindowInsets.Type.statusBars())

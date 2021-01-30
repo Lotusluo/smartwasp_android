@@ -125,11 +125,11 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
     override fun notifyCurDeviceChanged(){
         super.notifyCurDeviceChanged()
         swipeRefreshLayout?.let {swipeRefreshLayout->
-            mViewModel.cancel()
+            mViewModel?.cancel()
             swipeRefreshLayout.isRefreshing = true
             hotArea1.visibility = View.VISIBLE
             SmartApp.activity?.currentDevice?.let {
-                mViewModel.getFindData(it.device_id).observe(this@FindFragment, Observer {findBean->
+                mViewModel?.getFindData(it.device_id)?.observe(this@FindFragment, Observer {findBean->
                     swipeRefreshLayout.isRefreshing = false
                     hotArea1.visibility = View.GONE
                     if(findBean.isSuccess){

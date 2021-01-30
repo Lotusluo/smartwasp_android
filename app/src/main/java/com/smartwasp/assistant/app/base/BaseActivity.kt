@@ -75,6 +75,8 @@ abstract class BaseActivity<
                 (type.actualTypeArguments[0]) as Class<VM>
             }else -> BaseViewModel::class.java
         }
+        if(mModelClass.simpleName == "BaseViewModel")
+            return
         mModelClass.let {
             mViewModel = ViewModelProviders.of(this).get(it as Class<VM>)
         }
@@ -276,6 +278,17 @@ fun FragmentActivity.addFragmentByTag(frameId: Int,fragment: Fragment){
         return
     supportFragmentManager.inTransaction {
         add(frameId, fragment,tag)
+    }
+}
+
+fun FragmentActivity.addFragmentByTagWithStack(frameId: Int,fragment: Fragment){
+    val tag = fragment::class.java.simpleName
+    if(null != supportFragmentManager.findFragmentByTag(tag))
+        return
+    supportFragmentManager.inTransaction {
+        setCustomAnimations(R.anim.slide_right_in,0,0,R.anim.slide_right_out)
+        add(frameId, fragment,tag)
+        addToBackStack(null)
     }
 }
 

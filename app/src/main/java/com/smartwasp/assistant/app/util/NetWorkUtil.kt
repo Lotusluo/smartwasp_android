@@ -3,15 +3,14 @@ package com.smartwasp.assistant.app.util
 import android.content.Context
 import android.os.Looper
 import androidx.core.text.isDigitsOnly
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.SmartApp
-import okhttp3.Cache
-import okhttp3.OkHttpClient
+import okhttp3.*
 import java.io.*
 import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.security.SecureRandom
-import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
@@ -127,14 +126,16 @@ object NetWorkUtil {
 
     /**
      * 为retrofit配置okhttps
+     * @param interceptor 自定义拦截器
      */
-    fun getOkHttpsSSLOkHttpClientForRetrofit():OkHttpClient{
+    fun getOkHttpsSSLOkHttpClientForRetrofit(interceptor:Interceptor? = null):OkHttpClient{
         val okHttpsClientBuilder = getOkHttpsSSLOkHttpClient()
         return okHttpsClientBuilder.run {
             cache(Cache(File("${SmartApp.app.getExternalFilesDir(null)}/okhttp_cache/"),50 * 1024 * 1024))
             connectTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
+            addInterceptor(interceptor)
             build()
         }
     }

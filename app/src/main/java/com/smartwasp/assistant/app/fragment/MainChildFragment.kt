@@ -1,6 +1,7 @@
 package com.smartwasp.assistant.app.fragment
 
 import android.view.View
+import android.view.animation.Animation
 import androidx.databinding.ViewDataBinding
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R

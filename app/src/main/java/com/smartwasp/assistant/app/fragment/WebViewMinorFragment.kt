@@ -2,18 +2,17 @@ package com.smartwasp.assistant.app.fragment
 
 import android.os.Bundle
 import android.view.View
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.databinding.FragmentMinorWebBinding
 import com.smartwasp.assistant.app.util.IFLYOS
-import com.smartwasp.assistant.app.viewModel.MinorModel
 
 /**
  * Created by luotao on 2021/1/23 17:03
  * E-Mail Address：gtkrockets@163.com
  */
-class WebViewMinorFragment private constructor():WebViewMajorFragment<MinorModel,FragmentMinorWebBinding>() {
+class WebViewMinorFragment private constructor():WebViewMajorFragment<BaseViewModel,FragmentMinorWebBinding>() {
 
     companion object{
         fun newsInstance(type:String?=null,tag:String):WebViewMinorFragment{
@@ -39,13 +38,6 @@ class WebViewMinorFragment private constructor():WebViewMajorFragment<MinorModel
         super.onViewCreated(view, savedInstanceState)
         setToolBarIcon(R.mipmap.ic_navback,R.color.smartwasp_blue)
         mType = arguments?.getString(IFLYOS.EXTRA_TYPE)
-    }
-
-    /**
-     * 关闭
-     */
-    override fun onNavigatorClick(){
-        parentFragmentManager.popBackStack()
     }
 
     /**

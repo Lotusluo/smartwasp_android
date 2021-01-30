@@ -1,5 +1,7 @@
 package com.smartwasp.assistant.app.util
 
+import com.orhanobut.logger.Logger
+
 /**
  * @name :      SingletonHolder
  * @author :    luotao
@@ -11,6 +13,7 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
     @Volatile
     private var instance: T? = null
+    val a = null
 
     fun getInstance(arg: A): T {
         val i = instance

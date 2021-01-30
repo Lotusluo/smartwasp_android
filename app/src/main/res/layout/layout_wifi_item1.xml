@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.smartwasp.assistant.app.R" alias="R"/>
+        <import type="android.view.View" alias="View"/>
+        <variable
+            name="wifiBean"
+            type="com.smartwasp.assistant.app.bean.WifiBean" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:background="@drawable/ripple_background_transparent">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="@{wifiBean.linkType == 1 ? View.VISIBLE : View.GONE}"
+            android:layout_marginStart="20dp"
+            android:indeterminateTint="@color/smartwasp_blue"
+            android:indeterminateTintMode="src_atop"
+            android:layout_gravity="center_vertical"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/linked"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:visibility="@{wifiBean.linkType == 2 ? View.VISIBLE : View.GONE}"
+            android:src="@drawable/ic_mtrl_chip_checked_circle"
+            app:tint="@color/smartwasp_blue"
+            android:scaleType="centerInside"
+            android:layout_gravity="center_vertical"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="60dp"
+            android:background="@drawable/line_bottom">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@{wifiBean.ssid}"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/dark_"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"/>
+            <com.smartwasp.assistant.app.widget.SimpleImage
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="15dp"
+                android:src="@mipmap/ic_signal_wifi_3_bar_black_24dp"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</layout>

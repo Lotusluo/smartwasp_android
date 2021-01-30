@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.iflytek.home.sdk.IFlyHome
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.AboutActivity
 import com.smartwasp.assistant.app.activity.DeviceSetActivity
 import com.smartwasp.assistant.app.activity.PrevBindActivity
 import com.smartwasp.assistant.app.activity.WebViewActivity
@@ -55,12 +56,12 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      * 渲染绑定的设备
      */
     private fun onRenderBindDevices(devices: BindDevices?) {
-        mViewModel.cancelAskDevStatus(this)
-        val deviceBeans:MutableList<DeviceBean> =  ArrayList()
+        mViewModel?.cancelAskDevStatus(this)
+        deviceBeans =  ArrayList()
         devices?.user_devices?.let {
-            deviceBeans.addAll(it)
+            deviceBeans!!.addAll(it)
         }
-        deviceBeans.add(0,DeviceBean())
+        deviceBeans!!.add(0,DeviceBean())
         banner.adapter = object : BannerAdapter<DeviceBean,DeviceViewHolder>(deviceBeans){
             override fun onCreateHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
                 val itemView = LayoutInflater.from(SmartApp.app).inflate(R.layout.layout_device_item,parent,false)
@@ -84,16 +85,14 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         banner.setIndicatorSelectedWidth(BannerUtils.dp2px(8f).toInt())
         banner.addBannerLifecycleObserver(this)
         banner.currentItem = 1
-        if(deviceBeans.size > 1){
-            banner.currentItem = deviceBeans.indexOf(SmartApp.activity?.currentDevice) + 1
-        }
+        onSelectedPage()
         //todo 探寻impl中用到interface哪个方法就实现哪个
         banner.addOnPageChangeListener(object:OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {}
         })
-    }
+    }private var deviceBeans:MutableList<DeviceBean>? = null
 
     /**
      * 设备变更
@@ -102,6 +101,18 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         super.notifyCurDeviceChanged()
         banner.adapter?.let {adapter->
             adapter.notifyDataSetChanged()
+            onSelectedPage()
+        }
+    }
+
+    /**
+     * 选中相应的设备
+     */
+    private fun onSelectedPage(){
+        if(null != deviceBeans && deviceBeans!!.size > 1){
+            val selected = deviceBeans!!.indexOf(SmartApp.activity?.currentDevice) + 1
+            banner.setCurrentItem(selected,false)
+            indicator.onPageSelected(selected - 1)
         }
     }
 
@@ -131,7 +142,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
                 .setPositiveButton(android.R.string.ok) {
                     _, _ ->
                     LoadingUtil.create(requireActivity())
-                    mViewModel.loginOut().observe(this, Observer {
+                    mViewModel?.loginOut()?.observe(this, Observer {
                         if(it == IFLYOS.OK){
                             ConfigUtils.removeAll()
                             requireView().postDelayed({
@@ -160,7 +171,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     override fun onStop() {
         super.onStop()
 //        不可见的时候取消轮询设备是否在线
-        mViewModel.cancelAskDevStatus(this)
+        mViewModel?.cancelAskDevStatus(this)
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = false
     }
 
@@ -179,6 +190,9 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
             }
             R.id.btnContent->{
                 onTurnToPage(IFlyHome.ACCOUNTS)
+            }
+            R.id.btnAbount->{
+                startActivity(Intent(requireActivity(),AboutActivity::class.java))
             }
         }
     }
@@ -219,7 +233,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = !hidden
         if(hidden){
 //        不可见的时候取消轮询设备是否在线
-            mViewModel.cancelAskDevStatus(this)
+            mViewModel?.cancelAskDevStatus(this)
         }else{
 //            呈现的时候轮询设备是否在线
         }
@@ -253,6 +267,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
                             .dontAnimate()
                             .into(it.deviceImage)
                     it.iconDeviceStatus.isSelected = data.isOnline()
+                    it.biasView.setText(if(data?.music?.enable == true) R.string.music_enabled else R.string.music_disEnabled)
                 }
             }
         }

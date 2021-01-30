@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId "com.smartwasp.assistant.app"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -64,7 +64,7 @@ android {
         android.applicationVariants.all { variant ->
             variant.outputs.all {
                 def versionName
-                if (variant.buildType.name.equals('release')) {
+                if (variant.buildType.name == 'release') {
                     outputFileName = "smartwasp.apk"
                 }
             }

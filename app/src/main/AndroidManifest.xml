@@ -2,17 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.smartwasp.assistant.app">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
@@ -38,18 +39,17 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.WebViewActivity"/>
-        <activity
-            android:name=".activity.PrevBindActivity" />
-        <activity
-            android:name=".activity.ScanActivity" />
-        <activity
-            android:name=".activity.DeviceSetActivity"/><!-- 今日头条屏幕适配数据 -->
-        <activity
-            android:name=".activity.MusicActivity" />
-        <service
-            android:name=".service.PushService"/>
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".activity.PrevBindActivity" />
+        <activity android:name=".activity.ScanActivity" />
+        <activity android:name=".activity.DeviceSetActivity" /> <!-- 今日头条屏幕适配数据 -->
+        <activity android:name=".activity.MusicActivity" />
+        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.ApStepActivity" />
+        <activity android:name=".activity.WifiListActivity" />
+        <service android:name=".service.PushService" />
+        <service android:name=".service.DownloadService"/>
+
         <meta-data
             android:name="design_width_in_dp"
             android:value="375" />

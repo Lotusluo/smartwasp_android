@@ -2,9 +2,11 @@ package com.smartwasp.assistant.app.base
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -29,7 +31,7 @@ abstract class BaseFragment<
         VM: BaseViewModel,
         BD: ViewDataBinding>:Fragment(), EasyPermissions.PermissionCallbacks, View.OnClickListener {
     //与Fragment绑定的唯一ViewModel
-    protected lateinit var mViewModel:VM
+    protected var mViewModel:VM? = null
     //与Fragment绑定的唯一ViewDataBinding
     protected lateinit var mBinding:BD
 
@@ -45,6 +47,8 @@ abstract class BaseFragment<
                 (type.actualTypeArguments[0]) as Class<VM>
             }else -> BaseViewModel::class.java
         }
+        if(mModelClass.simpleName == "BaseViewModel")
+            return
         mModelClass.let {
             mViewModel = ViewModelProviders.of(this).get(it as Class<VM>)
         }
@@ -55,6 +59,7 @@ abstract class BaseFragment<
      * @return 是否拦截
      */
     open fun interceptLeftButton():Boolean{
+        if(isHidden) return false
         childFragmentManager.fragments.forEach {
             (it as? BaseFragment<*,*>)?.let {baseFragment ->
                if(baseFragment.interceptLeftButton()){
@@ -195,7 +200,7 @@ abstract class BaseFragment<
      * 左侧按钮点击
      */
     open fun onNavigatorClick(){
-
+        (activity as? BaseActivity<*,*>)?.onNavigatorClick()
     }
 
     /**
@@ -249,6 +254,30 @@ abstract class BaseFragment<
         //将请求结果传递EasyPermission库处理
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
+
+
+    /**
+     * 转场动画
+     * @param transit
+     * @param enter
+     * @param nextAnim
+     */
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        if(enter && nextAnim > 0){
+            requireView()?.let {
+                it.postDelayed({
+                    onTransitDone()
+                },200)
+            }
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim)
+    }
+
+    /**
+     * 经常动画完成
+     */
+    open fun onTransitDone(){
+    }
 }
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
@@ -263,7 +292,7 @@ fun Fragment.addFragmentByTag(frameId:Int,fragment:Fragment){
     if(null != childFragmentManager.findFragmentByTag(tag))
         return
     childFragmentManager.inTransaction {
-        setCustomAnimations(R.anim.fragment_fade_enter,0,0,R.anim.fragment_fade_exit)
+        setCustomAnimations(R.anim.slide_right_in,0,0,R.anim.slide_right_out)
         add(frameId,fragment,tag)
         addToBackStack(null)
     }

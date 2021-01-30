@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.ItemBean
@@ -48,7 +49,16 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
         StatusBarUtil.setLightStatusBar(requireActivity(),false,true)
         initHeader()
         initImage()
-        initRecyclerView()
+    }
+
+    /**
+     * 入场动画完成
+     */
+    override fun onTransitDone(){
+        super.onTransitDone()
+        simpleRecyclerHelper?: kotlin.run {
+            initRecyclerView()
+        }
     }
 
     /**
@@ -107,7 +117,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
         simpleRecyclerHelper = SimpleRecyclerHelper(recyclerView,R.layout.layout_song_item,::SongViewHolder)
         with(simpleRecyclerHelper!!){
             onRequest { page, limit, isRefresh ->
-                mViewModel.getSongsData(itemBean.id,page,limit).observe(this@MusicItemFragment, Observer {result->
+                mViewModel?.getSongsData(itemBean.id,page,limit)?.observe(this@MusicItemFragment, Observer {result->
                     if(result.isSuccess){
                         addMore(isRefresh,page,result.getOrNull()?.items)
                     }else{
@@ -133,7 +143,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                 if(checkOffline())
                     return@setOnClickListener
                 SmartApp.activity?.currentDevice?.let {
-                    mViewModel.playMedia(it.device_id,bean?.id,itemBean.id).observe(this@MusicItemFragment,
+                    mViewModel?.playMedia(it.device_id,bean?.id,itemBean.id)?.observe(this@MusicItemFragment,
                             Observer {result->
                                 if(result.isSuccess){
                                     simpleRecyclerHelper?.notifyDataChanged(bean)
@@ -197,7 +207,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
         when(v.id){
             R.id.playAll ->{
                 SmartApp.activity?.currentDevice?.let {
-                    mViewModel.playMedia(it.device_id,"",itemBean.id).observe(this@MusicItemFragment,
+                    mViewModel?.playMedia(it.device_id,"",itemBean.id)?.observe(this@MusicItemFragment,
                             Observer {result->
                                 if(result.isSuccess){
                                     simpleRecyclerHelper?.notifyDataChanged()
@@ -212,7 +222,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
             R.id.sheet_play_btn ->{
                 SmartApp.activity?.currentDevice?.let {
                      (v.getTag(R.id.extra_tag) as SongBean?)?.let {song->
-                        mViewModel.playMedia(it.device_id,song.id,itemBean.id).observe(this@MusicItemFragment,
+                        mViewModel?.playMedia(it.device_id,song.id,itemBean.id)?.observe(this@MusicItemFragment,
                                 Observer {result->
                                     if(result.isSuccess){
                                         simpleRecyclerHelper?.notifyDataChanged(song)

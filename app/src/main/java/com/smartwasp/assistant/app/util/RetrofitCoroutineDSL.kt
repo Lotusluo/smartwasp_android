@@ -1,9 +1,11 @@
 package com.smartwasp.assistant.app.util
 
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import kotlinx.coroutines.*
 import retrofit2.Call
 import java.io.IOException
+import java.lang.RuntimeException
 import java.net.ConnectException
 
 class RetrofitCoroutineDSL<T> {
@@ -12,8 +14,6 @@ class RetrofitCoroutineDSL<T> {
     internal var onSuccess: ((T) -> Unit)? = null
         private set
     internal var onFail: ((errorCode: Int,msg: String?) -> Unit)? = null
-        private set
-    internal var onComplete: (() -> Unit)? = null
         private set
 
     /**
@@ -32,34 +32,29 @@ class RetrofitCoroutineDSL<T> {
         this.onFail = block
     }
 
-    /**
-     * 访问完成
-     * @param block () -> Unit
-     */
-    fun onComplete(block: () -> Unit) {
-        this.onComplete = block
-    }
-
     internal fun clean() {
         onSuccess = null
-        onComplete = null
         onFail = null
     }
 }
 
 fun <T> CoroutineScope.retrofit(dsl: RetrofitCoroutineDSL<T>.() -> Unit) {
-    this.launch(Dispatchers.Main) {
-        val coroutine = RetrofitCoroutineDSL<T>().apply(dsl)
+    val coroutine = RetrofitCoroutineDSL<T>().apply(dsl)
+    launch(Dispatchers.IO) {
         coroutine.api?.let { call ->
             //async 并发执行 在IO线程中
-            val deferred = async(Dispatchers.IO) {
+            val deferred = async {
                 try {
-                    call.execute() //已经在io线程中了，所以调用Retrofit的同步方法.
+                    var result = call.execute() //已经在io线程中了，所以调用Retrofit的同步方法.
+                    result
                 } catch (e: ConnectException) {
-                    coroutine.onFail?.invoke(R.string.error_net_connect,null)
+                    coroutine.onFail?.invoke(-1,e.toString())
                     null
                 } catch (e: IOException) {
-                    coroutine.onFail?.invoke(R.string.error_net_unknown,null)
+                    coroutine.onFail?.invoke(-1,e.toString())
+                    null
+                } catch (e:RuntimeException){
+                    coroutine.onFail?.invoke(-1,e.toString())
                     null
                 }
             }
@@ -80,12 +75,12 @@ fun <T> CoroutineScope.retrofit(dsl: RetrofitCoroutineDSL<T>.() -> Unit) {
                         coroutine.onFail?.invoke(it.code(),it.message())
                     }
                 }else{
+                    Logger.e(it.errorBody()?.string()!!)
                     coroutine.onFail?.invoke(R.string.error_empty_data,null)
                 }
             }?: kotlin.run {
                 coroutine.onFail?.invoke(R.string.error_empty_data,null)
             }
-            coroutine.onComplete?.invoke()
         }?: kotlin.run {
             coroutine.onFail?.invoke(R.string.error_empty_request,null)
         }

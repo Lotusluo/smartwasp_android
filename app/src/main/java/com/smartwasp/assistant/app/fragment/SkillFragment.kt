@@ -3,17 +3,17 @@ package com.smartwasp.assistant.app.fragment
 
 import com.iflytek.home.sdk.IFlyHome
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.databinding.FragmentDialogBinding
-import com.smartwasp.assistant.app.viewModel.DialogModel
 
 
 /**
  * Created by luotao on 2021/1/23 17:07
  * E-Mail Address：gtkrockets@163.com
  */
-class SkillFragment private constructor(): WebViewMajorFragment<DialogModel,FragmentDialogBinding>() {
+class SkillFragment private constructor(): WebViewMajorFragment<BaseViewModel,FragmentDialogBinding>() {
 
     companion object{
         fun newsInstance():SkillFragment{

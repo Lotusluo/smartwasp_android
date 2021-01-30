@@ -13,6 +13,7 @@
             type="android.view.View.OnClickListener" />
 
         <import type="android.view.View" alias="View"/>
+        <import type="com.smartwasp.assistant.app.R" alias="R"/>
 
     </data>
 
@@ -49,16 +50,16 @@
         <!--设备显示页-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/type2Container"
-            android:visibility="@{deviceBean.isHeader() ? View.GONE : View.VISIBLE}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="@{deviceBean.isHeader() ? View.GONE : View.VISIBLE}">
 
             <!--        设备图片-->
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/device_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="26dp"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,8 +74,8 @@
                 android:layout_marginTop="14dp"
                 android:ellipsize="end"
                 android:text="@{deviceBean.alias}"
-                android:textSize="18sp"
                 android:textColor="#000"
+                android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/device_image"
                 app:layout_constraintTop_toTopOf="@+id/device_image" />
 
@@ -83,14 +84,14 @@
                 android:id="@+id/device_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="@{deviceBean.getStatusWords()}"
-                android:textColor="#000"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
+                android:text="@{deviceBean.getStatusWords()}"
+                android:textColor="#000"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/icon_device_status"
-                app:layout_constraintTop_toBottomOf="@+id/device_name"/>
+                app:layout_constraintTop_toBottomOf="@+id/device_name" />
 
             <!--            设备状态图标-->
             <androidx.appcompat.widget.AppCompatTextView
@@ -99,9 +100,9 @@
                 android:layout_height="16dp"
                 android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
                 android:backgroundTint="@color/device_status_color"
+                app:layout_constraintBottom_toBottomOf="@+id/device_status"
                 app:layout_constraintStart_toStartOf="@+id/device_name"
-                app:layout_constraintTop_toTopOf="@+id/device_status"
-                app:layout_constraintBottom_toBottomOf="@+id/device_status"/>
+                app:layout_constraintTop_toTopOf="@+id/device_status" />
 
             <!--        竖线-->
             <View
@@ -109,22 +110,30 @@
                 style="@style/vertical_line"
                 android:layout_height="14dp"
                 android:layout_marginLeft="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/device_status"
                 app:layout_constraintLeft_toRightOf="@id/device_status"
-                app:layout_constraintTop_toTopOf="@id/device_status"
-                app:layout_constraintBottom_toBottomOf="@id/device_status"/>
+                app:layout_constraintTop_toTopOf="@id/device_status" />
 
             <!--        设备应用场景-->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/device_stage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="@{deviceBean.zone}"
                 android:layout_marginLeft="10dp"
+                android:text="@{deviceBean.zone}"
                 android:textColor="@color/dark_light"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/vline"
                 app:layout_constraintLeft_toRightOf="@id/vline"
-                app:layout_constraintTop_toTopOf="@id/vline"
-                app:layout_constraintBottom_toBottomOf="@id/vline"/>
+                app:layout_constraintTop_toTopOf="@id/vline" />
+
+            <com.smartwasp.assistant.app.widget.BiasView
+                android:id="@+id/biasView"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:text="@{deviceBean.music.enable ? R.string.music_enabled : R.string.music_disEnabled}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

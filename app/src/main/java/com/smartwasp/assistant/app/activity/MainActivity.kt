@@ -1,14 +1,17 @@
 package com.smartwasp.assistant.app.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.os.EnvironmentCompat
 import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -49,6 +52,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StatusBarUtil.transparencyBar(this)
+        StatusBarUtil.setLightStatusBar(this,true,true)
         SmartApp.activity = this
         initObserver()
         setTabIconStyle()
@@ -365,11 +369,9 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                                         return@run
                                     }
                                 }
-                            }?: kotlin.run {
-                                currentDevice = deviceList.lastOrNull()
-                                ConfigUtils.putString(ConfigUtils.KEY_DEVICE_ID,currentDevice?.device_id)
                             }
-
+                            currentDevice = deviceList.lastOrNull()
+                            ConfigUtils.putString(ConfigUtils.KEY_DEVICE_ID,currentDevice?.device_id)
                         }
                     }else{
                         //未绑定设备

@@ -15,7 +15,7 @@
 <!--    视图容器-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
-        android:background="#fff"
+        android:background="@color/smartwasp_white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -65,75 +65,96 @@
 
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="40dp"
-            app:layout_constraintTop_toBottomOf="@id/indicator"
+            android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicator">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btnRoutines"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:gravity="center_vertical"
-                android:drawablePadding="20dp"
-                android:textColor="#000"
-                android:textSize="18sp"
+                android:background="@drawable/ripple_background"
                 android:clickable="true"
+                android:drawableStart="@mipmap/ic_routines"
+                android:drawableEnd="@mipmap/ic_arrow_right_grey_16dp"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical"
                 android:onClick="@{onclickListener}"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:drawableStart="@mipmap/ic_routines"
                 android:text="@string/ic_routines"
-                app:drawableTint="#000"
-                android:drawableEnd="@mipmap/ic_arrow_right_grey_16dp"
-                android:background="@drawable/ripple_background"/>
+                android:textColor="#000"
+                android:textSize="18sp"
+                app:drawableTint="#000" />
 
             <View
                 style="@style/horizontal_line"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btnAlarm"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:gravity="center_vertical"
-                android:drawablePadding="20dp"
-                android:textColor="#000"
-                android:textSize="18sp"
+                android:background="@drawable/ripple_background"
                 android:clickable="true"
+                android:drawableStart="@mipmap/ic_alarm_clock_black_32dp"
+                android:drawableEnd="@mipmap/ic_arrow_right_grey_16dp"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical"
+                android:onClick="@{onclickListener}"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                app:drawableTint="#000"
-                android:onClick="@{onclickListener}"
-                android:drawableStart="@mipmap/ic_alarm_clock_black_32dp"
                 android:text="@string/ic_alarm"
-                android:drawableEnd="@mipmap/ic_arrow_right_grey_16dp"
-                android:background="@drawable/ripple_background"/>
+                android:textColor="#000"
+                android:textSize="18sp"
+                app:drawableTint="#000" />
 
             <View
                 style="@style/horizontal_line"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btnContent"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:gravity="center_vertical"
-                android:drawablePadding="20dp"
-                android:textColor="#000"
-                android:textSize="18sp"
+                android:background="@drawable/ripple_background"
                 android:clickable="true"
+                android:drawableStart="@mipmap/ic_content_account_32dp"
+                android:drawableEnd="@mipmap/ic_arrow_right_grey_16dp"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical"
+                android:onClick="@{onclickListener}"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                app:drawableTint="#000"
-                android:onClick="@{onclickListener}"
-                android:drawableStart="@mipmap/ic_content_account_32dp"
                 android:text="@string/ic_content"
+                android:textColor="#000"
+                android:textSize="18sp"
+                app:drawableTint="#000" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btnAbount"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/ripple_background"
+                android:clickable="true"
+                android:drawableStart="@mipmap/ic_about"
                 android:drawableEnd="@mipmap/ic_arrow_right_grey_16dp"
-                android:background="@drawable/ripple_background"/>
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical"
+                android:onClick="@{onclickListener}"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/ic_about"
+                android:textColor="#000"
+                android:textSize="18sp"
+                app:drawableTint="#000"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
         </LinearLayout>

@@ -35,19 +35,6 @@ import java.util.concurrent.TimeUnit
  * E-Mail Address：gtkrockets@163.com
  */
 class MainViewModel(application: Application):AskDeviceModel(application) {
-    //获取网络时间校准
-    fun timeCheck():LiveData<TimeBean<TimeData>> {
-        val timeCheckData = MutableLiveData<TimeBean<TimeData>>()
-        //获取原始数据
-        retrofit<TimeBean<TimeData>> {
-            api = RetrofitManager.get().retrofitApiService?.launch()
-            onSuccess {
-                timeCheckData.postValue(it)
-            }
-        }
-        return timeCheckData
-    }
-
     //请求讯飞登录
     fun iflyoslogin():LiveData<String>{
         val iflyosloginData = MutableLiveData<String>()
