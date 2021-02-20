@@ -30,6 +30,7 @@ import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
 import com.youth.banner.util.BannerUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
+import kotlinx.android.synthetic.main.layout_device_item.view.*
 
 /**
  * Created by luotao on 2021/1/11 15:44
@@ -66,6 +67,8 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
             override fun onCreateHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
                 val itemView = LayoutInflater.from(SmartApp.app).inflate(R.layout.layout_device_item,parent,false)
                 itemView.layoutParams = ViewGroup.MarginLayoutParams(-1,-1)
+                itemView.type1Container.visibility = View.GONE
+                itemView.type2Container.visibility = View.GONE
                 return DeviceViewHolder(itemView,viewType)
             }
             override fun getItemViewType(position: Int): Int {

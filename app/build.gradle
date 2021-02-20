@@ -137,4 +137,6 @@ dependencies {
     implementation project(':switchButton')
     implementation project(':blurredview')
     implementation project(':magicindicator')
+    //騰訊bugly
+    implementation 'com.tencent.bugly:crashreport:2.8.6'
 }

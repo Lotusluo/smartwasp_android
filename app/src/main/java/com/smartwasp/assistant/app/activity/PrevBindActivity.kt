@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
@@ -36,10 +37,14 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
             }
             R.id.ApBtn ->{
                 //申请
-                easyPermissions(getString(R.string.ap_per),REQUEST_LOCATION_CODE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.CHANGE_WIFI_STATE)
+//                easyPermissions(getString(R.string.ap_per),REQUEST_LOCATION_CODE,
+//                        Manifest.permission.ACCESS_COARSE_LOCATION,
+//                        Manifest.permission.ACCESS_FINE_LOCATION,
+//                        Manifest.permission.CHANGE_WIFI_STATE)
+                AlertDialog.Builder(this)
+                        .setMessage(R.string.un_open)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .show()
             }
         }
     }

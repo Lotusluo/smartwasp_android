@@ -149,7 +149,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                                     simpleRecyclerHelper?.notifyDataChanged(bean)
                                 }else{
                                     this@MusicItemFragment.requireContext()?.let {context->
-                                        LoadingUtil.showToast(context,context.getString(R.string.try_again))
+                                        LoadingUtil.showToast(context,context.getString(R.string.try_again1))
                                     }
                                 }
                     })
@@ -213,7 +213,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                                     simpleRecyclerHelper?.notifyDataChanged()
                                 }else{
                                     this@MusicItemFragment.requireContext()?.let {context->
-                                        LoadingUtil.showToast(context,context.getString(R.string.try_again))
+                                        LoadingUtil.showToast(context,context.getString(R.string.try_again1))
                                     }
                                 }
                             })
@@ -228,7 +228,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                                         simpleRecyclerHelper?.notifyDataChanged(song)
                                     }else{
                                         this@MusicItemFragment.requireContext()?.let {context->
-                                            LoadingUtil.showToast(context,context.getString(R.string.try_again))
+                                            LoadingUtil.showToast(context,context.getString(R.string.try_again1))
                                         }
                                     }
                                 })

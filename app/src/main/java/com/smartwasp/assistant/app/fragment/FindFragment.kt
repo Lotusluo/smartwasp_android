@@ -342,7 +342,10 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
             private set
         private fun onRender(){
             itemViewBinding?.tvMore?.setOnClickListener {
-                LoadingUtil.showToast(requireContext(),getString(R.string.un_open))
+                AlertDialog.Builder(requireContext())
+                        .setMessage(R.string.un_open)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .show()
             }
             val recyclerView:RecyclerView? = itemViewBinding?.groupList
             recyclerView?.let {

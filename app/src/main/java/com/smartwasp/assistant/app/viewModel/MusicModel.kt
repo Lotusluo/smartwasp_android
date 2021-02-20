@@ -72,7 +72,7 @@ class MusicModel(application: Application):AskDeviceModel(application) {
                         musicStateBeanData.postValue(Result.failure(Throwable("Err")))
                     }
                 }else{
-                    musicStateBeanData.postValue(Result.failure(Throwable("empty")))
+                    musicStateBeanData.postValue(Result.failure(Throwable("Err")))
                 }
             }
         })

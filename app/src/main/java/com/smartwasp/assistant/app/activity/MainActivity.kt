@@ -25,10 +25,7 @@ import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.databinding.ActivityMainBinding
 import com.smartwasp.assistant.app.fragment.*
-import com.smartwasp.assistant.app.util.ConfigUtils
-import com.smartwasp.assistant.app.util.IFLYOS
-import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.StatusBarUtil
+import com.smartwasp.assistant.app.util.*
 import com.smartwasp.assistant.app.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_loading.*
@@ -53,10 +50,27 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         StatusBarUtil.transparencyBar(this)
         StatusBarUtil.setLightStatusBar(this,true,true)
-        SmartApp.activity = this
         initObserver()
         setTabIconStyle()
         login()
+
+        AlertDialog.Builder(this)
+                .setTitle(R.string.tip)
+                .setMessage("本测试版暂仅适用于\n'小黄蜂智能音箱WIFI版'\n内测版较为不稳定，敬请谅解！")
+                .setPositiveButton(android.R.string.ok,null)
+                .show()
+
+        AppExecutors.get().netIO().execute {
+            if(!NetWorkUtil.isGoodInternet(this)){
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage("网络不太好，请确定网络状态！")
+                            .setPositiveButton(android.R.string.ok,null)
+                            .show()
+                }
+            }
+        }
     }
 
     /**
@@ -65,7 +79,6 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
     override fun onDestroy() {
         mViewModel.clearBinder(this)
         super.onDestroy()
-        SmartApp.activity = null
     }
 
     private var lastExitTime:Long = 0
@@ -80,7 +93,8 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
             lastExitTime = System.currentTimeMillis()
             true
         } else{
-            false
+            SmartApp.finish(0)
+            true
         }
     }
 

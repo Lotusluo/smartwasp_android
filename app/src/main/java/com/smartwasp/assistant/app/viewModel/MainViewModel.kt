@@ -76,11 +76,10 @@ class MainViewModel(application: Application):AskDeviceModel(application) {
                     try {
                         val userBean = Gson().fromJson<UserBean>(response.body(), object:TypeToken<UserBean>(){}.type)
                         SmartApp.userBean = userBean
-                        launch(Dispatchers.IO) {
+                        AppExecutors.get().diskIO().execute {
                             ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
-                            Logger.e("写入userID!")
+                            userIdData.postValue(IFLYOS.OK)
                         }
-                        userIdData.postValue(IFLYOS.OK)
                     }catch (e:Throwable){
                         userIdData.postValue(IFLYOS.ERROR)
                     }

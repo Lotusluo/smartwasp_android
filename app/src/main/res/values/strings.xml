@@ -20,6 +20,7 @@
     <string name="error_net_unknown">网络未知错误</string>
     <string name="error_request">请求数据错误</string>
     <string name="try_again">请重试</string>
+    <string name="try_again1">请开通音乐权限或发生未知错误</string>
     <string name="offline">设备处于离线状态</string>
 
     <string name="tab_dialog">对话</string>
@@ -31,8 +32,8 @@
     <string name="title_login">小黄蜂登录</string>
     <string name="add_device">添加主控设备</string>
     <string name="add_device1">请添加设备</string>
-    <string name="scan_device">扫码授权</string>
-    <string name="ap_device">无屏授权测试</string>
+    <string name="scan_device">有屏扫码授权</string>
+    <string name="ap_device">无屏扫码授权</string>
     <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>
     <string name="words1">小黄蜂智能音箱</string>
@@ -51,10 +52,14 @@
     <string name="unBindTip">是否解除绑定?</string>
     <string name="nextStep">下一步</string>
     <string name="tip">提示</string>
+    <string name="tip_update_check_ok_least">当前为最新版本!</string>
+    <string name="tip_update_check_ok_new">发现有新版本\n内测版暂不支持自动更新\n请卸载软件并重新扫码下载</string>
+    <string name="tip_update_check_err">检查更新失败,请重试</string>
     <string name="page_tip"></string>
     <string name="play">播放</string>
     <string name="more">更多</string>
-    <string name="un_open">暂未开放</string>
+    <string name="un_open">调试中,敬请期待</string>
+    <string name="test_crash">内测中,容易出现问题,很抱歉，软件需要重启。</string>
     <string name="play_all">播放全部</string>
     <string name="no_more">------已经到底了------</string>
     <string name="err_">加载失败,请退出重试</string>

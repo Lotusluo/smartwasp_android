@@ -1,9 +1,7 @@
 package com.smartwasp.assistant.app.util
 
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -50,7 +48,16 @@ class RetrofitManager private constructor():Interceptor{
      * @return 响应
      */
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        return chain.proceed(request)
+        var cache = chain.request().header("cache")
+        var originalResponse = chain.proceed(chain.request())
+        val cacheControl = originalResponse.header("Cache-Control")
+        return cacheControl?.let {
+            originalResponse = originalResponse.newBuilder()
+                    .header("Cache-Control", "public, max-age=${if(cache.isNullOrBlank()) 5 else cache}")
+                    .build()
+            originalResponse
+        } ?: kotlin.run {
+            originalResponse
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.smartwasp.assistant.app.base
 
+import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.os.Bundle
 import android.os.Process
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
@@ -21,6 +23,7 @@ import com.smartwasp.assistant.app.bean.UserBean
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.NetWorkUtil
 import com.smartwasp.assistant.app.util.SerializableUtils
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -149,6 +152,7 @@ class SmartApp : Application() {
         lateinit var app:SmartApp
             private set
         var activity:MainActivity? = null
+            private set
     }
 
     /**
@@ -157,7 +161,25 @@ class SmartApp : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
-
+        app.registerActivityLifecycleCallbacks(object :ActivityLifecycleCallbacks{
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                if(activity is MainActivity){
+                    SmartApp.activity = activity
+                }
+            }
+            override fun onActivityDestroyed(activity: Activity) {
+                if(activity is MainActivity){
+                    SmartApp.activity = null
+                }
+            }
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+            override fun onActivityStopped(activity: Activity) {}
+            override fun onActivityPaused(activity: Activity) {}
+            override fun onActivityStarted(activity: Activity) {}
+            override fun onActivityResumed(activity: Activity) {}
+        })
+        //闪退捕捉
+        CrashReport.initCrashReport(app, "cc12a03d8c", true)
         //设置支持的https协议
         System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3")
         //今日头条适配方案
@@ -172,14 +194,14 @@ class SmartApp : Application() {
         //初始化配置
         ConfigUtils.init(app)
         //讯飞初始化
-        IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.CUSTOM_TOKEN)
+        IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.STANDARD)
         //模拟
-        IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
-        if(ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null).isNullOrEmpty()){
-            val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")
-            SmartApp.userBean = userBean
-            ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
-        }
+//        IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
+//        if(ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null).isNullOrEmpty()){
+//            val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")
+//            SmartApp.userBean = userBean
+//            ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
+//        }
         //恢复用户ID
         GlobalScope.launch(Dispatchers.IO) {
             val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null)
