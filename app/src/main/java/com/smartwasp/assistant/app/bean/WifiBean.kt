@@ -5,7 +5,20 @@ package com.smartwasp.assistant.app.bean
  * E-Mail Address：gtkrockets@163.com
  */
 
-data class WifiBean(var ssid:String,var bssid:String,private var capabilities:String,var level:Int = 0,var linkType:Int = 1){
+data class WifiBean(var ssid:String,
+                    var bssid:String,
+                    private var capabilities:String,
+                    var level:Int = 0,
+                    var linkType:Int = STATE_IDLE){
+
+    companion object{
+        //无状态
+        const val STATE_IDLE = 0
+        //连接中
+        const val STATE_LINKING = 1
+        //已连接
+        const val STATE_LINKED = 2
+    }
 
     /**
      * 获取加密类型

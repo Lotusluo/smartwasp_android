@@ -281,7 +281,7 @@ fun FragmentActivity.addFragmentByTag(frameId: Int,fragment: Fragment){
     }
 }
 
-fun FragmentActivity.addFragmentByTagWithStack(frameId: Int,fragment: Fragment){
+fun FragmentActivity.addFragmentByTagWithStack(frameId: Int,fragment:Fragment){
     val tag = fragment::class.java.simpleName
     if(null != supportFragmentManager.findFragmentByTag(tag))
         return
@@ -304,4 +304,11 @@ fun FragmentActivity.hideFragment(fragment: Fragment) {
     if(null == supportFragmentManager.findFragmentByTag(tag))
         return
     supportFragmentManager.inTransaction{hide(fragment)}
+}
+
+fun FragmentActivity.removeFragment(fragment: Fragment) {
+    val tag = fragment::class.java.simpleName
+    if(null == supportFragmentManager.findFragmentByTag(tag))
+        return
+    supportFragmentManager.inTransaction{remove(fragment)}
 }

@@ -18,6 +18,8 @@
     <string name="error_request_cancel">请求取消</string>
     <string name="error_net_connect">网络连接错误</string>
     <string name="error_net_unknown">网络未知错误</string>
+    <string name="error_ap_connect">连接音箱失败,请返回上一级或重试</string>
+    <string name="error_ap_auth">获取授权码失败,请返回上一级重试</string>
     <string name="error_request">请求数据错误</string>
     <string name="try_again">请重试</string>
     <string name="try_again1">请开通音乐权限或发生未知错误</string>
@@ -33,7 +35,10 @@
     <string name="add_device">添加主控设备</string>
     <string name="add_device1">请添加设备</string>
     <string name="scan_device">有屏扫码授权</string>
-    <string name="ap_device">无屏扫码授权</string>
+    <string name="ap_device">党建AP配网</string>
+    <string name="ap_device_ok">AP配网授权成功,请稍后</string>
+    <string name="ap_device_exit">正在努力检测授权,是否强行退出?</string>
+    <string name="ap_device_no_net">当前网络不可用,请检查网络</string>
     <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>
     <string name="words1">小黄蜂智能音箱</string>
@@ -58,6 +63,8 @@
     <string name="page_tip"></string>
     <string name="play">播放</string>
     <string name="more">更多</string>
+    <string name="retry">重试</string>
+    <string name="back">返回</string>
     <string name="un_open">调试中,敬请期待</string>
     <string name="test_crash">内测中,容易出现问题,很抱歉，软件需要重启。</string>
     <string name="play_all">播放全部</string>
@@ -86,6 +93,8 @@
     <string name="prev_bind_subTittle_a1">设备正在配网</string>
     <string name="ap_step_1">选择设备工作Wi-Fi</string>
     <string name="ap_step_1_1">暂不支持连接5G Wi-Fi</string>
+    <string name="ap_step_4">设备联网</string>
+    <string name="ap_step_4_1">设备联网中...请稍后</string>
     <string name="wifiTip">选取可见的网络</string>
     <string name="wifiName">Wi-Fi名称</string>
     <string name="wifiPassWd">Wi-Fi密码</string>

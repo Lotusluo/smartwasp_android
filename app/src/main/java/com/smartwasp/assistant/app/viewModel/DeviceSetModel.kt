@@ -107,6 +107,7 @@ class DeviceSetModel(application: Application):BaseViewModel(application) {
             override fun onResponse(response: Response<String>) {
                 if(response.isSuccessful){
                     try {
+                        Logger.e(response.body().toString())
                         val deviceInfoBean = Gson().fromJson<DeviceBean>(response.body(), object: TypeToken<DeviceBean>(){}.type)
                         devStatusData.postValue(Result.success(deviceInfoBean))
                     }catch (e:Throwable){

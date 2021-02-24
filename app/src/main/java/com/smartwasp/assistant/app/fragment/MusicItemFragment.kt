@@ -46,7 +46,6 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        StatusBarUtil.setLightStatusBar(requireActivity(),false,true)
         initHeader()
         initImage()
     }
@@ -66,7 +65,6 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        StatusBarUtil.setLightStatusBar(requireActivity(),true,true)
     }
 
     /**

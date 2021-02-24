@@ -39,6 +39,7 @@
             android:gravity="center"
             android:textSize="16sp"
             android:clickable="true"
+            android:alpha="0"
             android:visibility="@{groupBean.has_more ? View.VISIBLE:View.GONE}"
             android:textColor="@color/smartwasp_blue"
             android:background="@drawable/ripple_background"

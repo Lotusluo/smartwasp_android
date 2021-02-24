@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.os.Process
+import android.os.SystemClock
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
@@ -24,9 +25,7 @@ import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.NetWorkUtil
 import com.smartwasp.assistant.app.util.SerializableUtils
 import com.tencent.bugly.crashreport.CrashReport
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.jessyan.autosize.AutoSize
 import java.io.InputStream
 import kotlin.system.exitProcess
@@ -197,11 +196,8 @@ class SmartApp : Application() {
         IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.STANDARD)
         //模拟
 //        IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
-//        if(ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null).isNullOrEmpty()){
-//            val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")
-//            SmartApp.userBean = userBean
-//            ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
-//        }
+//        val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")
+//        SmartApp.userBean = userBean
         //恢复用户ID
         GlobalScope.launch(Dispatchers.IO) {
             val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null)
@@ -211,4 +207,31 @@ class SmartApp : Application() {
             }
         }
     }
+
+
+    fun main() = runBlocking {
+
+        val job = launch() {
+
+            Logger.e("Current Thread : ${Thread.currentThread()}")
+            var nextActionTime = System.currentTimeMillis()
+            var i = 0
+
+            while (i < 20) {
+                Logger.e("Job: ${i++}")
+                delay(1000)
+//                if (System.currentTimeMillis() >= nextActionTime) {
+//                    nextActionTime += 500
+//                }
+            }
+        }
+
+        delay(1300)
+        Logger.e("hello")
+
+        job.cancelAndJoin()
+
+        Logger.e("welcome")
+    }
+
 }

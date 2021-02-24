@@ -34,6 +34,7 @@ import com.smartwasp.assistant.app.databinding.LayoutFindGroupBinding
 import com.smartwasp.assistant.app.databinding.LayoutFindItemBinding
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.StatusBarUtil
 import com.smartwasp.assistant.app.viewModel.FindModel
 import com.smartwasp.assistant.app.widget.BezelImageView
 import com.youth.banner.adapter.BannerAdapter
@@ -65,6 +66,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
             return FindFragment()
         }
     }
+
 
     /**
      * 按钮点击

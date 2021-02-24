@@ -96,6 +96,7 @@ class WifiListActivity : BaseActivity<WifiGetModel,ActivityWifiListBinding>() {
             itemView.setOnClickListener {
                 setResult(Activity.RESULT_OK,Intent().apply {
                     putExtra(IFLYOS.EXTRA,this@ItemViewHolder.data?.ssid)
+                    putExtra(IFLYOS.EXTRA_TAG,this@ItemViewHolder.data?.bssid)
                 })
                 finish()
             }

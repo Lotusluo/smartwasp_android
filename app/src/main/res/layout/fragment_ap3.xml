@@ -99,6 +99,7 @@
             android:text="@string/nextStep"
             android:layout_width="match_parent"
             android:textSize="18sp"
+            android:enabled="false"
             android:textColor="@color/next_text_color"
             android:background="#FFF"
             android:layout_height="56dp"

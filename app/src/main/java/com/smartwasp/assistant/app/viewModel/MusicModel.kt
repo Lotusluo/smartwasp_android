@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.ResponseCallback
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.SongsBean
 import retrofit2.Call
@@ -17,7 +18,7 @@ import retrofit2.Response
  * Created by luotao on 2021/1/19 13:43
  * E-Mail Address：gtkrockets@163.com
  */
-class MusicModel(application: Application):AskDeviceModel(application) {
+class MusicModel(application: Application): BaseViewModel(application) {
     /**
      * 获取歌单列表
      * @param groupID 歌单GroupID

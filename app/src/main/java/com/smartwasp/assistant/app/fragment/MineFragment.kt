@@ -13,10 +13,7 @@ import com.bumptech.glide.Glide
 import com.iflytek.home.sdk.IFlyHome
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.activity.AboutActivity
-import com.smartwasp.assistant.app.activity.DeviceSetActivity
-import com.smartwasp.assistant.app.activity.PrevBindActivity
-import com.smartwasp.assistant.app.activity.WebViewActivity
+import com.smartwasp.assistant.app.activity.*
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
@@ -25,6 +22,7 @@ import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBinding
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.WifiUtils
 import com.smartwasp.assistant.app.viewModel.MineModel
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
@@ -57,7 +55,6 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      * 渲染绑定的设备
      */
     private fun onRenderBindDevices(devices: BindDevices?) {
-        mViewModel?.cancelAskDevStatus(this)
         deviceBeans =  ArrayList()
         devices?.user_devices?.let {
             deviceBeans!!.addAll(it)
@@ -174,7 +171,6 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     override fun onStop() {
         super.onStop()
 //        不可见的时候取消轮询设备是否在线
-        mViewModel?.cancelAskDevStatus(this)
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = false
     }
 
@@ -236,7 +232,6 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = !hidden
         if(hidden){
 //        不可见的时候取消轮询设备是否在线
-            mViewModel?.cancelAskDevStatus(this)
         }else{
 //            呈现的时候轮询设备是否在线
         }

@@ -1,6 +1,10 @@
 package com.smartwasp.assistant.app.util
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Looper
 import androidx.core.text.isDigitsOnly
 import com.orhanobut.logger.Logger
@@ -139,4 +143,5 @@ object NetWorkUtil {
             build()
         }
     }
+
 }

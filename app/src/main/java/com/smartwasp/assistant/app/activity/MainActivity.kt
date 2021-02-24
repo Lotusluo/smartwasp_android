@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout
@@ -54,13 +55,8 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         setTabIconStyle()
         login()
 
-        AlertDialog.Builder(this)
-                .setTitle(R.string.tip)
-                .setMessage("本测试版暂仅适用于\n'小黄蜂智能音箱WIFI版'\n内测版较为不稳定，敬请谅解！")
-                .setPositiveButton(android.R.string.ok,null)
-                .show()
-
         AppExecutors.get().netIO().execute {
+            SystemClock.sleep(2000)
             if(!NetWorkUtil.isGoodInternet(this)){
                 runOnUiThread {
                     AlertDialog.Builder(this)
@@ -346,7 +342,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
     override fun onStop() {
         super.onStop()
         SmartApp.userBean?.let {
-            mViewModel.cancelAskDevStatus(this)
+//            mViewModel.cancelAskDevStatus(this)
         }
     }
 
@@ -355,7 +351,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      */
     private fun askBindDevices(){
         LoadingUtil.create(this,null)
-        mViewModel.cancelAskDevStatus(this)
+//        mViewModel.cancelAskDevStatus(this)
         mViewModel.getBindDevices().observe(this, Observer {
             SmartApp.NEED_MAIN_REFRESH_DEVICES = false
             LoadingUtil.dismiss()

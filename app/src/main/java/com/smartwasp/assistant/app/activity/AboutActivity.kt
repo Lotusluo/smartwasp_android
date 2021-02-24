@@ -9,6 +9,7 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
+import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.databinding.ActivityAboutBinding
 import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.viewModel.AboutModel
@@ -41,6 +42,7 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
      */
     override fun onButtonClick(v: View){
         super.onButtonClick(v)
+        Logger.e(SmartApp.app.externalCacheDir.toString())
         when(v.id){
             R.id.btnUpdate->{
                 LoadingUtil.create(this)

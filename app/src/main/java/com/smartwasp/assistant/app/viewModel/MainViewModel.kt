@@ -18,6 +18,7 @@ import com.iflytek.home.sdk.callback.ResponseCallback
 import com.iflytek.home.sdk.push.OsPushService
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.activity.MainActivity
+import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.bean.test.TimeBean
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit
  * Created by luotao on 2021/1/8 12:01
  * E-Mail Address：gtkrockets@163.com
  */
-class MainViewModel(application: Application):AskDeviceModel(application) {
+class MainViewModel(application: Application): BaseViewModel(application) {
     //请求讯飞登录
     fun iflyoslogin():LiveData<String>{
         val iflyosloginData = MutableLiveData<String>()

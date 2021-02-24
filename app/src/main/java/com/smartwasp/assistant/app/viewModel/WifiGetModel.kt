@@ -6,17 +6,32 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkInfo
+import android.net.NetworkRequest
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.os.SystemClock
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.iflytek.home.sdk.IFlyHome
+import com.iflytek.home.sdk.callback.ResponseCallback
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.bean.AuthBean
+import com.smartwasp.assistant.app.bean.MusicStateBean
+import com.smartwasp.assistant.app.bean.SongsBean
 import com.smartwasp.assistant.app.bean.WifiBean
+import com.smartwasp.assistant.app.util.NetWorkUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Response
 
 /**
  * Created by luotao on 2021/1/29 17:42
@@ -49,7 +64,8 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
      */
     fun startScan(context: Context){
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-//        The WifiManager.startScan() usage is limited to: - Each foreground app is restricted to 4 scans every 2 minutes. - All background apps combined are restricted to one scan every 30 minutes."
+//        The WifiManager.startScan() usage is limited to: - Each foreground app is restricted to 4 scans every 2 minutes.
+//        - All background apps combined are restricted to one scan every 30 minutes."
         launch(Dispatchers.IO) {
             SystemClock.sleep(1000)
             wifiManager.startScan()
@@ -62,41 +78,49 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
 
     /**
      * 监听wifi状态改变
+     * @param context
      */
-    fun startWifiObserver(){
+    fun startWifiObserver(context: Context){
         wifiBroadcastReceiver = wifiBroadcastReceiver ?: WifiBroadcastReceiver()
         try {
             SmartApp.app.registerReceiver(wifiBroadcastReceiver, IntentFilter().apply {
                 addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-                addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
-                addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
             })
         }catch (e:Throwable){}
+        //监听网络连接状态
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.requestNetwork(NetworkRequest.Builder().build(), object: ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val bssid = wifiManager.connectionInfo.bssid
+                if(!bssid.isNullOrEmpty() && linking != null){
+                    if(bssid == linking!!.bssid){
+                        autoConnectData.postValue(Result.success(bssid))
+                        linking = null
+                    }
+                }
+            }
+        })
     }
 
     /**
      * 自动连接wifi
      * @param context
      * @param wifiBean
-     * @return 当前正在连接的ssid
+     * @return 当前正在连接的wifiBean
      */
     @SuppressLint("MissingPermission")
-    fun autoConnectWifi(context: Context, wifiBean: WifiBean):String?{
-
-        if(!linkingSSID.isNullOrEmpty()){
+    fun autoConnectWifi(context: Context, wifiBean: WifiBean):WifiBean?{
+        if(linking != null){
             //当前有正在连接的mac
-            return linkingSSID
+            return linking
         }
-
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
         if(wifiManager.connectionInfo.bssid == wifiBean.bssid){
             //当前已连接
-            Logger.e("null")
             return null
         }
-
-
         //网络配置对象设置无密码连接
         val config = WifiConfiguration().apply {
             allowedAuthAlgorithms.clear()
@@ -107,7 +131,6 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
             SSID = "\"" + wifiBean.ssid + "\""
             allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
         }
-
         //移除之前可能配置过的此wifi
         var netID = -1
         run looper@{
@@ -120,23 +143,39 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
                 }
             }
         }
-
         //添加网络ID
         if(netID == -1){
             netID = wifiManager.addNetwork(config)
         }
-
         //开始联网
-        linkingSSID = if(wifiManager.enableNetwork(netID, true)){
-            wifiBean.bssid
+        linking = if(wifiManager.enableNetwork(netID, true)){
+            wifiBean
         }else{
             null
         }
-        return linkingSSID
+        return linking
     }
-    //当前正在连接的网络ID
-    private var linkingSSID:String? = null
 
+    /**
+     * 移除正在连接的ssid
+     */
+    @SuppressLint("MissingPermission")
+    fun removeLinkingSSID(context: Context):String?{
+        val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        linking?.let {
+            wifiManager.configuredNetworks.forEach {
+                if (it.SSID == "\"" + linking!!.ssid + "\"") {
+                    wifiManager.removeNetwork(it.networkId)
+                    return@let
+                }
+            }
+        }
+        linking = null
+        return wifiManager.connectionInfo.bssid
+    }
+
+    //当前正在连接的网络ID
+    private var linking:WifiBean? = null
     //wifi监听
     private var wifiBroadcastReceiver:WifiBroadcastReceiver? = null
 
@@ -171,28 +210,55 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
                     if(it.SSID.isNullOrEmpty()){
                         return@forEach
                     }
-                    if(!it.SSID.startsWith("LA_005")){
+                    if(!it.SSID.startsWith("LA_00")){
                         return@forEach
                     }
                     val wifiBean = WifiBean(it.SSID,it.BSSID, it.capabilities,WifiManager.calculateSignalLevel(it.level,4))
+                    //状态赋值
+                    linking?.let {l->
+                        //正在连接中
+                        if(l.bssid == it.BSSID){
+                            wifiBean.linkType = WifiBean.STATE_LINKING
+                        }
+                        if(l.bssid == wifiManager.connectionInfo.bssid){
+                            linking = null
+                        }
+                    }
+                    if(wifiManager.connectionInfo.bssid == it.BSSID){
+                        //已完成连接
+                        wifiBean.linkType = WifiBean.STATE_LINKED
+                    }
+
                     wifiBeanList.remove(wifiBean)
                     wifiBeanList.add(wifiBean)
                 }
-                if(wifiManager.connectionInfo.bssid == linkingSSID){
-                    autoConnectData.postValue(Result.success(wifiManager.connectionInfo.bssid))
-                    linkingSSID = null
-                }
                 wifiScanData.postValue(Result.success(wifiBeanList))
-            }else if(action == WifiManager.WIFI_STATE_CHANGED_ACTION){
-                intent.getParcelableExtra<NetworkInfo>(WifiManager.EXTRA_NETWORK_INFO)?.let {
-                    if (NetworkInfo.State.CONNECTED == it.state){
-                        if(wifiManager.connectionInfo.bssid == linkingSSID){
-                            autoConnectData.postValue(Result.success(wifiManager.connectionInfo.bssid))
-                            linkingSSID = null
-                        }
-                    }
-                }
             }
         }
+    }
+
+    /**
+     * 获取授权码
+     * @param clientID
+     */
+    fun getAuthCode(clientID:String): LiveData<Result<AuthBean>>{
+        val authData = MutableLiveData<Result<AuthBean>>()
+        val result = IFlyHome.getClientAuthCode(clientID, null, object : ResponseCallback {
+            override fun onResponse(response: Response<String>) {
+                if(response.isSuccessful){
+                    val authBean = Gson().fromJson<AuthBean>(response.body(), object: TypeToken<AuthBean>(){}.type)
+                    authData.postValue(Result.success(authBean))
+                }else{
+                    authData.postValue(Result.failure(Throwable("Err")))
+                }
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                authData.postValue(Result.failure(Throwable("Err")))
+            }
+        })
+        if(result != IFlyHome.RESULT_OK){
+            authData.postValue(Result.failure(Throwable("Err")))
+        }
+        return authData
     }
 }

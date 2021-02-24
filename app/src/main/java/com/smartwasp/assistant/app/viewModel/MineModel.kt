@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeLogoutCallback
+import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.util.IFLYOS
 
 
@@ -12,7 +13,7 @@ import com.smartwasp.assistant.app.util.IFLYOS
  * Created by luotao on 2021/1/11 15:44
  * E-Mail Address：gtkrockets@163.com
  */
-class MineModel(application: Application):AskDeviceModel(application) {
+class MineModel(application: Application): BaseViewModel(application) {
     /**
      * 更登出
      */

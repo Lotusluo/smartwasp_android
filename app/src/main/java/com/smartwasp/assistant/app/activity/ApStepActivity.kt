@@ -18,6 +18,12 @@ class ApStepActivity : BaseActivity<BaseViewModel,ActivityApStepBinding>() {
 
     override val layoutResID: Int = R.layout.activity_ap_step
 
+    companion object{
+        var CUR_WIFI_SSID:String? = null
+        var CUR_WIFI_BSSID:String? = null
+        var CUR_WIFI_PWD:String? = null
+    }
+
     /**
      * 生成
      */

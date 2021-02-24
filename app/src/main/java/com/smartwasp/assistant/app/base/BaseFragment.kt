@@ -173,6 +173,7 @@ abstract class BaseFragment<
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
+        Logger.d("setUserVisibleHint:$isVisibleToUser")
     }
 
     /**

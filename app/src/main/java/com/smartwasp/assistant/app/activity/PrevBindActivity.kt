@@ -37,18 +37,19 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
             }
             R.id.ApBtn ->{
                 //申请
-//                easyPermissions(getString(R.string.ap_per),REQUEST_LOCATION_CODE,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION,
-//                        Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.CHANGE_WIFI_STATE)
-                AlertDialog.Builder(this)
-                        .setMessage(R.string.un_open)
-                        .setPositiveButton(android.R.string.ok,null)
-                        .show()
+                easyPermissions(getString(R.string.ap_per),REQUEST_LOCATION_CODE,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.CHANGE_WIFI_STATE)
             }
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(SmartApp.NEED_MAIN_REFRESH_DEVICES){
+            finish()
+        }
+    }
 
     /**
      * 权限回调

@@ -37,7 +37,7 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
         const val BIND_LOGO_STEP:String = "bind_log_step"
         const val BIND_LOGO_TOTAL:String = "bind_log_total"
         const val BIND_CLIENT_ID:String = "bind_client_id"
-
+        const val BIND_AUTH_CODE:String = "bind_client_id"
         /**
          * 静态生成类
          * @param tittle
@@ -47,6 +47,9 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
          * @param type 类型
          * @param step
          * @param total
+         * @param ssid
+         * @param bssid
+         * @param pwd
          */
         fun newsInstance(tittle:String,
                          subTittle:String? = null,
@@ -96,6 +99,9 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 stepBtn.isEnabled = isChecked
             }
+            subTittle11.setOnClickListener {
+                checkBox.setChecked(!checkBox.isChecked,true)
+            }
         }
     }
 
@@ -141,7 +147,10 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
                         //摄像头权限回调成功,设置等待二维码Code
                         startActivityForResult(Intent(requireContext(),ScanActivity::class.java),ScanActivity.REQUEST_WEB_CONFIG_CODE)
                     }else if(it == 2){
-                        requireActivity()?.addFragmentByTagWithStack(R.id.container,ApStepFragment3.newsInstance())
+                        val clientID = arguments?.getString(BIND_CLIENT_ID)
+                        clientID?.let {
+                            requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(clientID))
+                        }
                     }
                 }
             }

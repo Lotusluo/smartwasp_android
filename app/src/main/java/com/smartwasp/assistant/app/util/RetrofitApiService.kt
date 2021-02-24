@@ -22,9 +22,9 @@ interface RetrofitApiService {
     /**
      * 获取版本信息
      */
-    @GET("https://smartwasp.cdn.bcebos.com/update")
+    @GET("https://smartwasp.bj.bcebos.com/update")
     @Headers("Cache-Control: no-cache, max-age=0")
-    fun update(@Query("r") r:String = Math.random().toString()): Call<BaseBean<UpdateBean>>
+    fun update(): Call<BaseBean<UpdateBean>>
 
     /**
      * 断点下载

@@ -5,14 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AlertDialog
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.ApStepActivity
 import com.smartwasp.assistant.app.activity.WifiListActivity
 import com.smartwasp.assistant.app.base.*
 import com.smartwasp.assistant.app.databinding.FragmentAp1Binding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
-import com.smartwasp.assistant.app.util.IFLYOS
-import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.ServiceUtil
+import com.smartwasp.assistant.app.util.*
 import kotlinx.android.synthetic.main.fragment_ap1.*
 
 /**
@@ -39,9 +40,14 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.step = "1"
-        mBinding.total = "/5"
+        mBinding.total = "/4"
         wifiPasswd.inputType = EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_PASSWORD
+        ApStepActivity.CUR_WIFI_SSID = WifiUtils.getConnectedSsid(context)
+        ApStepActivity.CUR_WIFI_BSSID = WifiUtils.getConnectedBssid(context)
+        wifiName.setText(ApStepActivity.CUR_WIFI_SSID)
+        wifiPasswd.setText("")
     }
+
 
     /**
      * 等待选择的wifi成功回调
@@ -52,13 +58,15 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == SSID_CHOOSE_REQUEST && resultCode == Activity.RESULT_OK && null != data){
-            wifiName.setText(data.getStringExtra(IFLYOS.EXTRA).toString())
+            ApStepActivity.CUR_WIFI_SSID = data.getStringExtra(IFLYOS.EXTRA)
+            ApStepActivity.CUR_WIFI_BSSID = data.getStringExtra(IFLYOS.EXTRA_TAG)
+            wifiName.setText(ApStepActivity.CUR_WIFI_SSID)
+            wifiPasswd.setText("")
         }
     }
 
     //布局文件
     override val layoutResID:Int = R.layout.fragment_ap1
-
     /**
      * 其他按钮点击
      * @param v
@@ -79,9 +87,11 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
             }
             R.id.stepBtn ->{
                 ServiceUtil.hintKbTwo(root)
-                val wifiName = wifiName.text.toString()
-                val wifiPassWd = wifiPasswd.text.toString()
-                if(!wifiName.isNullOrEmpty() && !wifiPassWd.isNullOrEmpty() && wifiPassWd.length >= 8){
+                ApStepActivity.CUR_WIFI_SSID = wifiName.text.toString()
+                ApStepActivity.CUR_WIFI_PWD = wifiPasswd.text.toString()
+                if(!ApStepActivity.CUR_WIFI_SSID.isNullOrEmpty()
+                        && !ApStepActivity.CUR_WIFI_PWD.isNullOrEmpty()
+                        && ApStepActivity.CUR_WIFI_PWD?.length!! >= 8){
 //              临时测试党建的项目，后期动态获取
                 requireActivity()?.addFragmentByTagWithStack(R.id.container,
                         PreBindFragment.newsInstance(
@@ -92,7 +102,7 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
                                 2,
                                 "65e8d4f8-da9e-4633-8cac-84b0b47496b6",
                                 "2",
-                                "/5"))
+                                "/4"))
                 }else{
                     LoadingUtil.showToast(requireContext(),getString(R.string.wifiInfoErr))
                 }
