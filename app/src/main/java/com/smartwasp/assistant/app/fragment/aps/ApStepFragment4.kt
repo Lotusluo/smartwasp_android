@@ -242,7 +242,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                 compatProgress(100)
                 tvSubTittle.setText(R.string.ap_device_ok)
                 AppExecutors.get().mainThread().executeDelay(Runnable {
-                    if(isAdded)
+                    if(!isAdded)
                         return@Runnable
                     requireActivity().finish()
                 },4000)

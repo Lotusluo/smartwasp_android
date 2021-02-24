@@ -38,7 +38,7 @@
     <string name="ap_device">党建AP配网</string>
     <string name="ap_device_ok">AP配网授权成功,请稍后</string>
     <string name="ap_device_exit">正在努力检测授权,是否强行退出?</string>
-    <string name="ap_device_no_net">当前网络不可用,请检查网络</string>
+    <string name="ap_device_no_net">无法切回网络或网络不可用,请稍后</string>
     <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>
     <string name="words1">小黄蜂智能音箱</string>
