@@ -1,13 +1,18 @@
 package com.smartwasp.assistant.app.base
 
+import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
+import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
@@ -17,13 +22,21 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.activity.AboutActivity
+import com.smartwasp.assistant.app.util.CrashCollectHandler
+import com.smartwasp.assistant.app.util.FileUtil
 import com.smartwasp.assistant.app.util.StatusBarUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.jessyan.autosize.AutoSizeCompat
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
+import java.io.File
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -136,10 +149,8 @@ abstract class BaseActivity<
          * 这时候，需要跳转到设置界面去，让用户手动开启。
          */
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            AppSettingsDialog
-                    .Builder(this)
-                    .build()
-                    .show()
+
+
         }
     }
 
@@ -147,7 +158,7 @@ abstract class BaseActivity<
      * 权限允许
      */
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-
+        Logger.e("onPermissionsGranted:$requestCode")
     }
 
     /**
@@ -263,10 +274,61 @@ abstract class BaseActivity<
      * 针对AutoSize布局混乱的问题解决
      */
     override fun getResources(): Resources {
-        AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
+        if(!CrashCollectHandler.isCrashOccur){
+            AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
+        }
         return super.getResources()
     }
 
+    /**
+     * 回调
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == INSTALL_REQUEST){
+            onPreInstall(File(applicationContext.externalCacheDir,"update.apk"))
+        }
+    }
+
+    /**
+     * 下载安装文件完毕,准备更新
+     * @param saveFile
+     * @param md5
+     */
+    fun onPreInstall(saveFile: File) {
+        GlobalScope.launch(Dispatchers.Main) {
+            AlertDialog.Builder(this@BaseActivity)
+                    .setTitle(R.string.tip)
+                    .setMessage(R.string.request_install)
+                    .setPositiveButton(android.R.string.ok){
+                        _,_->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (!packageManager.canRequestPackageInstalls()) {
+                                val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + BuildConfig.APPLICATION_ID))
+                                startActivityForResult(intent, INSTALL_REQUEST)
+                                return@setPositiveButton
+                            }
+                        }
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        val contentUri: Uri = FileUtil.createUriFromFile(this@BaseActivity, saveFile)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        }
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
+                        startActivity(intent)
+                        SmartApp.finish()
+                    }
+                    .setNegativeButton(R.string.giveUp,null)
+                    .show()
+
+        }
+    }
+
+    companion object{
+        const val INSTALL_REQUEST = 1605
+    }
 }
 
 /**

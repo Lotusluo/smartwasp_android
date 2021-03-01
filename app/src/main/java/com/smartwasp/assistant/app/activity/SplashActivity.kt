@@ -14,6 +14,7 @@ import com.smartwasp.assistant.app.base.SmartApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -27,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        Android P 为 Android 9；Android Q 为 Android 10；Android R 为 Android 11
+//        Android P 为 Android 9 28；Android Q 为 Android 10；Android R 为 Android 11
         val controller = ViewCompat.getWindowInsetsController(window.decorView)
         controller?.also {
             it.hide(WindowInsets.Type.statusBars())
@@ -38,11 +39,17 @@ class SplashActivity : AppCompatActivity() {
             decorView.systemUiVisibility = uiOptions
         }
         setContentView(R.layout.activity_splash)
+
         GlobalScope.launch(Dispatchers.IO) {
             doWork()
-            GlobalScope.launch(Dispatchers.Main) {
-                toMain()
-            }
+            suspend {
+                withContext(Dispatchers.Main) {
+                    toMain()
+                }
+            }.invoke()
+//            GlobalScope.launch(Dispatchers.Main) {
+//                toMain()
+//            }
         }
     }
 

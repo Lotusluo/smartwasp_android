@@ -11,10 +11,16 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- android8安装未知应用权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REPLACE_EXISTING_PACKAGE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".base.SmartApp"
@@ -50,12 +56,28 @@
         <service android:name=".service.PushService" />
         <service android:name=".service.DownloadService"/>
         <service android:name=".service.ApConfigNetService" />
+
         <meta-data
             android:name="design_width_in_dp"
             android:value="375" />
+
         <meta-data
             android:name="design_height_in_dp"
             android:value="667" />
+
+        <meta-data
+            android:name="access_token"
+            android:value="smartwasp-eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIxMTQiLCJzdWIiOiJ4aGYtdXNlciIsImlhdCI6MTYxNDIzNzUwNywiaXNzIjoiY3hnIiwiYXV0aG9yaXRpZXMiOiJbXSIsInR5cGUiOiJ1c2VyIiwiZXhwIjoxNjE0OTQ5MDgwfQ.11TEOiGeXhT1zaYtRGMiabu_k3tE7FL6rSx5XGwLn1BZssNzZdKdnn9Qx7vscIlBo85sDsRit9ffdjCAwhgaYg"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.smartwasp.assistant.app.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

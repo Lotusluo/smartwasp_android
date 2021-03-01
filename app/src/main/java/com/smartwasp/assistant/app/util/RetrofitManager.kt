@@ -1,6 +1,9 @@
 package com.smartwasp.assistant.app.util
 
+import android.content.pm.PackageManager
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
+import com.smartwasp.assistant.app.base.SmartApp
 import okhttp3.Interceptor
 import okhttp3.Response
 import retrofit2.Retrofit
@@ -28,8 +31,12 @@ class RetrofitManager private constructor():Interceptor{
     var retrofitApiService:RetrofitApiService? = null
         private set
 
+    private lateinit var accessToken:String
+
     init {
         initHttpRequest()
+        accessToken = SmartApp.app.packageManager.
+        getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).metaData["access_token"].toString()
     }
 
     //初始化Http
@@ -48,16 +55,10 @@ class RetrofitManager private constructor():Interceptor{
      * @return 响应
      */
     override fun intercept(chain: Interceptor.Chain): Response {
-        var cache = chain.request().header("cache")
-        var originalResponse = chain.proceed(chain.request())
-        val cacheControl = originalResponse.header("Cache-Control")
-        return cacheControl?.let {
-            originalResponse = originalResponse.newBuilder()
-                    .header("Cache-Control", "public, max-age=${if(cache.isNullOrBlank()) 5 else cache}")
-                    .build()
-            originalResponse
-        } ?: kotlin.run {
-            originalResponse
-        }
+        val request = chain.request().newBuilder()
+                .addHeader("access_token",accessToken)
+                .addHeader("Cache-Control","no-cache, max-age=0")
+                .build()
+        return chain.proceed(request)
     }
 }

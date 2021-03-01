@@ -11,6 +11,7 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.bean.FindBean
+import com.smartwasp.assistant.app.bean.GroupBean
 import retrofit2.Call
 import retrofit2.Response
 
@@ -45,5 +46,35 @@ class FindModel(application: Application): BaseViewModel(application) {
             findData.postValue(Result.failure(Throwable("Err")))
         }
         return findData
+    }
+
+    /**
+     * 更多媒体资源
+     * @param deviceID
+     * @param selectedID
+     */
+    fun getMoreData(deviceID:String,selectedID:String): LiveData<Result<GroupBean>> {
+        val moreDatas = MutableLiveData<Result<GroupBean>>()
+        val result = IFlyHome.getGroupSection(selectedID,deviceID,object : ResponseCallback {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                moreDatas.postValue(Result.failure(Throwable("Err")))
+            }
+            override fun onResponse(response: Response<String>) {
+                if(response.isSuccessful){
+                    try {
+                        val moreBean = Gson().fromJson<GroupBean>(response.body(), object: TypeToken<GroupBean>(){}.type)
+                        moreDatas.postValue(Result.success(moreBean))
+                    }catch (e:Throwable){
+                        moreDatas.postValue(Result.failure(Throwable("Err")))
+                    }
+                }else{
+                    moreDatas.postValue(Result.failure(Throwable("empty")))
+                }
+            }
+        })
+        if(result != IFlyHome.RESULT_OK){
+            moreDatas.postValue(Result.failure(Throwable("Err")))
+        }
+        return moreDatas
     }
 }

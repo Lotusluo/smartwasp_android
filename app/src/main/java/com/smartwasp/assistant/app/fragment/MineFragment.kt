@@ -29,6 +29,8 @@ import com.youth.banner.listener.OnPageChangeListener
 import com.youth.banner.util.BannerUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.layout_device_item.view.*
+import java.io.IOException
+import java.lang.RuntimeException
 
 /**
  * Created by luotao on 2021/1/11 15:44

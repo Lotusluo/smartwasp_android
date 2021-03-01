@@ -21,11 +21,13 @@ import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.*
+import com.smartwasp.assistant.app.bean.test.BaseBean
 import com.smartwasp.assistant.app.bean.test.TimeBean
 import com.smartwasp.assistant.app.bean.test.TimeData
 import com.smartwasp.assistant.app.service.PushService
 import com.smartwasp.assistant.app.util.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
@@ -77,10 +79,8 @@ class MainViewModel(application: Application): BaseViewModel(application) {
                     try {
                         val userBean = Gson().fromJson<UserBean>(response.body(), object:TypeToken<UserBean>(){}.type)
                         SmartApp.userBean = userBean
-                        AppExecutors.get().diskIO().execute {
-                            ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
-                            userIdData.postValue(IFLYOS.OK)
-                        }
+                        ConfigUtils.putString(ConfigUtils.KEY_USER_ID, SerializableUtils.writeObject(userBean))
+                        userIdData.postValue(IFLYOS.OK)
                     }catch (e:Throwable){
                         userIdData.postValue(IFLYOS.ERROR)
                     }
@@ -93,6 +93,30 @@ class MainViewModel(application: Application): BaseViewModel(application) {
             userIdData.postValue(IFLYOS.ERROR)
         }
         return userIdData
+    }
+
+    /**
+     * 注册用户
+     * @param uid
+     */
+    fun register(uid:String):MutableLiveData<String>{
+        val updateData = MutableLiveData<String>()
+        val params = HashMap<String,String>()
+        params["uid"] = uid
+        retrofit<BaseBean<String>> {
+            api = RetrofitManager.get().retrofitApiService?.register(params)
+            onSuccess {
+                if(it.errCode == 0){
+                    updateData.postValue(IFLYOS.OK)
+                }else{
+                    updateData.postValue(IFLYOS.ERROR)
+                }
+            }
+            onFail { _, _ ->
+                updateData.postValue(IFLYOS.ERROR)
+            }
+        }
+        return updateData
     }
 
     /**

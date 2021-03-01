@@ -41,7 +41,7 @@ class MusicBindModel(application: Application):BaseViewModel(application) {
      */
     fun mediaControlFun(type:MediaControlType,vararg params:String) {
         if(null != currentType){
-            LoadingUtil.showToast(SmartApp.app,SmartApp.app.getString(R.string.plz_wait))
+//            LoadingUtil.showToast(SmartApp.app,SmartApp.app.getString(R.string.plz_wait))
             return
         }
         currentType = type

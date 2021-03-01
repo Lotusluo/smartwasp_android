@@ -6,6 +6,7 @@ import android.content.res.TypedArray
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -39,6 +40,9 @@ import kotlinx.android.synthetic.main.fragment_music_item.*
 import kotlinx.android.synthetic.main.fragment_music_item.bezelImageView
 import kotlinx.android.synthetic.main.layout_device_header.*
 import kotlinx.android.synthetic.main.layout_toolbar_device.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by luotao on 2021/1/7 15:00
@@ -102,6 +106,8 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 //        webview.settings.javaScriptEnabled = true
 //        webview.settings.blockNetworkImage = false
 //        webview.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
@@ -301,7 +307,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
         webview.destroy()
         super.onDestroy()
         SmartApp.removeMediaObserver(mediaStateObserver)
-        if(mType == IFLYOS.TYPE_LOGIN && null == SmartApp.userBean){
+        if(mType == IFLYOS.TYPE_LOGIN && !IFlyHome.isLogin()){
             //登录界面退出时还未登录，则杀掉应用
             SmartApp.finish(0)
         }

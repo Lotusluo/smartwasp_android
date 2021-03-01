@@ -144,4 +144,24 @@ object NetWorkUtil {
         }
     }
 
+    fun getCurrentGateway(context: Context): String {
+        val wm = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+        val dhcpInfo = wm.dhcpInfo
+
+        return ipToString(dhcpInfo.gateway)
+    }
+
+    private fun ipToString(ip: Int): String {
+        val sb = StringBuffer()
+        sb.append(ip and 0xFF)
+        sb.append('.')
+        sb.append(ip.shr(8) and 0xFF)
+        sb.append('.')
+        sb.append(ip.shr(16) and 0xFF)
+        sb.append('.')
+        sb.append(ip.shr(24) and 0xFF)
+        return sb.toString()
+    }
+
 }

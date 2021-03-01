@@ -1,5 +1,6 @@
 package com.smartwasp.assistant.app.util;
 
+import android.hardware.Camera;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -58,10 +59,27 @@ public class RomUtils {
     }
 
     //Android Api 23以上
-    private static boolean isAndroidMOrAbove() {
+    public static boolean isAndroidMOrAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
+    //Android6.0以下的摄像头权限处理：
+    public static boolean isCameraCanUse() {
+        boolean canUse = true;
+        Camera mCamera = null;
+        try {
+            mCamera = Camera.open();
+            // setParameters 是针对魅族MX5 做的。MX5 通过Camera.open() 拿到的Camera
+            Camera.Parameters mParameters = mCamera.getParameters();
+            mCamera.setParameters(mParameters);
+        } catch (Exception e) {
+            canUse = false;
+        }
+        if (mCamera != null) {
+            mCamera.release();
+        }
+        return canUse;
+    }
     private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
 
     private static boolean isMiUIV6OrAbove() {

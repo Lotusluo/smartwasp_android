@@ -1,6 +1,9 @@
 package com.smartwasp.assistant.app.fragment.aps
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.ApStepActivity
 import com.smartwasp.assistant.app.base.*
 import com.smartwasp.assistant.app.bean.AuthBean
 import com.smartwasp.assistant.app.bean.WifiBean
@@ -19,10 +23,12 @@ import com.smartwasp.assistant.app.databinding.LayoutWifiItem1Binding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
 import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.NetWorkUtil
+import com.smartwasp.assistant.app.util.WifiUtils
 import com.smartwasp.assistant.app.viewModel.WifiGetModel
 import kotlinx.android.synthetic.main.activity_wifi_list.recyclerView
 import kotlinx.android.synthetic.main.fragment_ap3.*
 import java.lang.ref.WeakReference
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by luotao on 2021/1/30 11:13
@@ -81,6 +87,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             obj.observe(this, Observer {
                 if(it.isSuccess){
                     //有wifi连接成功
+                    //清除其它多余连接
                     linked(it.getOrThrow())
                 }
             })
@@ -157,11 +164,30 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
      * 入场动画完成
      */
     override fun onTransitDone() {
-        //先获取授权码
+        ApStepActivity.authBean?.let {
+            //如果有授权码,检测是否过期
+            if(it.isExpires()){
+                //过期重新获取
+                ApStepActivity.authBean = null
+                getAuthCode()
+            }else{
+                onRefreshWifi()
+            }
+        } ?: kotlin.run {
+            //没有授权码直接获取
+            getAuthCode()
+        }
+    }
+
+    /**
+     * 获取授权码
+     */
+    private fun getAuthCode(){
         arguments?.getString(PreBindFragment.BIND_CLIENT_ID)?.let {
             mViewModel!!.getAuthCode(it).observe(this, Observer {result->
                 if(result.isSuccess){
-                    authBean = result.getOrNull()
+                    ApStepActivity.authBean = result.getOrNull()
+                    ApStepActivity.authBean?.local_created_at = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
                     onRefreshWifi()
                 }else{
                     AlertDialog.Builder(requireContext())
@@ -173,13 +199,11 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             })
         }
     }
-    //授权码
-    private var authBean:AuthBean? = null
 
     /**
      * 刷新wifi列表
      */
-    fun onRefreshWifi() {
+    private fun onRefreshWifi() {
         progress.visibility = View.VISIBLE
         noWifi.visibility = View.GONE
         stepBtn.isEnabled = false
@@ -199,8 +223,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
         super.onButtonClick(v)
         when(v.id){
             R.id.stepBtn ->{
-                //先记录当前热点的mac
-                authBean?.auth_code?.let {authCode->
+                ApStepActivity.authBean?.auth_code?.let {authCode->
                     val apStepFragment4 = ApStepFragment4.newsInstance(authCode)
                     requireActivity()?.addFragmentByTagWithStack(R.id.container,apStepFragment4)
                     AppExecutors.get().mainThread().executeDelay(Runnable {

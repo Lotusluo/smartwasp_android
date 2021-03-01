@@ -62,6 +62,10 @@ object WifiUtils {
         return true
     }
 
+    /**
+     * 取消所有网络
+     * @param context
+     */
     fun forgetAll(context: Context?): Boolean {
         (context?.applicationContext?.getSystemService(Context.WIFI_SERVICE)
             as? WifiManager)?.let { wm ->
@@ -76,6 +80,11 @@ object WifiUtils {
         return false
     }
 
+    /**
+     * 取消某个网络
+     * @param context
+     * @param ssid
+     */
     fun forget(context: Context?, ssid: String?): Boolean {
         (context?.applicationContext?.getSystemService(Context.WIFI_SERVICE)
             as? WifiManager)?.let { wm ->
@@ -88,6 +97,33 @@ object WifiUtils {
                     else
                         configuration.SSID.substring(1, configuration.SSID.length - 1)
                 if (configuredSsid == ssid) {
+                    iterator.remove()
+                    wm.removeNetwork(configuration.networkId)
+                    return true
+                }
+            }
+            return false
+        }
+        return false
+    }
+
+    /**
+     * 取消除某个网络的所有网络
+     * @param context
+     * @param ssid
+     */
+    fun forgetBut(context: Context?, ssid: String?): Boolean {
+        (context?.applicationContext?.getSystemService(Context.WIFI_SERVICE)
+                as? WifiManager)?.let { wm ->
+            val iterator = wm.configuredNetworks.iterator()
+            while (iterator.hasNext()) {
+                val configuration = iterator.next()
+                val configuredSsid =
+                        if (configuration.SSID.isNullOrEmpty())
+                            ""
+                        else
+                            configuration.SSID.substring(1, configuration.SSID.length - 1)
+                if (configuredSsid != ssid) {
                     iterator.remove()
                     wm.removeNetwork(configuration.networkId)
                     return true

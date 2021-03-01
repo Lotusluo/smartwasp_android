@@ -1,5 +1,7 @@
 package com.smartwasp.assistant.app.activity
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -9,12 +11,15 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
-import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
+import com.smartwasp.assistant.app.bean.UpdateBean
 import com.smartwasp.assistant.app.databinding.ActivityAboutBinding
+import com.smartwasp.assistant.app.fragment.PreBindFragment
+import com.smartwasp.assistant.app.service.DownloadService
 import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.NotificationsUtils
 import com.smartwasp.assistant.app.viewModel.AboutModel
 import kotlinx.android.synthetic.main.layout_toolbar.*
-import java.lang.RuntimeException
 
 class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
 
@@ -37,12 +42,12 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
     private val versionName by lazy{
         packageManager.getPackageInfo(BuildConfig.APPLICATION_ID,0).versionName
     }
+    private var updateBean:UpdateBean? = null
     /**
      * 添加点击事件
      */
     override fun onButtonClick(v: View){
         super.onButtonClick(v)
-        Logger.e(SmartApp.app.externalCacheDir.toString())
         when(v.id){
             R.id.btnUpdate->{
                 LoadingUtil.create(this)
@@ -52,7 +57,23 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
                     if(it.isSuccess){
                         it.getOrNull()?.data?.let {updateBean->
                             if(updateBean.versionCode > versionCode){
-                                resID = R.string.tip_update_check_ok_new
+                                AlertDialog.Builder(this)
+                                        .setTitle(getString(R.string.tip_update_check_ok_new,updateBean.versionName))
+                                        .setMessage(updateBean.describe)
+                                        .setNegativeButton(android.R.string.cancel,null)
+                                        .setPositiveButton(R.string.update){_,_->
+                                            this.updateBean = updateBean
+                                            //检测权限
+                                            if (!NotificationsUtils.isNotificationEnabled(this@AboutActivity)) {
+                                                NotificationsUtils.toNotificationSetting(this@AboutActivity)
+                                            } else {
+                                                easyPermissions(getString(R.string.write_per),
+                                                        REQUEST_ACCESS_FILE,
+                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                            }
+                                        }
+                                        .show()
+                                return@Observer
                             }
                         }
                     }else{
@@ -66,5 +87,22 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
                 })
             }
         }
+    }
+
+    /**
+     * 权限回调
+     */
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        when(requestCode){
+            REQUEST_ACCESS_FILE ->{
+                updateBean?.let {
+                    DownloadService.startActionFoo(this,it.downloadSite,it.md5)
+                }
+            }
+        }
+    }
+
+    companion object{
+        const val REQUEST_ACCESS_FILE = 10119
     }
 }

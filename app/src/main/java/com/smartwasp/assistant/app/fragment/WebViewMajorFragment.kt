@@ -11,9 +11,11 @@ import androidx.databinding.ViewDataBinding
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeCallback
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.util.IFLYOS
 import kotlinx.android.synthetic.main.activity_web_view.webview
+import kotlinx.coroutines.*
 
 /**
  * Created by luotao on 2021/1/23 17:09
@@ -61,13 +63,15 @@ abstract class WebViewMajorFragment<
                         super.onReceivedError(view, request, error)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                            onReceivedError:net::ERR_NAME_NOT_RESOLVED
-                            Logger.e("onReceivedError:${error?.description}")
+                            errorCode = error?.errorCode ?: 0
+                            Logger.e("errorCode:$errorCode")
                         }
                     }
                 }
             }
         },webTag)
     }
+    private var errorCode = 0
 
     /**
      * 打开新页面
@@ -92,6 +96,7 @@ abstract class WebViewMajorFragment<
         }
     }
 
+    private var job:Job? = null
     /**
      * 恢复
      */
@@ -100,7 +105,21 @@ abstract class WebViewMajorFragment<
         webViewTag?.let {
             IFlyHome.resumeWebView(it)
         }
+        job?.cancel()
+        if(errorCode != 0){
+            webview.reload()
+//            job = GlobalScope.launch(Dispatchers.IO) {
+//                delay(2000)
+//                suspend {
+//                    withContext(Dispatchers.Main) {
+//                        webview.reload()
+//                    }
+//                }.invoke()
+//            }
+        }
     }
+
+
 
     /**
      * 暂停
@@ -110,6 +129,7 @@ abstract class WebViewMajorFragment<
         webViewTag?.let {
             IFlyHome.pauseWebView(it)
         }
+        job?.cancel()
     }
 
     /**
