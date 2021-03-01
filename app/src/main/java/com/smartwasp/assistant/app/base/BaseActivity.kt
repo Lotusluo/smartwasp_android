@@ -25,6 +25,7 @@ import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.AboutActivity
+import com.smartwasp.assistant.app.util.CrashCollectHandler
 import com.smartwasp.assistant.app.util.FileUtil
 import com.smartwasp.assistant.app.util.StatusBarUtil
 import kotlinx.coroutines.Dispatchers
@@ -273,7 +274,9 @@ abstract class BaseActivity<
      * 针对AutoSize布局混乱的问题解决
      */
     override fun getResources(): Resources {
-        AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
+        if(!CrashCollectHandler.isCrashOccur){
+            AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
+        }
         return super.getResources()
     }
 

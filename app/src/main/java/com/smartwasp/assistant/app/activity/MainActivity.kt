@@ -1,22 +1,16 @@
 package com.smartwasp.assistant.app.activity
 
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.SystemClock
-import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.os.EnvironmentCompat
 import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.iflytek.home.sdk.IFlyHome
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
@@ -29,12 +23,7 @@ import com.smartwasp.assistant.app.fragment.*
 import com.smartwasp.assistant.app.util.*
 import com.smartwasp.assistant.app.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.layout_tabbar.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.File
 
 /**
  * Created by luotao on 2021/1/7 15:00

@@ -20,7 +20,7 @@
     <string name="error_net_unknown">网络未知错误</string>
     <string name="error_ap_connect">连接音箱失败,请重试</string>
     <string name="error_ap_connect1">连接音箱失败,请返回重试</string>
-    <string name="error_ap_auth">获取授权码失败,请联网并返回上一级重试</string>
+    <string name="error_ap_auth">请勿提前连接设备热点,请保证正常联网并返回上一级重试</string>
     <string name="error_request">请求数据错误</string>
     <string name="try_again">请重试</string>
     <string name="try_again1">请开通音乐权限或发生未知错误</string>

@@ -6,6 +6,7 @@ import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.addFragmentByTag
+import com.smartwasp.assistant.app.bean.AuthBean
 import com.smartwasp.assistant.app.databinding.ActivityApStepBinding
 import com.smartwasp.assistant.app.fragment.aps.ApStepFragment1
 import kotlinx.coroutines.runBlocking
@@ -23,6 +24,8 @@ class ApStepActivity : BaseActivity<BaseViewModel,ActivityApStepBinding>() {
         var CUR_WIFI_SSID:String? = null
         var CUR_WIFI_BSSID:String? = null
         var CUR_WIFI_PWD:String? = null
+        //授权码
+        var authBean: AuthBean? = null
     }
 
     /**
