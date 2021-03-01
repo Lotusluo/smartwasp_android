@@ -1,0 +1,43 @@
+import java.util.regex.Matcher
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+    defaultConfig {
+        //applicationId "com.qiniu.android"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled = true
+        }
+
+    }
+
+    lintOptions {
+        warning 'InvalidPackage'
+    }
+
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+}
+
+
+dependencies {
+    compileOnly 'com.squareup.okhttp3:okhttp:4.2.2'
+    compileOnly 'com.qiniu:happy-dns:0.2.16'
+    // for javax.annotation.Nullable use in custom MultipartBody and Headers implements.
+//    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'org.conscrypt:conscrypt-android:2.2.1'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}

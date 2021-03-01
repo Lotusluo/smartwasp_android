@@ -19,6 +19,7 @@ import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.IFLYOS
 import retrofit2.Call
 import retrofit2.Response
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Created by luotao on 2021/2/22 11:44
@@ -30,13 +31,14 @@ class ApBindModel(application: Application): BaseViewModel(application) {
     val askDeferred = MutableLiveData<String>()
     //授权码
     private lateinit var authCode:String
+    private val count:AtomicInteger = AtomicInteger(1)
 
     /**
      * 轮询设备状态
      * @param authCode 设备信息
      * @param delayInSeconds 轮询时间
      */
-    fun askDevAuth(authCode:String,delayInSeconds:Long = 1){
+    fun askDevAuth(authCode:String,delayInSeconds:Long = 2){
         this.authCode = authCode
         cancelAskDevStatus()
         AppExecutors.get().mainThread().executeDelay(askDevAuthJob,delayInSeconds * 1000)
@@ -61,11 +63,16 @@ class ApBindModel(application: Application): BaseViewModel(application) {
      * 询问设备状态动作
      */
     private var askDevAuthJob = Runnable {
+        if(count.incrementAndGet() >= 60){
+            cancelAskDevStatus()
+            Logger.d("cancelAskDevStatus")
+            return@Runnable
+        }
+        Logger.d("askDevAuthJob")
         askDevAuth(authCode)
         IFlyHome.checkAuthCodeState(authCode, object : ResponseCallback {
             override fun onResponse(response: Response<String>) {
                 if(response.isSuccessful){
-                    Logger.e(response.body().toString())
                     val authCheckCode = Gson().fromJson<AuthCheckBean>(response.body(), object: TypeToken<AuthCheckBean>(){}.type)
                     if(authCheckCode.code == "0000"){
                         cancelAskDevStatus()

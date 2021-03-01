@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.databinding.LayoutMoreBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 /**
  * Created by luotao on 2021/1/20 13:59
@@ -193,10 +195,14 @@ class SimpleRecyclerHelper<
      * 设置加载更多的样式
      */
     private fun onUpdateMoreStyle(){
-        val loadMoreHolder = recyclerView.findViewHolderForAdapterPosition(dataBeans.size) as MoreViewHolder?
-        loadMoreHolder?.let {
-            loadMoreHolder?.updateUI(true)
-        }
+        AppExecutors.get().mainThread().executeDelay(Runnable {
+            if(recyclerView.isAttachedToWindow){
+                val loadMoreHolder = recyclerView.findViewHolderForAdapterPosition(dataBeans.size) as MoreViewHolder?
+                loadMoreHolder?.let {
+                    loadMoreHolder?.updateUI(true)
+                }
+            }
+        },200)
     }
 
     /**

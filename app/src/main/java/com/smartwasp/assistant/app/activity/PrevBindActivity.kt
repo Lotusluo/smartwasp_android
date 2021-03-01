@@ -12,6 +12,7 @@ import com.smartwasp.assistant.app.base.*
 import com.smartwasp.assistant.app.databinding.ActivityPrevBindBinding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
 import com.smartwasp.assistant.app.util.IFLYOS
+import com.smartwasp.assistant.app.util.RomUtils
 import kotlinx.android.synthetic.main.layout_toolbar.*
 
 class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
@@ -32,8 +33,17 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
         when(v.id){
             R.id.scanBtn ->{
                 //申请摄像头权限
-                easyPermissions(getString(R.string.camera_per),ScanActivity.REQUEST_CAMERA_CODE,
-                        Manifest.permission.CAMERA)
+                if(!RomUtils.isAndroidMOrAbove() && !RomUtils.isCameraCanUse()){
+                    //部分国产机在6.0以下做了权限处理
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.camera_per1)
+                            .setPositiveButton(android.R.string.ok,null)
+                            .show()
+                }else{
+                    easyPermissions(getString(R.string.camera_per),ScanActivity.REQUEST_CAMERA_CODE,
+                            Manifest.permission.CAMERA)
+                }
             }
             R.id.ApBtn ->{
                 //申请

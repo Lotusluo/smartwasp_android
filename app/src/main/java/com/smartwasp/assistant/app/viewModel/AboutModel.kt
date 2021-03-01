@@ -33,7 +33,11 @@ class AboutModel(application: Application): BaseViewModel(application) {
         retrofit<BaseBean<UpdateBean>> {
             api = RetrofitManager.get().retrofitApiService?.update()
             onSuccess {
-                updateData.postValue(Result.success(it))
+                if(it.errCode == 0){
+                    updateData.postValue(Result.success(it))
+                }else{
+                    updateData.postValue(Result.failure(Throwable("err")))
+                }
             }
             onFail { _, _ ->
                 updateData.postValue(Result.failure(Throwable("err")))

@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -344,10 +345,9 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
             private set
         private fun onRender(){
             itemViewBinding?.tvMore?.setOnClickListener {
-                AlertDialog.Builder(requireContext())
-                        .setMessage(R.string.un_open)
-                        .setPositiveButton(android.R.string.ok,null)
-                        .show()
+                //加载更多
+//                LoadingUtil.showToast(requireContext(),getString(R.string.un_open))
+                onRequestMore(bean.section_id)
             }
             val recyclerView:RecyclerView? = itemViewBinding?.groupList
             recyclerView?.let {
@@ -381,6 +381,28 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                     }
                 })
             }
+        }
+    }
+
+    /**
+     * 请求更多的媒体资源
+     * @param sectionId
+     */
+    private fun onRequestMore(sectionId: String) {
+        SmartApp.activity?.currentDevice?.let {device->
+            LoadingUtil.create(requireActivity())
+            mViewModel!!.getMoreData(device.device_id,sectionId).observe(this, Observer {
+                LoadingUtil.dismiss()
+                if(it.isSuccess){
+                    it.getOrNull()?.let {more->
+                        addFragmentByTag(R.id.container,MusicMoreFragment.newsInstance(more))
+                    } ?: kotlin.run {
+                        LoadingUtil.showToast(requireContext(),getString(R.string.error_request),Toast.LENGTH_LONG)
+                    }
+                }else{
+                    LoadingUtil.showToast(requireContext(),getString(R.string.error_request),Toast.LENGTH_LONG)
+                }
+            })
         }
     }
 

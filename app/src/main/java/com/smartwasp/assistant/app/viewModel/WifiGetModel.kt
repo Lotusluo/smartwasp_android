@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkInfo
 import android.net.NetworkRequest
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
@@ -23,15 +22,16 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.AuthBean
-import com.smartwasp.assistant.app.bean.MusicStateBean
-import com.smartwasp.assistant.app.bean.SongsBean
 import com.smartwasp.assistant.app.bean.WifiBean
+import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.NetWorkUtil
+import com.smartwasp.assistant.app.util.ShellUtils
+import com.smartwasp.assistant.app.util.WifiUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
+import java.net.InetAddress
 
 /**
  * Created by luotao on 2021/1/29 17:42
@@ -92,14 +92,16 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
         connectivityManager.requestNetwork(NetworkRequest.Builder().build(), object: ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                val bssid = wifiManager.connectionInfo.bssid
-                if(!bssid.isNullOrEmpty() && linking != null){
-                    if(bssid == linking!!.bssid){
-                        autoConnectData.postValue(Result.success(bssid))
-                        linking = null
+                AppExecutors.get().mainThread().executeDelay(Runnable {
+                    val bssid = WifiUtils.getConnectedBssid(context)
+                    if(!bssid.isNullOrEmpty() && linking != null){
+                        if(bssid == linking!!.bssid){
+                            WifiUtils.forgetBut(context,bssid)
+                            autoConnectData.postValue(Result.success(bssid))
+                            linking = null
+                        }
                     }
-                }
+                },500)
             }
         })
     }
@@ -205,6 +207,7 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
             val action = intent.action
             val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
             if(action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION){
+                val bbssid = WifiUtils.getConnectedBssid(context)
                 val wifiBeanList = mutableListOf<WifiBean>()
                 wifiManager.scanResults.forEach {
                     if(it.SSID.isNullOrEmpty()){
@@ -220,11 +223,11 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
                         if(l.bssid == it.BSSID){
                             wifiBean.linkType = WifiBean.STATE_LINKING
                         }
-                        if(l.bssid == wifiManager.connectionInfo.bssid){
+                        if(!bbssid.isNullOrEmpty() && l.bssid == bbssid){
                             linking = null
                         }
                     }
-                    if(wifiManager.connectionInfo.bssid == it.BSSID){
+                    if(!bbssid.isNullOrEmpty() && bbssid == it.BSSID){
                         //已完成连接
                         wifiBean.linkType = WifiBean.STATE_LINKED
                     }

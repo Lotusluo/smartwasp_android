@@ -8,6 +8,7 @@ import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.databinding.ActivityApStepBinding
 import com.smartwasp.assistant.app.fragment.aps.ApStepFragment1
+import kotlinx.coroutines.runBlocking
 
 /**
  * Created by luotao on 2021/1/28 16:17

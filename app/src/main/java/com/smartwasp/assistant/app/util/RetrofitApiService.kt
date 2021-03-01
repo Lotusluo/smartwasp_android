@@ -22,9 +22,15 @@ interface RetrofitApiService {
     /**
      * 获取版本信息
      */
-    @GET("https://smartwasp.bj.bcebos.com/update")
-    @Headers("Cache-Control: no-cache, max-age=0")
+    @POST("http://box.smartwasp.com.cn:8888/api/checkUpdate")
     fun update(): Call<BaseBean<UpdateBean>>
+
+    /**
+     * 注册
+     */
+    @FormUrlEncoded
+    @POST("http://box.smartwasp.com.cn:8888/api/register")
+    fun register(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
 
     /**
      * 断点下载

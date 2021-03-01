@@ -1,5 +1,7 @@
 package com.smartwasp.assistant.app.fragment.aps
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import com.smartwasp.assistant.app.databinding.LayoutWifiItem1Binding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
 import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.NetWorkUtil
+import com.smartwasp.assistant.app.util.WifiUtils
 import com.smartwasp.assistant.app.viewModel.WifiGetModel
 import kotlinx.android.synthetic.main.activity_wifi_list.recyclerView
 import kotlinx.android.synthetic.main.fragment_ap3.*
@@ -81,6 +84,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             obj.observe(this, Observer {
                 if(it.isSuccess){
                     //有wifi连接成功
+                    //清除其它多余连接
                     linked(it.getOrThrow())
                 }
             })

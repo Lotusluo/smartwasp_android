@@ -51,7 +51,6 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         }
     }
 
-
     /**
      * 拦截劝等待
      */
@@ -84,36 +83,41 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
             tryConnect.set(false)
             sendConfig()
         }
+
         override fun onClosed(socket: Socket, t: Throwable?) {
-            if(!this@ApStepFragment4.isAdded)
-                return
-            if(flag) return
+            //忽略没有错误的关闭
             t ?: return
-            if(t.message?.toLowerCase()?.contains("connect") == true && !tryConnect.getAndSet(true)){
-                apConfigNetService?.connect() ?: run {
-                    context?.startService(Intent(context, ApConfigNetService::class.java).apply {
-                        action = ApConfigNetService.ACTION_CONNECT
-                    })
-                }
-                return
-            }
-            AlertDialog.Builder(requireContext())
-                    .setTitle(R.string.tip)
-                    .setMessage(R.string.error_ap_connect)
-                    .setPositiveButton(R.string.retry){_,_->
-                        progress.progress = 10
-                        apConfigNetService?.connect() ?: run {
-                            context?.startService(Intent(context, ApConfigNetService::class.java).apply {
-                                action = ApConfigNetService.ACTION_CONNECT
-                            })
+            Logger.e("onClosed:${t},$flag")
+            //已经发送密码则忽略所有错误
+            if(flag) return
+            handleRetry()
+        }
+
+        override fun onMessage(socket: Socket, byteArray: ByteArray) {
+            val string = String(byteArray)
+            Logger.e("onMessage:$string")
+            if(!string.isNullOrEmpty()){
+                //检测收到密码，开始等待网络切换并且轮询
+                if("{\"code\":1}" == string){
+                    AppExecutors.get().mainThread().execute{
+                        flag = true
+                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+                        val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
+                        mViewModel?.askDevAuth(authCode!!)
+                        GlobalScope.launch(Dispatchers.IO) {
+                            SystemClock.sleep(4000)
+                            if(!isAdded)
+                                return@launch
+                            if(progress.progress >= 100)
+                                return@launch
+                            compatProgress(90)
                         }
                     }
-                    .setNegativeButton(R.string.back){_,_->
-                        onNavigatorClick()
-                    }
-                    .show()
+                }else{
+                    handleRetry()
+                }
+            }
         }
-        override fun onMessage(socket: Socket, byteArray: ByteArray) {}
     }
 
     //socket服务
@@ -148,6 +152,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
 
     //    发送标志
     private var flag = false
+    private var gateWay:String?=null
     /**
      * 开始发送配置文件
      */
@@ -162,69 +167,15 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         apConfigNetService?.let { service ->
             if (service.isConnected() == true) {
                 compatProgress(50)
+                gateWay = NetWorkUtil.getCurrentGateway(requireContext())
+                //发送配置文件，等待返回code=1
                 service.send(json.toString())
-                flag = true
-                SmartApp.NEED_MAIN_REFRESH_DEVICES = true
-                mViewModel?.askDevAuth(authCode!!)
-                GlobalScope.launch(Dispatchers.IO) {
-                    SystemClock.sleep(4000)
-                    if(!isAdded)
-                        return@launch
-                    if(progress.progress >= 100)
-                        return@launch
-                    compatProgress(90)
-                    service.disconnect()
-                    SystemClock.sleep(15 * 1000)
-                    if(!NetWorkUtil.isGoodInternet(requireContext())){
-                        GlobalScope.launch(Dispatchers.Main){
-                            if(!isAdded)
-                                return@launch
-                            AlertDialog.Builder(requireContext())
-                                    .setTitle(R.string.tip)
-                                    .setMessage(R.string.ap_device_no_net)
-                                    .setPositiveButton(android.R.string.ok,null)
-                                    .show()
-                        }
-                    }
-                }
                 return
             } else {
-                if(!isAdded)
-                    return
-                AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.tip)
-                        .setMessage(R.string.error_ap_connect)
-                        .setPositiveButton(R.string.retry){_,_->
-                            progress.progress = 10
-                            apConfigNetService?.connect() ?: run {
-                                context?.startService(Intent(context, ApConfigNetService::class.java).apply {
-                                    action = ApConfigNetService.ACTION_CONNECT
-                                })
-                            }
-                        }
-                        .setNegativeButton(R.string.back){_,_->
-                            onNavigatorClick()
-                        }
-                        .show()
+                handleRetry()
             }
         } ?: run {
-            if(this.isAdded){
-                AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.tip)
-                        .setMessage(R.string.error_ap_connect)
-                        .setPositiveButton(R.string.retry){_,_->
-                            progress.progress = 10
-                            apConfigNetService?.connect() ?: run {
-                                context?.startService(Intent(context, ApConfigNetService::class.java).apply {
-                                    action = ApConfigNetService.ACTION_CONNECT
-                                })
-                            }
-                        }
-                        .setNegativeButton(R.string.back){_,_->
-                            onNavigatorClick()
-                        }
-                        .show()
-            }
+            handleRetry()
         }
     }
 
@@ -240,14 +191,60 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         mViewModel?.askDeferred!!.observe(this, Observer {
             if(it == IFLYOS.OK){
                 compatProgress(100)
-                tvSubTittle.setText(R.string.ap_device_ok)
-                AppExecutors.get().mainThread().executeDelay(Runnable {
-                    if(isAdded)
-                        return@Runnable
-                    requireActivity().finish()
-                },4000)
+                var count = 4
+                AppExecutors.get().diskIO().execute {
+                    while (count-->=0){
+                        AppExecutors.get().mainThread().execute{
+                            if(!isAdded)
+                                return@execute
+                            if(count <= 0)
+                                requireActivity().finish()
+                            else
+                                tvSubTittle.text = String.format(getString(R.string.ap_device_ok),count)
+                        }
+                        SystemClock.sleep(1000)
+                    }
+                }
             }
         })
+    }
+
+    /**
+     * 点击重试
+     */
+    private fun handleRetry(){
+        flag = false
+        if(this.isAdded){
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.tip)
+                    .setMessage(R.string.error_ap_connect)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.retry){_,_->
+                        val gateWay1 = NetWorkUtil.getCurrentGateway(requireContext())
+                        if(gateWay1 == gateWay && gateWay != "127.0.0.1"){
+                            progress.progress = 10
+                            apConfigNetService?.connect() ?: run {
+                                context?.startService(Intent(context, ApConfigNetService::class.java).apply {
+                                    action = ApConfigNetService.ACTION_CONNECT
+                                })
+                            }
+                        }else{
+                            AlertDialog.Builder(requireContext())
+                                    .setTitle(R.string.tip)
+                                    .setCancelable(false)
+                                    .setMessage(R.string.error_ap_connect1)
+                                    .setPositiveButton(android.R.string.ok){
+                                        _,_->
+                                        onNavigatorClick()
+                                    }
+                                    .show()
+                        }
+                    }
+                    .setNegativeButton(R.string.back){_,_->
+                        onNavigatorClick()
+                    }
+                    .show()
+        }
     }
 
 

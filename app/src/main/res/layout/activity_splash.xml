@@ -17,7 +17,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:textColor="#000"
         android:text="©2021 小黄蜂人工智能(深圳) 版权所有"

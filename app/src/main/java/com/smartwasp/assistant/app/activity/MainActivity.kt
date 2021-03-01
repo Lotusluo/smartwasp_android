@@ -31,6 +31,11 @@ import com.smartwasp.assistant.app.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.layout_tabbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.File
+
 /**
  * Created by luotao on 2021/1/7 15:00
  * E-Mail Address：gtkrockets@163.com
@@ -158,6 +163,8 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                         LoadingUtil.dismiss()
                         when(msg){
                             IFLYOS.OK->{
+                                //提交uid到服务器
+                                registerUid()
                                 requestData()
                             }
                             IFLYOS.ERROR->{
@@ -185,6 +192,19 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                         putExtra(IFLYOS.EXTRA_TYPE,IFLYOS.TYPE_LOGIN)
                     })
                 }
+            }
+        })
+    }
+
+    /**
+     * 注册
+     */
+    private fun registerUid(time:Int = 0) {
+        if(time > 1)
+            return
+        mViewModel.register(SmartApp.userBean!!.user_id).observe(this, Observer {
+            if(it != IFLYOS.OK){
+                registerUid(time + 1)
             }
         })
     }

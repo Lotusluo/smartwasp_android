@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.os.Process
-import android.os.SystemClock
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
@@ -28,6 +27,7 @@ import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.*
 import me.jessyan.autosize.AutoSize
 import java.io.InputStream
+import java.util.*
 import kotlin.system.exitProcess
 
 /**
@@ -152,6 +152,11 @@ class SmartApp : Application() {
             private set
         var activity:MainActivity? = null
             private set
+        private var mActivityList = Collections.synchronizedList(LinkedList<Activity>())
+        var topActivity:Activity? = null
+            get() {
+                return if(mActivityList.size < 1) null else mActivityList[mActivityList.size - 1]
+            }
     }
 
     /**
@@ -162,11 +167,13 @@ class SmartApp : Application() {
         app = this
         app.registerActivityLifecycleCallbacks(object :ActivityLifecycleCallbacks{
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                mActivityList.add(activity)
                 if(activity is MainActivity){
                     SmartApp.activity = activity
                 }
             }
             override fun onActivityDestroyed(activity: Activity) {
+                mActivityList.remove(activity)
                 if(activity is MainActivity){
                     SmartApp.activity = null
                 }
@@ -206,32 +213,31 @@ class SmartApp : Application() {
                 Logger.d("userBean:$userBean")
             }
         }
+//        main()
     }
 
-
     fun main() = runBlocking {
-
-        val job = launch() {
-
-            Logger.e("Current Thread : ${Thread.currentThread()}")
+        val job = launch(Dispatchers.Default) {
+            println("Current Thread : ${Thread.currentThread()}")
             var nextActionTime = System.currentTimeMillis()
             var i = 0
-
-            while (i < 20) {
-                Logger.e("Job: ${i++}")
-                delay(1000)
-//                if (System.currentTimeMillis() >= nextActionTime) {
-//                    nextActionTime += 500
-//                }
+            try {
+                while (isActive) {
+                    if (System.currentTimeMillis() >= nextActionTime) {
+                        println("Job: ${i++}")
+                        delay(5000)
+                    }
+                }
+            }catch (e:CancellationException){
+                println("CancellationException")
+            }finally {
+                println("finally")
             }
         }
-
         delay(1300)
-        Logger.e("hello")
-
+        println("hello")
         job.cancelAndJoin()
-
-        Logger.e("welcome")
+        println("welcome")
     }
 
 }

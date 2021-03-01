@@ -1,3 +1,6 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -8,6 +11,11 @@ repositories {
     }
 }
 
+def getDateTime() {
+    DateFormat df = new SimpleDateFormat("yyyyMMdd");
+    return df.format(new Date());
+}
+
 android {
     compileSdkVersion 30
 
@@ -15,8 +23,8 @@ android {
         applicationId "com.smartwasp.assistant.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.0.2"
+        versionCode 8
+        versionName "1.0.11"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -63,9 +71,8 @@ android {
         }
         android.applicationVariants.all { variant ->
             variant.outputs.all {
-                def versionName
                 if (variant.buildType.name == 'release') {
-                    outputFileName = "smartwasp_online_test.apk"
+                    outputFileName = "smartwasp_online_${variant.versionName}_${getDateTime()}.apk"
                 }
             }
         }
@@ -137,6 +144,7 @@ dependencies {
     implementation project(':switchButton')
     implementation project(':blurredview')
     implementation project(':magicindicator')
-    //騰訊bugly
+    implementation project(':qiniu')
+    //腾讯bugly
     implementation 'com.tencent.bugly:crashreport:2.8.6'
 }

@@ -61,7 +61,7 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
             ApStepActivity.CUR_WIFI_SSID = data.getStringExtra(IFLYOS.EXTRA)
             ApStepActivity.CUR_WIFI_BSSID = data.getStringExtra(IFLYOS.EXTRA_TAG)
             wifiName.setText(ApStepActivity.CUR_WIFI_SSID)
-            wifiPasswd.setText("")
+            wifiPasswd.setText("Wasp2020@")
         }
     }
 
@@ -92,6 +92,7 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
                 if(!ApStepActivity.CUR_WIFI_SSID.isNullOrEmpty()
                         && !ApStepActivity.CUR_WIFI_PWD.isNullOrEmpty()
                         && ApStepActivity.CUR_WIFI_PWD?.length!! >= 8){
+                    WifiUtils.forgetAll(requireContext())
 //              临时测试党建的项目，后期动态获取
                 requireActivity()?.addFragmentByTagWithStack(R.id.container,
                         PreBindFragment.newsInstance(
