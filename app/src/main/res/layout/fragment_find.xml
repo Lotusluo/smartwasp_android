@@ -75,7 +75,7 @@
                             android:textSize="14sp"
                             android:visibility="@{deviceBean.music.enable ? View.GONE : View.VISIBLE}"
                             android:text="@{deviceBean.music.text}"
-                            android:drawableRight="@mipmap/ic_arrow_right_grey_16dp"
+                            android:drawableRight="@drawable/ic_arrow_right_grey_16dp"
                             android:drawableTint="@color/smartwasp_yellow1"
                             android:textColor="@color/smartwasp_yellow1"
                             android:paddingStart="30dp"

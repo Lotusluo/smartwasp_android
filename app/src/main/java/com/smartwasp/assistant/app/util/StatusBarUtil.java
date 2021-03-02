@@ -9,7 +9,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.orhanobut.logger.Logger;
 
@@ -253,5 +258,15 @@ public class StatusBarUtil {
         Resources resource= context.getResources();
         int resID = resource.getIdentifier("status_bar_height","dimen", "android");
         return resource.getDimensionPixelOffset(resID);
+    }
+
+    @Nullable
+    public static WindowInsetsControllerCompat getWindowInsetsController(@NonNull View view) {
+        Context context = view.getContext();
+        if (context instanceof Activity) {
+            Window window = ((Activity) context).getWindow();
+            return window != null ? WindowCompat.getInsetsController(window, view) : null;
+        }
+        return null;
     }
 }

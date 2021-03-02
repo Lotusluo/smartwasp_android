@@ -208,7 +208,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
     private fun readyToUrl(url:String,type:String){
         when(type){
             IFLYOS.TYPE_BIND->{
-                setNavigator(R.mipmap.ic_close)
+                setNavigator(R.drawable.ic_close)
                 mViewModel.openAuthorizePage(webview,url).observe(this, Observer {
                     if(it.startsWith(IFLYOS.OK)){
                         //绑定设备成功

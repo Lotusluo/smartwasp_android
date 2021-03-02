@@ -427,7 +427,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                 Glide.with(itemView)
                         .load(data.image)
                         .dontAnimate()
-                        .error(R.mipmap.ic_warning_black_24dp)
+                        .error(R.drawable.ic_warning_black_24dp)
                         .into(it)
             }
             itemViewBinding?.tvTitle?.text = data.name

@@ -73,7 +73,7 @@ abstract class BaseActivity<
             mBinding.lifecycleOwner = this
             mBinding.setVariable(BR.onclickListener,this)
             //默认返回图标
-            setNavigator(R.mipmap.ic_navback)
+            setNavigator(R.drawable.ic_navback)
         }
         createModelView()
         Logger.d("onCreate:${this}")
@@ -345,12 +345,24 @@ fun FragmentActivity.addFragmentByTag(frameId: Int,fragment: Fragment){
 
 fun FragmentActivity.addFragmentByTagWithStack(frameId: Int,fragment:Fragment){
     val tag = fragment::class.java.simpleName
-    if(null != supportFragmentManager.findFragmentByTag(tag))
+    if(null != supportFragmentManager.findFragmentByTag(tag)){
+        Logger.e("has:${supportFragmentManager.findFragmentByTag(tag)}")
         return
+    }
+    Logger.e("add:$fragment")
     supportFragmentManager.inTransaction {
         setCustomAnimations(R.anim.slide_right_in,0,0,R.anim.slide_right_out)
         add(frameId, fragment,tag)
         addToBackStack(null)
+    }
+}
+
+fun FragmentActivity.removeFragment(fragment: Fragment) {
+    val tag = fragment::class.java.simpleName
+    if(null == supportFragmentManager.findFragmentByTag(tag))
+        return
+    supportFragmentManager.inTransaction{
+        remove(fragment)
     }
 }
 
@@ -366,11 +378,4 @@ fun FragmentActivity.hideFragment(fragment: Fragment) {
     if(null == supportFragmentManager.findFragmentByTag(tag))
         return
     supportFragmentManager.inTransaction{hide(fragment)}
-}
-
-fun FragmentActivity.removeFragment(fragment: Fragment) {
-    val tag = fragment::class.java.simpleName
-    if(null == supportFragmentManager.findFragmentByTag(tag))
-        return
-    supportFragmentManager.inTransaction{remove(fragment)}
 }

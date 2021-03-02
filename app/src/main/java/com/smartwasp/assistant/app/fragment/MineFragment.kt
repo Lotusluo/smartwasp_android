@@ -220,7 +220,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.post {
-            setToolBarIcon(R.mipmap.ic_login_out,R.color.smartwasp_blue)
+            setToolBarIcon(R.drawable.ic_login_out,R.color.smartwasp_blue)
             setTittle(getString(R.string.tab_mime))
             notifyBindDevicesChanged()
         }

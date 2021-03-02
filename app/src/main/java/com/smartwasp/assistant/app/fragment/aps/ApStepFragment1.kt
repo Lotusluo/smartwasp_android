@@ -61,7 +61,7 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
             ApStepActivity.CUR_WIFI_SSID = data.getStringExtra(IFLYOS.EXTRA)
             ApStepActivity.CUR_WIFI_BSSID = data.getStringExtra(IFLYOS.EXTRA_TAG)
             wifiName.setText(ApStepActivity.CUR_WIFI_SSID)
-            wifiPasswd.setText("Wasp2020@")
+            wifiPasswd.setText("")
         }
     }
 
@@ -99,7 +99,7 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
                                 getString(R.string.prev_bind_tittle1),
                                 getString(R.string.prev_bind_subTittle1),
                                 getString(R.string.prev_bind_subTittle_a1),
-                                R.mipmap.ic_screen_box1,
+                                R.drawable.ic_screen_box1,
                                 2,
                                 "65e8d4f8-da9e-4633-8cac-84b0b47496b6",
                                 "2",

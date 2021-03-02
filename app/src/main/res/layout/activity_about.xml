@@ -43,7 +43,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/smartwasp_logo" />
+                android:src="@drawable/smartwasp_logo" />
         </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatTextView

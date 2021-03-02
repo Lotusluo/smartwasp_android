@@ -18,8 +18,8 @@
     <string name="error_request_cancel">请求取消</string>
     <string name="error_net_connect">网络连接错误</string>
     <string name="error_net_unknown">网络未知错误</string>
-    <string name="error_ap_connect">连接音箱失败,请重试</string>
-    <string name="error_ap_connect1">连接音箱失败,请返回重试</string>
+    <string name="error_ap_connect">配网遇到问题,请重试</string>
+    <string name="error_ap_connect1">配网遇到问题,请返回重试</string>
     <string name="error_ap_auth">请勿提前连接设备热点,请保证正常联网并返回上一级重试</string>
     <string name="error_request">请求数据错误</string>
     <string name="try_again">请重试</string>
@@ -75,6 +75,7 @@
     <string name="updating">更新中</string>
     <string name="update_name">更新通知</string>
     <string name="update_err">更新失败,错误码:%d,请重试!</string>
+    <string name="update_tip">更新中,请稍后!</string>
     <string name="un_open">调试中,敬请期待</string>
     <string name="test_crash">内测中,容易出现问题,很抱歉，软件需要重启。</string>
     <string name="play_all">播放全部</string>

@@ -55,14 +55,14 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
      * 拦截劝等待
      */
     override fun interceptLeftButton():Boolean{
-        if(flag){
+        if(flag > 0){
             //已经发送了密码,劝等待
             if(isAdded){
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.tip)
                         .setMessage(R.string.ap_device_exit)
                         .setPositiveButton(android.R.string.ok){ _, _ ->
-                            flag = false
+                            flag = 0
                             super.onNavigatorClick()
                         }
                         .setNegativeButton(android.R.string.cancel,null)
@@ -89,33 +89,33 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
             t ?: return
             Logger.e("onClosed:${t},$flag")
             //已经发送密码则忽略所有错误
-            if(flag) return
+            if(flag > 1) return
             handleRetry()
         }
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {
+            Logger.e("onMessage:$flag")
+            if(flag != 1) return
             val string = String(byteArray)
-            Logger.e("onMessage:$string")
             if(!string.isNullOrEmpty()){
                 //检测收到密码，开始等待网络切换并且轮询
                 if("{\"code\":1}" == string){
-                    AppExecutors.get().mainThread().execute{
-                        flag = true
-                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
-                        val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
-                        mViewModel?.askDevAuth(authCode!!)
-                        GlobalScope.launch(Dispatchers.IO) {
-                            SystemClock.sleep(4000)
-                            if(!isAdded)
-                                return@launch
-                            if(progress.progress >= 100)
-                                return@launch
-                            compatProgress(90)
-                        }
+                    flag = 2
+                    val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
+                    mViewModel?.askDevAuth(authCode!!)
+                    GlobalScope.launch(Dispatchers.IO) {
+                        SystemClock.sleep(4000)
+                        if(!isAdded)
+                            return@launch
+                        if(progress.progress >= 100)
+                            return@launch
+                        compatProgress(90)
                     }
                 }else{
                     handleRetry()
                 }
+            }else{
+                handleRetry()
             }
         }
     }
@@ -142,7 +142,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
     override fun onTransitDone() {
         super.onTransitDone()
         //建立连接
-        flag = false
+        flag = 0
         apConfigNetService?.connect() ?: run {
             context?.startService(Intent(context, ApConfigNetService::class.java).apply {
                 action = ApConfigNetService.ACTION_CONNECT
@@ -150,8 +150,9 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         }
     }
 
+
     //    发送标志
-    private var flag = false
+    private var flag:Int = 0
     private var gateWay:String?=null
     /**
      * 开始发送配置文件
@@ -170,6 +171,8 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                 gateWay = NetWorkUtil.getCurrentGateway(requireContext())
                 //发送配置文件，等待返回code=1
                 service.send(json.toString())
+                flag = 1
+                SmartApp.NEED_MAIN_REFRESH_DEVICES = true
                 return
             } else {
                 handleRetry()
@@ -213,7 +216,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
      * 点击重试
      */
     private fun handleRetry(){
-        flag = false
+        flag = 0
         if(this.isAdded){
             AlertDialog.Builder(requireContext())
                     .setTitle(R.string.tip)

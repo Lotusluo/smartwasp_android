@@ -1,17 +1,20 @@
 package com.smartwasp.assistant.app.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.base.*
+import com.smartwasp.assistant.app.base.BaseActivity
+import com.smartwasp.assistant.app.base.BaseViewModel
+import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.databinding.ActivityPrevBindBinding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
-import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.RomUtils
 import kotlinx.android.synthetic.main.layout_toolbar.*
 
@@ -46,6 +49,14 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                 }
             }
             R.id.ApBtn ->{
+                //android6.0/6.0.1在任何情况下android.permission.CHANGE_NETWORK_STATE都是拒绝的
+                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M && !Settings.System.canWrite(applicationContext)){
+                    //打开修改系统设置权限
+                    val goToSettings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                    goToSettings.data = Uri.parse("package:$packageName")
+                    startActivity(goToSettings)
+                    return
+                }
                 //申请
                 easyPermissions(getString(R.string.ap_per),REQUEST_LOCATION_CODE,
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -72,7 +83,7 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                                 getString(R.string.prev_bind_tittle),
                                 getString(R.string.prev_bind_subTittle),
                                 getString(R.string.prev_bind_subTittle_a),
-                                R.mipmap.ic_screen_box,
+                                R.drawable.ic_screen_box,
                                 1))
             }
             REQUEST_LOCATION_CODE ->{

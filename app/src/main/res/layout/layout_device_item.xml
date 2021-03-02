@@ -42,7 +42,7 @@
                 android:text="@string/add_device"
                 android:gravity="center"
                 android:textSize="18sp"
-                android:drawableLeft="@mipmap/ic_add_white"
+                android:drawableLeft="@drawable/ic_add_white"
                 app:drawableTint="@color/smartwasp_blue"/>
 
         </FrameLayout>
@@ -98,7 +98,7 @@
                 android:id="@+id/icon_device_status"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
+                android:background="@drawable/abc_btn_radio_to_on_mtrl_000"
                 android:backgroundTint="@color/device_status_color"
                 app:layout_constraintBottom_toBottomOf="@+id/device_status"
                 app:layout_constraintStart_toStartOf="@+id/device_name"

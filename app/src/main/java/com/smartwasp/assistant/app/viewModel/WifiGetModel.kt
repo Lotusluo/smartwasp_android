@@ -94,14 +94,16 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
                 super.onAvailable(network)
                 AppExecutors.get().mainThread().executeDelay(Runnable {
                     val bssid = WifiUtils.getConnectedBssid(context)
-                    if(!bssid.isNullOrEmpty() && linking != null){
+                    val gateway = NetWorkUtil.getCurrentGateway(context)
+                    Logger.e("ssid:${WifiUtils.getConnectedSsid(context)},bssid:$bssid,linking:$linking,gateway:$gateway")
+                    if(!bssid.isNullOrEmpty() && linking != null && gateway != "127.0.0.1"){
                         if(bssid == linking!!.bssid){
                             WifiUtils.forgetBut(context,bssid)
                             autoConnectData.postValue(Result.success(bssid))
                             linking = null
                         }
                     }
-                },500)
+                },1000)
             }
         })
     }

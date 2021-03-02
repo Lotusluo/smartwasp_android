@@ -11,7 +11,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@mipmap/smartwasp_logo"
+        android:src="@drawable/smartwasp_logo"
         app:maskDrawable="@drawable/shape_mask_bg_radius20" />
 
     <androidx.appcompat.widget.AppCompatTextView

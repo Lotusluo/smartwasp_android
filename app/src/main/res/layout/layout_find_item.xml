@@ -14,7 +14,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/smartwasp_logo"
+            android:src="@drawable/smartwasp_logo"
             app:maskDrawable="@drawable/shape_mask_bg_radius10" />
 
         <View

@@ -49,7 +49,7 @@ class DownloadService : IntentService("DownService"){
                 val builder = NotificationCompat.Builder(this, "channel_update_id")
                 with(builder){
                     setContentText(getString(R.string.updating))
-                    setSmallIcon(R.mipmap.ic_launcher)
+                    setSmallIcon(R.drawable.update_notification)
                     setAutoCancel(false)
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                         setChannelId("notification_id")

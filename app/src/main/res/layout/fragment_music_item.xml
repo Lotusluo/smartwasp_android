@@ -138,7 +138,7 @@
                 android:id="@+id/playAll"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
-                android:drawableStart="@mipmap/ic_play_arrow_black_24dp"
+                android:drawableStart="@drawable/ic_play_arrow_black_24dp"
                 android:drawableTint="@color/smartwasp_blue"
                 android:clickable="true"
                 android:layout_margin="10dp"
