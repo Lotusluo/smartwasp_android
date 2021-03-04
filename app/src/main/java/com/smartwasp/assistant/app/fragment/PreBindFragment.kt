@@ -11,12 +11,10 @@ import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.PrevBindActivity
 import com.smartwasp.assistant.app.activity.ScanActivity
 import com.smartwasp.assistant.app.activity.WebViewActivity
-import com.smartwasp.assistant.app.base.BaseFragment
-import com.smartwasp.assistant.app.base.BaseViewModel
-import com.smartwasp.assistant.app.base.SmartApp
-import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
+import com.smartwasp.assistant.app.base.*
 import com.smartwasp.assistant.app.databinding.FragmentPreBindBinding
 import com.smartwasp.assistant.app.fragment.aps.ApStepFragment3
+import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.isA
 import kotlinx.android.synthetic.main.fragment_pre_bind.*
@@ -92,7 +90,7 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
             getInt(BIND_LOGO_RES)?.let {
                 Glide.with(requireView())
                         .load(it)
-                        .error(R.mipmap.ic_warning_black_24dp)
+                        .error(R.drawable.ic_warning_black_24dp)
                         .into(mBinding.ivImage)
             }
             stepBtn.isEnabled = false
@@ -149,6 +147,7 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
                     }else if(it == 2){
                         val clientID = arguments?.getString(BIND_CLIENT_ID)
                         clientID?.let {
+                            onNavigatorClick()
                             requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(clientID))
                         }
                     }

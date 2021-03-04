@@ -28,6 +28,7 @@ import com.smartwasp.assistant.app.activity.WebViewActivity
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.bean.BannerBean
+import com.smartwasp.assistant.app.bean.ContentBean
 import com.smartwasp.assistant.app.bean.GroupBean
 import com.smartwasp.assistant.app.bean.ItemBean
 import com.smartwasp.assistant.app.databinding.FragmentFindBinding
@@ -44,6 +45,7 @@ import com.youth.banner.util.BannerUtils
 import kotlinx.android.synthetic.main.fragment_find.*
 import kotlinx.android.synthetic.main.layout_device_header.*
 import kotlinx.android.synthetic.main.layout_find_item.*
+import kotlinx.android.synthetic.main.layout_music_pay.*
 import kotlinx.coroutines.cancel
 import net.lucode.hackware.magicindicator.FragmentContainerHelper
 import net.lucode.hackware.magicindicator.buildins.UIUtil
@@ -68,24 +70,23 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
         }
     }
 
-
     /**
      * 按钮点击
      * @param v
      */
     override fun onButtonClick(v: View) {
         super.onButtonClick(v)
-        when(v.id){
-            R.id.card ->{
-                SmartApp.activity?.currentDevice?.music?.let {
-                    startActivity(Intent(requireActivity(), WebViewActivity::class.java).apply {
-                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
-                        putExtra(IFLYOS.EXTRA_URL, it?.redirect_url)
-                        putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
-                    })
-                }
-            }
-        }
+//        when(v.id){
+//            R.id.card ->{
+//                SmartApp.activity?.currentDevice?.music?.let {
+//                    startActivity(Intent(requireActivity(), WebViewActivity::class.java).apply {
+//                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+//                        putExtra(IFLYOS.EXTRA_URL, it?.redirect_url)
+//                        putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
+//                    })
+//                }
+//            }
+//        }
     }
 
     //布局文件
@@ -132,11 +133,11 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
             swipeRefreshLayout.isRefreshing = true
             hotArea1.visibility = View.VISIBLE
             SmartApp.activity?.currentDevice?.let {
+                checkMusicEnabled(it.music)
                 mViewModel?.getFindData(it.device_id)?.observe(this@FindFragment, Observer {findBean->
                     swipeRefreshLayout.isRefreshing = false
                     hotArea1.visibility = View.GONE
                     if(findBean.isSuccess){
-                        card.alpha = 1f
                         linearLayout.alpha = 1f
                         val findBean = findBean.getOrNull()
                         onRenderBanner(findBean?.banners)
@@ -163,6 +164,26 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
         }
     }
 
+    /**
+     * 检查音乐pay控件
+     * @param music 音乐内容
+     */
+    private fun checkMusicEnabled(music:ContentBean?){
+        if(music?.enable == false){
+            if(null == card){
+                val payView:AppCompatTextView = LayoutInflater.from(context).inflate(R.layout.layout_music_pay,null) as AppCompatTextView
+                val layoutParams = AppBarLayout.LayoutParams(BannerUtils.dp2px(300f).toInt(),BannerUtils.dp2px(45f).toInt())
+                layoutParams.topMargin = BannerUtils.dp2px(20f).toInt()
+                layoutParams.bottomMargin = layoutParams.topMargin
+                appBarLayout.addView(payView,0,layoutParams)
+            }
+            card.text = music?.text
+        }else{
+            if(null != card){
+                appBarLayout.removeView(card)
+            }
+        }
+    }
 
     /**
      * 渲染banner
@@ -427,7 +448,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                 Glide.with(itemView)
                         .load(data.image)
                         .dontAnimate()
-                        .error(R.mipmap.ic_warning_black_24dp)
+                        .error(R.drawable.ic_warning_black_24dp)
                         .into(it)
             }
             itemViewBinding?.tvTitle?.text = data.name

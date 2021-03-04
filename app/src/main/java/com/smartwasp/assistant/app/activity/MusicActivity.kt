@@ -127,7 +127,7 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
         currentMedia?.data?.let {
             Glide.with(this)
                     .asBitmap()
-                    .error(R.mipmap.ic_warning_black_24dp)
+                    .error(R.drawable.ic_warning_black_24dp)
                     .load(it.music?.image)
                     .into(bezelImageView)
             it.music?.let {song->

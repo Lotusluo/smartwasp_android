@@ -38,12 +38,15 @@
             android:text="@{tittle}"
             android:gravity="center"
             android:textColor="#000"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textSize="?attr/toolbarTitleSize"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"/>
 
-        <!--    右侧图标-->
         <!--        音乐效果-->
         <com.kyleduo.switchbutton.VoicePlayingIcon
             android:id="@+id/media_icon"

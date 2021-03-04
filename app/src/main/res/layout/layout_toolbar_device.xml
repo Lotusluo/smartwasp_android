@@ -47,7 +47,7 @@
                 android:id="@+id/icon_device_status"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
+                android:background="@drawable/abc_btn_radio_to_on_mtrl_000"
                 android:backgroundTint="@color/device_status_color"/>
 
             <!--            设备名称-->

@@ -20,7 +20,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tab_dialog"
             android:tag="1"
-            android:drawableTop="@mipmap/ic_tabbar_xf"
+            android:drawableTop="@drawable/ic_tabbar_xf"
             android:text="@string/tab_dialog"
             android:onClick="@{onclickListener}"
             style="@style/TabBarTextStyle"/>
@@ -29,7 +29,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tab_find"
             android:tag="2"
-            android:drawableTop="@mipmap/ic_tabbar_discover"
+            android:drawableTop="@drawable/ic_tabbar_discover"
             android:text="@string/tab_find"
             android:onClick="@{onclickListener}"
             style="@style/TabBarTextStyle"/>
@@ -38,7 +38,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tab_skill"
             android:tag="3"
-            android:drawableTop="@mipmap/ic_tabbar_skill"
+            android:drawableTop="@drawable/ic_tabbar_skill"
             android:text="@string/tab_skill"
             android:onClick="@{onclickListener}"
             style="@style/TabBarTextStyle"/>
@@ -47,7 +47,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tab_mall"
             android:tag="4"
-            android:drawableTop="@mipmap/ic_tabbar_house"
+            android:drawableTop="@drawable/ic_tabbar_house"
             android:text="@string/tab_home"
             android:onClick="@{onclickListener}"
             style="@style/TabBarTextStyle"/>
@@ -56,7 +56,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tab_mine"
             android:tag="5"
-            android:drawableTop="@mipmap/ic_tabbar_user"
+            android:drawableTop="@drawable/ic_tabbar_user"
             android:text="@string/tab_mime"
             android:onClick="@{onclickListener}"
             style="@style/TabBarTextStyle"/>

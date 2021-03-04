@@ -91,7 +91,7 @@
             android:layout_height="50dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/ripple_background_transparent"
-            android:src="@mipmap/ic_skip_previous_black_24dp"
+            android:src="@drawable/ic_skip_previous_black_24dp"
             android:clickable="true"
             android:onClick="@{onclickListener}"
             app:layout_constraintBottom_toBottomOf="@+id/btnPlayer"
@@ -117,7 +117,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="30dp"
             android:background="@drawable/ripple_background_transparent"
-            android:src="@mipmap/ic_skip_next_black_24dp"
+            android:src="@drawable/ic_skip_next_black_24dp"
             android:clickable="true"
             android:onClick="@{onclickListener}"
             app:layout_constraintBottom_toBottomOf="@+id/btnPlayer"
@@ -135,7 +135,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/ic_sound_min_black_24dp"
+                android:src="@drawable/ic_sound_min_black_24dp"
                 app:tint="@color/smartwasp_dark"/>
 
             <SeekBar
@@ -145,12 +145,12 @@
                 android:layout_gravity="center"
                 android:maxHeight="6dp"
                 android:progressDrawable="@drawable/seek_progress"
-                android:thumb="@mipmap/abc_btn_switch"/>
+                android:thumb="@drawable/abc_btn_switch"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/ic_sound_max_black_24dp"
+                android:src="@drawable/ic_sound_max_black_24dp"
                 app:tint="@color/smartwasp_dark"/>
         </LinearLayout>
 

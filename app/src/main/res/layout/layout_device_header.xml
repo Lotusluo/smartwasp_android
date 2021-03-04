@@ -28,7 +28,7 @@
             android:layout_height="16dp"
             android:layout_marginLeft="20dp"
             android:visibility="@{deviceBean==null?View.GONE:View.VISIBLE}"
-            android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
+            android:background="@drawable/abc_btn_radio_to_on_mtrl_000"
             android:backgroundTint="@color/device_status_color"/>
 
         <!--            设备名称-->
@@ -41,7 +41,7 @@
             android:textSize="16sp"
             android:padding="4dp"
             android:visibility="@{deviceBean==null?View.GONE:View.VISIBLE}"
-            android:drawableRight="@mipmap/ic_triangle_down"
+            android:drawableRight="@drawable/ic_triangle_down"
             android:textColor="#000"
             android:clickable="true"
             android:onClick="@{onclickListener}"

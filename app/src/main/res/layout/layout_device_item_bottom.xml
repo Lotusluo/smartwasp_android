@@ -28,7 +28,7 @@
            android:id="@+id/icon_device_status"
            android:layout_width="16dp"
            android:layout_height="16dp"
-           android:background="@mipmap/abc_btn_radio_to_on_mtrl_000"
+           android:background="@drawable/abc_btn_radio_to_on_mtrl_000"
            android:backgroundTint="@color/device_status_color"
            app:layout_constraintStart_toStartOf="@+id/device_name"
            app:layout_constraintTop_toTopOf="@+id/device_status"
@@ -48,7 +48,7 @@
 <!--       勾选框-->
        <androidx.appcompat.widget.AppCompatTextView
            android:id="@+id/device_selected"
-           android:background="@mipmap/ic_choose"
+           android:background="@drawable/ic_choose"
            android:backgroundTint="@color/smartwasp_blue"
            android:layout_marginLeft="10dp"
            android:visibility="gone"
@@ -68,7 +68,7 @@
            android:gravity="right"/>
 
        <androidx.appcompat.widget.AppCompatTextView
-           android:background="@mipmap/ic_arrow_right_grey_16dp"
+           android:background="@drawable/ic_arrow_right_grey_16dp"
            android:layout_marginEnd="10dp"
            android:layout_width="16dp"
            android:layout_height="16dp"/>

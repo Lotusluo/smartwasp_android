@@ -282,7 +282,7 @@ abstract class BaseFragment<
 }
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
-    beginTransaction().func().commit()
+    beginTransaction().func().commitAllowingStateLoss()
 }
 
 /**

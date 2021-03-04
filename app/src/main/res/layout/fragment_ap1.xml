@@ -96,7 +96,7 @@
                 android:onClick="@{onclickListener}"
                 android:layout_marginEnd="20dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ic_arrow_right_grey_16dp"
+                android:src="@drawable/ic_arrow_right_grey_16dp"
                 android:background="@drawable/ripple_background_transparent"
                 app:tint="#000"/>
         </LinearLayout>

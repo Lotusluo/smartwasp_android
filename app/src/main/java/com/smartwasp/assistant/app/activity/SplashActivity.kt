@@ -11,6 +11,8 @@ import androidx.core.view.ViewCompat
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.util.StatusBarUtil
+import kotlinx.android.synthetic.main.activity_prev_bind.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,7 +37,9 @@ class SplashActivity : AppCompatActivity() {
             it.hide(WindowInsets.Type.navigationBars())
         }?: kotlin.run {
             val decorView: View = window.decorView
-            var uiOptions = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+            var uiOptions =
+                    (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
             decorView.systemUiVisibility = uiOptions
         }
         setContentView(R.layout.activity_splash)

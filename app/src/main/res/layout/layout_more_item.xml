@@ -57,7 +57,7 @@
 <!--        操作-->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnPlayer"
-            android:src="@mipmap/ic_arrow_right_grey_16dp"
+            android:src="@drawable/ic_arrow_right_grey_16dp"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:scaleType="center"

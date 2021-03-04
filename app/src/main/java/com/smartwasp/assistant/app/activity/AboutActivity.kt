@@ -50,7 +50,7 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
         super.onButtonClick(v)
         when(v.id){
             R.id.btnUpdate->{
-                LoadingUtil.create(this)
+                LoadingUtil.create(this,null)
                 mViewModel.update(versionCode).observe(this, Observer {
                     LoadingUtil.dismiss()
                     var resID = R.string.tip_update_check_ok_least
@@ -96,6 +96,7 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
         when(requestCode){
             REQUEST_ACCESS_FILE ->{
                 updateBean?.let {
+                    LoadingUtil.showToast(this,getString(R.string.update_tip))
                     DownloadService.startActionFoo(this,it.downloadSite,it.md5)
                 }
             }

@@ -190,7 +190,7 @@ class MusicMoreFragment private constructor(var groupBean: GroupBean):
      */
     private fun initHeader(){
         with(mBinding.toolbar){
-            val icBack = resources.getDrawable(R.mipmap.ic_navback)
+            val icBack = resources.getDrawable(R.drawable.ic_navback)
             DrawableCompat.setTint(icBack,resources.getColor(R.color.smartwasp_blue))
             navigationIcon = icBack
             (layoutParams as ViewGroup.MarginLayoutParams).topMargin = StatusBarUtil.getStatusBarHeight(requireContext())

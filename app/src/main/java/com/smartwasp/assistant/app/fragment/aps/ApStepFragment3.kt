@@ -22,6 +22,7 @@ import com.smartwasp.assistant.app.databinding.FragmentAp3Binding
 import com.smartwasp.assistant.app.databinding.LayoutWifiItem1Binding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
 import com.smartwasp.assistant.app.util.AppExecutors
+import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.util.NetWorkUtil
 import com.smartwasp.assistant.app.util.WifiUtils
 import com.smartwasp.assistant.app.viewModel.WifiGetModel
@@ -184,7 +185,11 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
      */
     private fun getAuthCode(){
         arguments?.getString(PreBindFragment.BIND_CLIENT_ID)?.let {
+            progress.visibility = View.GONE
+            noWifi.visibility = View.GONE
+            LoadingUtil.create(requireActivity())
             mViewModel!!.getAuthCode(it).observe(this, Observer {result->
+                LoadingUtil.dismiss()
                 if(result.isSuccess){
                     ApStepActivity.authBean = result.getOrNull()
                     ApStepActivity.authBean?.local_created_at = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
@@ -224,16 +229,17 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
         when(v.id){
             R.id.stepBtn ->{
                 ApStepActivity.authBean?.auth_code?.let {authCode->
-                    val apStepFragment4 = ApStepFragment4.newsInstance(authCode)
-                    requireActivity()?.addFragmentByTagWithStack(R.id.container,apStepFragment4)
-                    AppExecutors.get().mainThread().executeDelay(Runnable {
-                        requireActivity()?.removeFragment(this)
-                    },1000)
+                    onNavigatorClick()
+                    requireActivity()?.addFragmentByTagWithStack(R.id.container,ApStepFragment4.newsInstance(authCode))
                 }?: kotlin.run {
                     AlertDialog.Builder(requireContext())
                             .setTitle(R.string.tip)
                             .setMessage(R.string.error_ap_auth)
-                            .setPositiveButton(android.R.string.ok,null)
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok){
+                                _,_->
+                                onNavigatorClick()
+                            }
                             .show()
                 }
             }

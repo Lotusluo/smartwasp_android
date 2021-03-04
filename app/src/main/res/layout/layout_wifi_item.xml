@@ -41,14 +41,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="20dp"
-            android:background="@mipmap/ic_lock_black_24dp"/>
+            android:background="@drawable/ic_lock_black_24dp"/>
 
         <com.smartwasp.assistant.app.widget.SimpleImage
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="15dp"
-            android:src="@mipmap/ic_signal_wifi_3_bar_black_24dp"/>
+            android:src="@drawable/ic_signal_wifi_3_bar_black_24dp"/>
 
     </LinearLayout>
 

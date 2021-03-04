@@ -25,7 +25,7 @@
         <!--    左侧图标-->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/toolbar_left_icon"
-            android:src="@mipmap/ic_navback"
+            android:src="@drawable/ic_navback"
             android:scaleType="fitCenter"
             android:onClick="@{onclickListener}"
             android:layout_centerVertical="true"

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:textSize="14sp"
+    android:drawableRight="@drawable/ic_arrow_right_grey_16dp"
+    android:drawableTint="@color/smartwasp_yellow1"
+    android:textColor="@color/smartwasp_yellow1"
+    android:paddingStart="30dp"
+    android:paddingEnd="10dp"
+    android:background="@drawable/shape_mask_bg_radius40"
+    app:layout_scrollFlags="scroll"/>
+
