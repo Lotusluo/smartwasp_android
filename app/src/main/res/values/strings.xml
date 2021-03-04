@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">小黄蜂在线</string>
+    <string name="app_name">小黄蜂管家</string>
     <string name="wifi_list">选择网络</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

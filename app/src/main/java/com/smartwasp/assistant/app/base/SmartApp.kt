@@ -187,7 +187,7 @@ class SmartApp : Application() {
             override fun onActivityResumed(activity: Activity) {}
         })
         //闪退捕捉
-//        CrashReport.initCrashReport(app, "cc12a03d8c", true)
+        CrashReport.initCrashReport(app, "cc12a03d8c", true)
         //设置支持的https协议
         System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3")
         //今日头条适配方案

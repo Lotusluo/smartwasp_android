@@ -1,7 +1,6 @@
 package com.smartwasp.assistant.app.fragment.aps
 
 import android.content.*
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -22,13 +21,9 @@ import kotlinx.android.synthetic.main.fragment_ap1.*
 import kotlinx.android.synthetic.main.fragment_ap3.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.lang.Exception
-import java.lang.ref.WeakReference
 import java.net.Socket
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -55,14 +50,14 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
      * 拦截劝等待
      */
     override fun interceptLeftButton():Boolean{
-        if(flag > 0){
+        if(sendTag.get() > 0){
             //已经发送了密码,劝等待
             if(isAdded){
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.tip)
                         .setMessage(R.string.ap_device_exit)
                         .setPositiveButton(android.R.string.ok){ _, _ ->
-                            flag = 0
+                            sendTag.set(0)
                             super.onNavigatorClick()
                         }
                         .setNegativeButton(android.R.string.cancel,null)
@@ -73,34 +68,30 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         return super.interceptLeftButton()
     }
 
-
-    private var tryConnect:AtomicBoolean = AtomicBoolean(false)
-
     //socket监听器
     private val socketListener = object : ApConfigNetService.SocketListener() {
         override fun onOpen(socket: Socket) {
             //开始发送配置文件
-            tryConnect.set(false)
             sendConfig()
         }
 
         override fun onClosed(socket: Socket, t: Throwable?) {
             //忽略没有错误的关闭
             t ?: return
-            Logger.e("onClosed:${t},$flag")
+            Logger.e("onClosed:${t},$sendTag")
             //已经发送密码则忽略所有错误
-            if(flag > 1) return
+            if(sendTag.get() > 1) return
             handleRetry()
         }
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {
-            Logger.e("onMessage:$flag")
-            if(flag != 1) return
+            Logger.e("onMessage:$sendTag")
+            if(sendTag.get() != 1) return
             val string = String(byteArray)
             if(!string.isNullOrEmpty()){
                 //检测收到密码，开始等待网络切换并且轮询
                 if("{\"code\":1}" == string){
-                    flag = 2
+                    sendTag.set(2)
                     val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
                     mViewModel?.askDevAuth(authCode!!)
                     GlobalScope.launch(Dispatchers.IO) {
@@ -142,7 +133,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
     override fun onTransitDone() {
         super.onTransitDone()
         //建立连接
-        flag = 0
+        sendTag.set(0)
         apConfigNetService?.connect() ?: run {
             context?.startService(Intent(context, ApConfigNetService::class.java).apply {
                 action = ApConfigNetService.ACTION_CONNECT
@@ -152,7 +143,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
 
 
     //    发送标志
-    private var flag:Int = 0
+    private var sendTag:AtomicInteger = AtomicInteger(0)
     private var gateWay:String?=null
     /**
      * 开始发送配置文件
@@ -171,7 +162,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                 gateWay = NetWorkUtil.getCurrentGateway(requireContext())
                 //发送配置文件，等待返回code=1
                 service.send(json.toString())
-                flag = 1
+                sendTag.set(1)
                 SmartApp.NEED_MAIN_REFRESH_DEVICES = true
                 return
             } else {
@@ -216,7 +207,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
      * 点击重试
      */
     private fun handleRetry(){
-        flag = 0
+        sendTag.set(0)
         if(this.isAdded){
             AlertDialog.Builder(requireContext())
                     .setTitle(R.string.tip)

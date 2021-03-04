@@ -63,26 +63,6 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
                         app:elevation="0dp">
-                        <!--                领取音乐畅听卡-->
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/card"
-                            android:layout_width="300dp"
-                            android:layout_height="44dp"
-                            android:gravity="center_vertical"
-                            android:alpha="0"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:textSize="14sp"
-                            android:visibility="@{deviceBean.music.enable ? View.GONE : View.VISIBLE}"
-                            android:text="@{deviceBean.music.text}"
-                            android:drawableRight="@drawable/ic_arrow_right_grey_16dp"
-                            android:drawableTint="@color/smartwasp_yellow1"
-                            android:textColor="@color/smartwasp_yellow1"
-                            android:paddingStart="30dp"
-                            android:paddingEnd="10dp"
-                            android:onClick="@{onclickListener}"
-                            android:background="@drawable/shape_mask_bg_radius40"
-                            app:layout_scrollFlags="scroll"/>
 
                         <!--                轮播图-->
                         <com.youth.banner.Banner
@@ -98,16 +78,15 @@
                         <LinearLayout
                             android:id="@+id/linearLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="45dp"
                             android:gravity="center"
-                            android:alpha="0"
+                            android:orientation="vertical"
                             android:paddingBottom="2dp"
-                            android:background="@drawable/line_bottom"
                             app:layout_scrollFlags="exitUntilCollapsed">
                             <net.lucode.hackware.magicindicator.MagicIndicator
                                 android:id="@+id/magic_indicator4"
                                 android:layout_width="match_parent"
-                                android:layout_height="45dp"
+                                android:layout_height="match_parent"
                                 android:layout_gravity="center_horizontal" />
                         </LinearLayout>
 
