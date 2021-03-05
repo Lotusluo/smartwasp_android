@@ -77,11 +77,11 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
 
         override fun onClosed(socket: Socket, t: Throwable?) {
             //忽略没有错误的关闭
-            t ?: return
-            Logger.e("onClosed:${t},$sendTag")
-            //已经发送密码则忽略所有错误
-            if(sendTag.get() > 1) return
-            handleRetry()
+//            t ?: return
+//            Logger.e("onClosed:${t},$sendTag")
+//            //已经发送密码则忽略所有错误
+//            if(sendTag.get() > 1) return
+//            handleRetry()
         }
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {

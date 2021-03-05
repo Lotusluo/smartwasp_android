@@ -131,6 +131,11 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
      * @param link
      */
     private fun onForceLinking(link:WifiBean){
+        mViewModel?.linking?.let {
+            if(it.bssid == link.bssid){
+                return
+            }
+        }
         mViewModel?.removeLinkingSSID(requireContext())?.let {
             linked(it)
         }
