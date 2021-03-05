@@ -37,7 +37,9 @@
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,15 +48,33 @@
         </activity> <!-- 主界面 -->
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activity.WebViewActivity" />
-        <activity android:name=".activity.PrevBindActivity" />
-        <activity android:name=".activity.ScanActivity" />
-        <activity android:name=".activity.DeviceSetActivity" />
-        <activity android:name=".activity.MusicActivity" />
-        <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.ApStepActivity" />
-        <activity android:name=".activity.WifiListActivity" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.WebViewActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.PrevBindActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.ScanActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.DeviceSetActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.MusicActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.ApStepActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".activity.WifiListActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
         <service android:name=".service.PushService" />
         <service android:name=".service.DownloadService"/>
         <service android:name=".service.ApConfigNetService" />

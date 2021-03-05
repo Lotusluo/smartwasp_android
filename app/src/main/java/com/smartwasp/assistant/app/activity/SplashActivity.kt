@@ -1,6 +1,7 @@
 package com.smartwasp.assistant.app.activity
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -32,6 +33,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        Android P 为 Android 9 28；Android Q 为 Android 10；Android R 为 Android 11
         val controller = ViewCompat.getWindowInsetsController(window.decorView)
+        setContentView(R.layout.activity_splash)
         controller?.also {
             it.hide(WindowInsets.Type.statusBars())
             it.hide(WindowInsets.Type.navigationBars())
@@ -42,8 +44,6 @@ class SplashActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
             decorView.systemUiVisibility = uiOptions
         }
-        setContentView(R.layout.activity_splash)
-
         GlobalScope.launch(Dispatchers.IO) {
             doWork()
             suspend {
