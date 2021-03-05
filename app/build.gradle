@@ -23,8 +23,8 @@ android {
         applicationId "com.smartwasp.assistant.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 12
-        versionName "1.0.15"
+        versionCode 13
+        versionName "1.0.16"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

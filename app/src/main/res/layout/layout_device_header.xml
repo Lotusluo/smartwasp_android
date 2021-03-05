@@ -57,7 +57,7 @@
             android:textSize="16sp"
             android:visibility="@{deviceBean==null?View.VISIBLE:View.GONE}"
             android:text="@string/add_device1"
-            android:textColor="@color/smartwasp_blue"
+            android:textColor="@color/smartwasp_dark"
             android:clickable="true"
             android:onClick="@{onclickListener}"
             android:background="@drawable/ripple_background_transparent"/>
@@ -75,7 +75,7 @@
             android:layout_marginEnd="20dp"
             android:onClick="@{onclickListener}"
             android:layout_gravity="center_vertical"
-            app:pointer_color="#FF5280FF" />
+            app:pointer_color="@color/smartwasp_dark" />
 
     </LinearLayout>
 

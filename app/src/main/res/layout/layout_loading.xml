@@ -5,6 +5,6 @@
     android:id="@+id/progress"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:SpinKit_Color="@color/smartwasp_blue"
+    app:SpinKit_Color="@color/smartwasp_orange"
     style="@style/SpinKitView.FadingCircle"/>
 

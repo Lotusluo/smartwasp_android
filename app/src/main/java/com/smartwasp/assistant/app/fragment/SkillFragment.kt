@@ -1,12 +1,14 @@
 package com.smartwasp.assistant.app.fragment
 
 
+import android.view.View
 import com.iflytek.home.sdk.IFlyHome
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.databinding.FragmentDialogBinding
+import kotlinx.android.synthetic.main.fragment_dialog.*
 
 
 /**
@@ -31,11 +33,12 @@ class SkillFragment private constructor(): WebViewMajorFragment<BaseViewModel,Fr
         super.notifyCurDeviceChanged()
         webViewTag?.let { webView ->
             SmartApp.activity?.currentDevice?.let {
+                webview.visibility = View.VISIBLE
                 val params = HashMap<String, String>()
                 params["deviceId"] = it.device_id
                 IFlyHome.openWebPage(webView, IFlyHome.SKILLS, params).toString()
             } ?: kotlin.run {
-
+                webview.visibility = View.GONE
             }
         }
     }

@@ -49,7 +49,7 @@
        <androidx.appcompat.widget.AppCompatTextView
            android:id="@+id/device_selected"
            android:background="@drawable/ic_choose"
-           android:backgroundTint="@color/smartwasp_blue"
+           android:backgroundTint="@color/smartwasp_orange"
            android:layout_marginLeft="10dp"
            android:visibility="gone"
            android:layout_width="wrap_content"

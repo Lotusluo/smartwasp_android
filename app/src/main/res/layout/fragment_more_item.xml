@@ -39,7 +39,7 @@
                     android:layout_marginEnd="20dp"
                     android:onClick="@{onclickListener}"
                     android:layout_gravity="center_vertical|right"
-                    app:pointer_color="#FF5280FF" />
+                    app:pointer_color="@color/smartwasp_dark" />
             </androidx.appcompat.widget.Toolbar>
 
             <net.lucode.hackware.magicindicator.MagicIndicator

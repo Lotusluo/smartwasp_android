@@ -128,13 +128,13 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      * 设置tab样式
      */
     private fun setTabIconStyle(){
-        (tabbar as LinearLayout).children.forEach {
-            val tabButton = it as AppCompatButton
-            tabButton.compoundDrawables[1]?.let {drawable->
-                DrawableCompat.setTintList(drawable,
-                        resources.getColorStateList(R.color.tab_text_color))
-            }
-        }
+//        (tabbar as LinearLayout).children.forEach {
+//            val tabButton = it as AppCompatButton
+//            tabButton.compoundDrawables[1]?.let {drawable->
+//                DrawableCompat.setTintList(drawable,
+//                        resources.getColorStateList(R.color.tab_text_color))
+//            }
+//        }
     }
 
     /**

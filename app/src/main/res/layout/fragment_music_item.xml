@@ -127,7 +127,7 @@
                         android:layout_marginEnd="20dp"
                         android:onClick="@{onclickListener}"
                         android:layout_gravity="center_vertical|right"
-                        app:pointer_color="#FF5280FF" />
+                        app:pointer_color="@color/smartwasp_dark" />
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -139,14 +139,14 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:drawableStart="@drawable/ic_play_arrow_black_24dp"
-                android:drawableTint="@color/smartwasp_blue"
+                android:drawableTint="@color/smartwasp_orange"
                 android:clickable="true"
                 android:layout_margin="10dp"
                 android:background="@drawable/ripple_background_dark_round"
                 android:gravity="center"
                 android:text="@string/play_all"
                 android:onClick="@{onclickListener}"
-                android:textColor="@color/smartwasp_blue"
+                android:textColor="@color/smartwasp_orange"
                 app:layout_scrollFlags="exitUntilCollapsed"/>
 
         </com.google.android.material.appbar.AppBarLayout>
