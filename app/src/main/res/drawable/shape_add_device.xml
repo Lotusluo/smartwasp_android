@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
        <corners android:radius="8dp" />
        <stroke
-           android:color="@color/smartwasp_blue"
+           android:color="@color/smartwasp_orange"
            android:width="1dp"
            android:dashGap="2dp"
            android:dashWidth="2dp"/>

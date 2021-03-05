@@ -73,7 +73,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
     private fun initHeader(){
         with(mBinding.toolbar){
             val icBack = resources.getDrawable(R.drawable.ic_navback)
-            DrawableCompat.setTint(icBack,resources.getColor(R.color.smartwasp_blue))
+            DrawableCompat.setTint(icBack,resources.getColor(R.color.smartwasp_dark))
             navigationIcon = icBack
             (layoutParams as ViewGroup.MarginLayoutParams).topMargin = StatusBarUtil.getStatusBarHeight(requireContext())
             setNavigationOnClickListener {

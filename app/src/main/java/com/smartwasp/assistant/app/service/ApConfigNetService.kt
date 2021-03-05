@@ -103,10 +103,8 @@ class ApConfigNetService : Service() {
                 }
             } catch (t: Throwable) {
                 t.printStackTrace()
-
                 if (socket != null)
                     onClosed(socket, t)
-
                 when (t) {
                     is UnsupportedOperationException -> {
                     }

@@ -243,28 +243,4 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
         }
     }
 
-    /**
-     * 获取授权码
-     * @param clientID
-     */
-    fun getAuthCode(clientID:String): LiveData<Result<AuthBean>>{
-        val authData = MutableLiveData<Result<AuthBean>>()
-        val result = IFlyHome.getClientAuthCode(clientID, null, object : ResponseCallback {
-            override fun onResponse(response: Response<String>) {
-                if(response.isSuccessful){
-                    val authBean = Gson().fromJson<AuthBean>(response.body(), object: TypeToken<AuthBean>(){}.type)
-                    authData.postValue(Result.success(authBean))
-                }else{
-                    authData.postValue(Result.failure(Throwable("Err")))
-                }
-            }
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                authData.postValue(Result.failure(Throwable("Err")))
-            }
-        })
-        if(result != IFlyHome.RESULT_OK){
-            authData.postValue(Result.failure(Throwable("Err")))
-        }
-        return authData
-    }
 }

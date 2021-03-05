@@ -2,17 +2,28 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.smartwasp.assistant.app.widget.BezelImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+<!--    <com.smartwasp.assistant.app.widget.BezelImageView-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_height="120dp"-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:layout_gravity="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:src="@drawable/smartwasp_logo"-->
+<!--        app:maskDrawable="@drawable/shape_mask_bg_radius20" />-->
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/smartwasp_logo"
-        app:maskDrawable="@drawable/shape_mask_bg_radius20" />
+        android:src="@drawable/smartwasp_logo1" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -20,7 +31,7 @@
         android:layout_marginBottom="12dp"
         android:gravity="center"
         android:textColor="#000"
-        android:text="©2021 小黄蜂人工智能(深圳) 版权所有"
+        android:text="©2021 小黄蜂人工智能(深圳)有限公司版权所有"
         android:textSize="12sp"
         android:layout_gravity="center_horizontal|bottom"/>
 

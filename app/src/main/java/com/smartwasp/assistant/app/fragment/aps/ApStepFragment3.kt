@@ -170,44 +170,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
      * 入场动画完成
      */
     override fun onTransitDone() {
-        ApStepActivity.authBean?.let {
-            //如果有授权码,检测是否过期
-            if(it.isExpires()){
-                //过期重新获取
-                ApStepActivity.authBean = null
-                getAuthCode()
-            }else{
-                onRefreshWifi()
-            }
-        } ?: kotlin.run {
-            //没有授权码直接获取
-            getAuthCode()
-        }
-    }
-
-    /**
-     * 获取授权码
-     */
-    private fun getAuthCode(){
-        arguments?.getString(PreBindFragment.BIND_CLIENT_ID)?.let {
-            progress.visibility = View.GONE
-            noWifi.visibility = View.GONE
-            LoadingUtil.create(requireActivity())
-            mViewModel!!.getAuthCode(it).observe(this, Observer {result->
-                LoadingUtil.dismiss()
-                if(result.isSuccess){
-                    ApStepActivity.authBean = result.getOrNull()
-                    ApStepActivity.authBean?.local_created_at = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
-                    onRefreshWifi()
-                }else{
-                    AlertDialog.Builder(requireContext())
-                            .setTitle(R.string.tip)
-                            .setMessage(R.string.error_ap_auth)
-                            .setPositiveButton(android.R.string.ok,null)
-                            .show()
-                }
-            })
-        }
+        onRefreshWifi()
     }
 
     /**
@@ -236,17 +199,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
                 ApStepActivity.authBean?.auth_code?.let {authCode->
                     onNavigatorClick()
                     requireActivity()?.addFragmentByTagWithStack(R.id.container,ApStepFragment4.newsInstance(authCode))
-                }?: kotlin.run {
-                    AlertDialog.Builder(requireContext())
-                            .setTitle(R.string.tip)
-                            .setMessage(R.string.error_ap_auth)
-                            .setCancelable(false)
-                            .setPositiveButton(android.R.string.ok){
-                                _,_->
-                                onNavigatorClick()
-                            }
-                            .show()
-                }
+                }?: kotlin.run {}
             }
             R.id.refreshBtn->{
                 onRefreshWifi()

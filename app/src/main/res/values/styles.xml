@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Smartwasp" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/smartwasp_blue</item>
+        <item name="colorPrimary">@color/smartwasp_orange</item>
         <item name="colorPrimaryVariant">@android:color/background_light</item>
         <item name="colorOnPrimary">@color/smartwasp_white</item>
         <!-- Secondary brand color. -->
@@ -32,7 +32,7 @@
 
     <!--快速启动-->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/smartwasp_yellow</item>
+        <item name="android:windowBackground">@color/smartwasp_orange</item>
         <item name="android:windowActionModeOverlay">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>

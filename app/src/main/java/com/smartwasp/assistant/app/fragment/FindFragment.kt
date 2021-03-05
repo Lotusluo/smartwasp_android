@@ -98,7 +98,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.smartwasp_blue))
+        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.smartwasp_orange))
         swipeRefreshLayout.setOnRefreshListener {
             notifyCurDeviceChanged()
         }
@@ -129,6 +129,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
     override fun notifyCurDeviceChanged(){
         super.notifyCurDeviceChanged()
         swipeRefreshLayout?.let {swipeRefreshLayout->
+            swipeRefreshLayout.visibility = View.VISIBLE
             mViewModel?.cancel()
             swipeRefreshLayout.isRefreshing = true
             hotArea1.visibility = View.VISIBLE
@@ -152,14 +153,9 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                     }
                 })
             }?: kotlin.run {
+                swipeRefreshLayout.visibility = View.GONE
                 swipeRefreshLayout.isRefreshing = false
                 hotArea1.visibility = View.GONE
-                requireContext()?.let {
-                    AlertDialog.Builder(it)
-                            .setMessage(R.string.add_device1)
-                            .setPositiveButton(android.R.string.ok,null)
-                            .show()
-                }
             }
         }
     }
@@ -238,7 +234,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                     val linePagerIndicator = LinePagerIndicator(context)
                     linePagerIndicator.mode = LinePagerIndicator.MODE_EXACTLY
                     linePagerIndicator.lineWidth = UIUtil.dip2px(context, 16.0).toFloat()
-                    linePagerIndicator.setColors(resources.getColor(R.color.smartwasp_blue))
+                    linePagerIndicator.setColors(resources.getColor(R.color.smartwasp_orange))
                     return linePagerIndicator
                 }
             }

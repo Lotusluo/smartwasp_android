@@ -5,9 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import androidx.lifecycle.Observer
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.ApStepActivity
 import com.smartwasp.assistant.app.activity.PrevBindActivity
 import com.smartwasp.assistant.app.activity.ScanActivity
 import com.smartwasp.assistant.app.activity.WebViewActivity
@@ -16,15 +19,20 @@ import com.smartwasp.assistant.app.databinding.FragmentPreBindBinding
 import com.smartwasp.assistant.app.fragment.aps.ApStepFragment3
 import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.IFLYOS
+import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.util.isA
+import com.smartwasp.assistant.app.viewModel.PreBindModel
+import kotlinx.android.synthetic.main.fragment_ap3.*
 import kotlinx.android.synthetic.main.fragment_pre_bind.*
+import kotlinx.android.synthetic.main.fragment_pre_bind.stepBtn
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by luotao on 2021/1/28 17:30
  * E-Mail Address：gtkrockets@163.com
  */
-class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentPreBindBinding>() {
+class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPreBindBinding>() {
 
     companion object{
         const val BIND_TITTLE:String = "bind_tittle"
@@ -145,14 +153,52 @@ class PreBindFragment private constructor():BaseFragment<BaseViewModel,FragmentP
                         //摄像头权限回调成功,设置等待二维码Code
                         startActivityForResult(Intent(requireContext(),ScanActivity::class.java),ScanActivity.REQUEST_WEB_CONFIG_CODE)
                     }else if(it == 2){
-                        val clientID = arguments?.getString(BIND_CLIENT_ID)
-                        clientID?.let {
-                            onNavigatorClick()
-                            requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(clientID))
+
+                        //获取授权码
+                        ApStepActivity.authBean?.let {authBean->
+                            //如果有授权码,检测是否过期
+                            if(authBean.isExpires()){
+                                //过期重新获取
+                                ApStepActivity.authBean = null
+                                getAuthCode()
+                            }else{
+                                val clientID = arguments?.getString(BIND_CLIENT_ID)
+                                clientID?.let {
+                                    onNavigatorClick()
+                                    requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(clientID))
+                                }
+                            }
+                        } ?: kotlin.run {
+                            //没有授权码直接获取
+                            getAuthCode()
                         }
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 获取授权码
+     */
+    private fun getAuthCode(){
+        arguments?.getString(BIND_CLIENT_ID)?.let {
+            LoadingUtil.create(requireActivity())
+            mViewModel!!.getAuthCode(it).observe(this, Observer {result->
+                LoadingUtil.dismiss()
+                if(result.isSuccess && null != result.getOrNull()){
+                    ApStepActivity.authBean = result.getOrNull()!!
+                    ApStepActivity.authBean!!.local_created_at = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
+                    onNavigatorClick()
+                    requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(it))
+                }else{
+                    AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.error_ap_auth)
+                            .setPositiveButton(android.R.string.ok,null)
+                            .show()
+                }
+            })
         }
     }
 }

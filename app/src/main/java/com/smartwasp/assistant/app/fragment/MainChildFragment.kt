@@ -43,6 +43,8 @@ abstract class MainChildFragment<VM: BaseViewModel,BD: ViewDataBinding>: BaseFra
             SmartApp.activity?.currentDevice?.let {
                 mBinding.setVariable(BR.deviceBean,it)
                 status.isSelected =it.isOnline()
+            }?: kotlin.run {
+                mBinding.setVariable(BR.deviceBean,null)
             }
         }
     }private var deviceUIChanged = false

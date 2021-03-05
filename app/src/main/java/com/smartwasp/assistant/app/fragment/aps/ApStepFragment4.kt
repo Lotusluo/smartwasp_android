@@ -86,28 +86,28 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {
             Logger.e("onMessage:$sendTag")
-            if(sendTag.get() != 1) return
-            val string = String(byteArray)
-            if(!string.isNullOrEmpty()){
-                //检测收到密码，开始等待网络切换并且轮询
-                if("{\"code\":1}" == string){
-                    sendTag.set(2)
-                    val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
-                    mViewModel?.askDevAuth(authCode!!)
-                    GlobalScope.launch(Dispatchers.IO) {
-                        SystemClock.sleep(4000)
-                        if(!isAdded)
-                            return@launch
-                        if(progress.progress >= 100)
-                            return@launch
-                        compatProgress(90)
-                    }
-                }else{
-                    handleRetry()
-                }
-            }else{
-                handleRetry()
-            }
+//            if(sendTag.get() != 1) return
+//            val string = String(byteArray)
+//            if(!string.isNullOrEmpty()){
+//                //检测收到密码，开始等待网络切换并且轮询
+//                if("{\"code\":1}" == string){
+//                    sendTag.set(2)
+//                    val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
+//                    mViewModel?.askDevAuth(authCode!!)
+//                    GlobalScope.launch(Dispatchers.IO) {
+//                        SystemClock.sleep(4000)
+//                        if(!isAdded)
+//                            return@launch
+//                        if(progress.progress >= 100)
+//                            return@launch
+//                        compatProgress(90)
+//                    }
+//                }else{
+//                    handleRetry()
+//                }
+//            }else{
+//                handleRetry()
+//            }
         }
     }
 
@@ -163,6 +163,17 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                 //发送配置文件，等待返回code=1
                 service.send(json.toString())
                 sendTag.set(1)
+                sendTag.set(2)
+                val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
+                mViewModel?.askDevAuth(authCode!!)
+                GlobalScope.launch(Dispatchers.IO) {
+                    SystemClock.sleep(4000)
+                    if(!isAdded)
+                        return@launch
+                    if(progress.progress >= 100)
+                        return@launch
+                    compatProgress(90)
+                }
                 SmartApp.NEED_MAIN_REFRESH_DEVICES = true
                 return
             } else {
@@ -185,7 +196,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         mViewModel?.askDeferred!!.observe(this, Observer {
             if(it == IFLYOS.OK){
                 compatProgress(100)
-                var count = 4
+                var count = 6
                 AppExecutors.get().diskIO().execute {
                     while (count-->=0){
                         AppExecutors.get().mainThread().execute{
