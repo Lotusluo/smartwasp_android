@@ -1,14 +1,14 @@
 package com.smartwasp.assistant.app.base
 
-import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
@@ -24,16 +24,13 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.activity.AboutActivity
 import com.smartwasp.assistant.app.util.CrashCollectHandler
 import com.smartwasp.assistant.app.util.FileUtil
 import com.smartwasp.assistant.app.util.StatusBarUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.jessyan.autosize.AutoSizeCompat
-import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
 import java.io.File
@@ -77,6 +74,13 @@ abstract class BaseActivity<
         }
         createModelView()
         Logger.d("onCreate:${this}")
+    }
+
+    /**
+     * 配置改变
+     */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
     }
 
     /**
