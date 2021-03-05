@@ -179,7 +179,8 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
     }
 
     //当前正在连接的网络ID
-    private var linking:WifiBean? = null
+    var linking:WifiBean? = null
+        private set
     //wifi监听
     private var wifiBroadcastReceiver:WifiBroadcastReceiver? = null
 
