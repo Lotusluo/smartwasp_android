@@ -155,7 +155,7 @@
             android:textSize="18sp"
             android:clickable="true"
             android:background="@drawable/ripple_background_transparent"
-            android:textColor="@color/smartwasp_blue"
+            android:textColor="@color/smartwasp_orange"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout2"/>
 

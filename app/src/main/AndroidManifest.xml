@@ -89,7 +89,7 @@
 
         <meta-data
             android:name="access_token"
-            android:value="smartwasp-eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIxMTQiLCJzdWIiOiJ4aGYtdXNlciIsImlhdCI6MTYxNDIzNzUwNywiaXNzIjoiY3hnIiwiYXV0aG9yaXRpZXMiOiJbXSIsInR5cGUiOiJ1c2VyIiwiZXhwIjoxNjE0OTQ5MDgwfQ.11TEOiGeXhT1zaYtRGMiabu_k3tE7FL6rSx5XGwLn1BZssNzZdKdnn9Qx7vscIlBo85sDsRit9ffdjCAwhgaYg"/>
+            android:value="smartwasp-eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIxMTQiLCJzdWIiOiJ4aGYtdXNlciIsImlhdCI6MTYxNDIzNzYwMCwiaXNzIjoiY3hnIiwiYXV0aG9yaXRpZXMiOiJbXSIsInR5cGUiOiJ1c2VyIiwiZXhwIjoxNjE0OTQ5MTczfQ.BPHqWcCzswwqILF_Wq5wiP92UR2Vu-mStBxmv-yCdo3oFGP8JLlHHi1DfV6ms9pp-CuSBcnaaYPxfyk3u0D2kw"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

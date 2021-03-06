@@ -32,7 +32,7 @@
 
     <!--快速启动-->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/smartwasp_orange</item>
+        <item name="android:windowBackground">@color/smartwasp_yellow</item>
         <item name="android:windowActionModeOverlay">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>

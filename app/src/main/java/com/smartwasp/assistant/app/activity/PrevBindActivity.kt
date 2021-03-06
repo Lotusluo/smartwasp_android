@@ -15,6 +15,7 @@ import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.databinding.ActivityPrevBindBinding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
+import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.util.RomUtils
 import kotlinx.android.synthetic.main.layout_toolbar.*
 
@@ -48,7 +49,8 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                             Manifest.permission.CAMERA)
                 }
             }
-            R.id.ApBtn ->{
+            R.id.danjian,R.id.xiaodan ->{
+                ApStepActivity.clientID = if(v.id == R.id.danjian) "65e8d4f8-da9e-4633-8cac-84b0b47496b6" else "cddcdf2d-f300-4616-922c-d46a9905c09f"
                 //android6.0/6.0.1在任何情况下android.permission.CHANGE_NETWORK_STATE都是拒绝的
                 if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M && !Settings.System.canWrite(applicationContext)){
                     //打开修改系统设置权限

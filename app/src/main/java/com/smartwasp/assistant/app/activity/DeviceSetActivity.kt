@@ -119,7 +119,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                             mBinding.setVariable(BR.deviceBean,this)
                         }
                     }else{
-                        LoadingUtil.showToast(this,getString(R.string.try_again))
+                        LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                         deviceBean ?: kotlin.run { finish() }
                     }
                 })
@@ -143,7 +143,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                         refresh()
                     }
                     IFLYOS.ERROR->{
-                        LoadingUtil.showToast(this,getString(R.string.try_again))
+                        LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                     }
                 }
             })
@@ -167,7 +167,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                         refresh()
                     }
                     IFLYOS.ERROR->{
-                        LoadingUtil.showToast(this,getString(R.string.try_again))
+                        LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                     }
                 }
             })
@@ -223,7 +223,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                                             finish()
                                         }
                                         IFLYOS.ERROR->{
-                                            LoadingUtil.showToast(this,getString(R.string.try_again))
+                                            LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                                         }
                                     }
                                 })

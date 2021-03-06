@@ -79,7 +79,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         if(super.interceptLeftButton())
             return true
         return if (System.currentTimeMillis() - lastExitTime > 2000) {
-            LoadingUtil.showToast(this,getString(R.string.exit_again))
+            LoadingUtil.showToast(SmartApp.app,getString(R.string.exit_again))
             lastExitTime = System.currentTimeMillis()
             true
         } else{
@@ -297,7 +297,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 putExtra(IFLYOS.DEVICE_ID,currentDevice)
             })
         }?: kotlin.run {
-            LoadingUtil.showToast(this,getString(R.string.plz_add))
+            LoadingUtil.showToast(SmartApp.app,getString(R.string.plz_add))
         }
     }
 
@@ -403,7 +403,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 mViewModel.initBinder(this)
             }else{
                 bindDevices?.let {
-                    LoadingUtil.showToast(this,getString(R.string.get_devices_err))
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.get_devices_err))
                 }?: kotlin.run {
                     AlertDialog.Builder(this)
                             .setMessage(R.string.get_devices_err)

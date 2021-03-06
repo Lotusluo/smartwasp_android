@@ -61,7 +61,7 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
             if(it.isSuccess){
 
             }else{
-                LoadingUtil.showToast(this,getString(R.string.try_again))
+                LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
             }
         })
         seekBar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
@@ -193,7 +193,7 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
     private fun checkOffline():Boolean{
         currentDevice?.let {
             if(!it.isOnline()){
-                LoadingUtil.showToast(this,getString(R.string.offline))
+                LoadingUtil.showToast(SmartApp.app,getString(R.string.offline))
                 return true
             }
         }

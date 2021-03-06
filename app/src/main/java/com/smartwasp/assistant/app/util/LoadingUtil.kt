@@ -1,6 +1,7 @@
 package com.smartwasp.assistant.app.util
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -50,7 +51,7 @@ object LoadingUtil {
     }
 
     private var mToast:Toast? = null
-    fun showToast(context: Context,text:String,duration: Int = Toast.LENGTH_SHORT){
+    fun showToast(context:Application,text:String,duration: Int = Toast.LENGTH_SHORT){
         mToast?.let {
             it.cancel()
         }

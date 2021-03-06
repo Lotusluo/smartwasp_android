@@ -11,6 +11,7 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
+import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.bean.UpdateBean
 import com.smartwasp.assistant.app.databinding.ActivityAboutBinding
@@ -96,7 +97,7 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
         when(requestCode){
             REQUEST_ACCESS_FILE ->{
                 updateBean?.let {
-                    LoadingUtil.showToast(this,getString(R.string.update_tip))
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.update_tip))
                     DownloadService.startActionFoo(this,it.downloadSite,it.md5)
                 }
             }

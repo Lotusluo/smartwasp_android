@@ -133,7 +133,7 @@ class DownloadService : IntentService("DownService"){
      */
     private fun showErrNotification(err:Int){
         GlobalScope.launch(Dispatchers.Main){
-            LoadingUtil.showToast(this@DownloadService, String.format(getString(R.string.update_err),err))
+            LoadingUtil.showToast(application,String.format(getString(R.string.update_err),err))
         }
     }
 

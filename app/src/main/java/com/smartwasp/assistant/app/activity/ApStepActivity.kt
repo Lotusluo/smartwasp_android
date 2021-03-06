@@ -5,11 +5,13 @@ import android.view.View
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.BaseViewModel
+import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
 import com.smartwasp.assistant.app.bean.AuthBean
 import com.smartwasp.assistant.app.databinding.ActivityApStepBinding
+import com.smartwasp.assistant.app.fragment.PreBindFragment
 import com.smartwasp.assistant.app.fragment.aps.ApStepFragment1
-import kotlinx.coroutines.runBlocking
+import com.smartwasp.assistant.app.util.LoadingUtil
 
 /**
  * Created by luotao on 2021/1/28 16:17
@@ -26,6 +28,7 @@ class ApStepActivity : BaseActivity<BaseViewModel,ActivityApStepBinding>() {
         var CUR_WIFI_PWD:String? = null
         //授权码
         var authBean: AuthBean? = null
+        lateinit var clientID:String
     }
 
     /**

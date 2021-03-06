@@ -76,17 +76,17 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
      */
     override fun onButtonClick(v: View) {
         super.onButtonClick(v)
-//        when(v.id){
-//            R.id.card ->{
-//                SmartApp.activity?.currentDevice?.music?.let {
-//                    startActivity(Intent(requireActivity(), WebViewActivity::class.java).apply {
-//                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
-//                        putExtra(IFLYOS.EXTRA_URL, it?.redirect_url)
-//                        putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
-//                    })
-//                }
-//            }
-//        }
+        when(v.id){
+            R.id.card ->{
+                SmartApp.activity?.currentDevice?.music?.let {
+                    startActivity(Intent(requireActivity(), WebViewActivity::class.java).apply {
+                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+                        putExtra(IFLYOS.EXTRA_URL, it?.redirect_url)
+                        putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
+                    })
+                }
+            }
+        }
     }
 
     //布局文件
@@ -140,6 +140,8 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                     hotArea1.visibility = View.GONE
                     if(findBean.isSuccess){
                         linearLayout.alpha = 1f
+                        var card1 = view?.findViewById<View>(R.id.card)
+                        card1?.alpha = 1f
                         val findBean = findBean.getOrNull()
                         onRenderBanner(findBean?.banners)
                         onRenderIndicator(findBean?.groups?.map{groupBean->
@@ -147,9 +149,7 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                         }?.distinct())
                         onRenderGroupItem(findBean?.groups)
                     }else{
-                        requireContext()?.let {context ->
-                            LoadingUtil.showToast(context,getString(R.string.try_again))
-                        }
+                        LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                     }
                 })
             }?: kotlin.run {
@@ -165,18 +165,25 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
      * @param music 音乐内容
      */
     private fun checkMusicEnabled(music:ContentBean?){
+        var card1 = view?.findViewById<View>(R.id.card)
         if(music?.enable == false){
-            if(null == card){
+            if(null == card1){
                 val payView:AppCompatTextView = LayoutInflater.from(context).inflate(R.layout.layout_music_pay,null) as AppCompatTextView
+                payView.setOnClickListener {
+                    onButtonClick(it)
+                }
+                payView.id = R.id.card
+                card1 = payView
+                payView.alpha = 0f
                 val layoutParams = AppBarLayout.LayoutParams(BannerUtils.dp2px(300f).toInt(),BannerUtils.dp2px(45f).toInt())
                 layoutParams.topMargin = BannerUtils.dp2px(20f).toInt()
                 layoutParams.bottomMargin = layoutParams.topMargin
                 appBarLayout.addView(payView,0,layoutParams)
             }
-            card.text = music?.text
+            (card1 as AppCompatTextView).text = music?.text
         }else{
-            if(null != card){
-                appBarLayout.removeView(card)
+            if(null != card1){
+                appBarLayout.removeView(card1)
             }
         }
     }
@@ -414,10 +421,10 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                     it.getOrNull()?.let {more->
                         addFragmentByTag(R.id.container,MusicMoreFragment.newsInstance(more))
                     } ?: kotlin.run {
-                        LoadingUtil.showToast(requireContext(),getString(R.string.error_request),Toast.LENGTH_LONG)
+                        LoadingUtil.showToast(SmartApp.app,getString(R.string.error_request),Toast.LENGTH_LONG)
                     }
                 }else{
-                    LoadingUtil.showToast(requireContext(),getString(R.string.error_request),Toast.LENGTH_LONG)
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.error_request),Toast.LENGTH_LONG)
                 }
             })
         }

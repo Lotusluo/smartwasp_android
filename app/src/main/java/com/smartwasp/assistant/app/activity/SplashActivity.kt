@@ -46,14 +46,16 @@ class SplashActivity : AppCompatActivity() {
         }
         GlobalScope.launch(Dispatchers.IO) {
             doWork()
+//            GlobalScope.launch(Dispatchers.Main) {
+//                SystemClock.sleep(1000)
+//                toMain()
+//            }
             suspend {
                 withContext(Dispatchers.Main) {
+                    SystemClock.sleep(1000)
                     toMain()
                 }
             }.invoke()
-//            GlobalScope.launch(Dispatchers.Main) {
-//                toMain()
-//            }
         }
     }
 
