@@ -87,7 +87,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_margin="5dp"
-                app:color_checked="@color/smartwasp_blue" />
+                app:color_checked="@color/smartwasp_orange" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/subTittle11"
@@ -105,7 +105,7 @@
             android:text="@string/qAndA"
             android:layout_marginTop="10dp"
             android:textSize="18sp"
-            android:textColor="@color/smartwasp_blue"
+            android:textColor="@color/smartwasp_orange"
             android:clickable="true"
             android:background="@drawable/ripple_background_transparent"
             app:layout_constraintEnd_toEndOf="parent"

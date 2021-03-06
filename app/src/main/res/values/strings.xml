@@ -14,6 +14,7 @@
 
 
     <string name="error_empty_data">数据为空</string>
+    <string name="error_empty_clientid">clientId为空</string>
     <string name="error_empty_request">空请求</string>
     <string name="error_request_cancel">请求取消</string>
     <string name="error_net_connect">网络连接错误</string>
@@ -25,6 +26,8 @@
     <string name="try_again">请重试</string>
     <string name="try_again1">请开通音乐权限或发生未知错误</string>
     <string name="offline">设备处于离线状态</string>
+
+    <string name="bind1tip">无屏音箱扫码授权</string>
 
     <string name="tab_dialog">对话</string>
     <string name="tab_find">发现</string>
@@ -38,7 +41,8 @@
     <string name="scan_device">有屏扫码授权</string>
     <string name="ap_device">党建AP配网</string>
     <string name="ap_device_ok">AP配网授权成功,请稍等%d秒</string>
-    <string name="ap_device_exit">正在努力检测授权,是否强行退出?</string>
+    <string name="ap_device_exit">正在努力检测授权,是否退出?</string>
+    <string name="ap_device_err">设备匹配失败</string>
     <string name="ap_device_no_net">正在努力切回可用的网络,请稍后!</string>
     <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>

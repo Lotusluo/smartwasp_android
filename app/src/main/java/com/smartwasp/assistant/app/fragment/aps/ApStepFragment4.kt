@@ -18,7 +18,10 @@ import com.smartwasp.assistant.app.service.ApConfigNetService
 import com.smartwasp.assistant.app.util.*
 import com.smartwasp.assistant.app.viewModel.ApBindModel
 import kotlinx.android.synthetic.main.fragment_ap1.*
+import kotlinx.android.synthetic.main.fragment_ap1.tvSubTittle
 import kotlinx.android.synthetic.main.fragment_ap3.*
+import kotlinx.android.synthetic.main.fragment_ap3.progress
+import kotlinx.android.synthetic.main.fragment_ap4.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,19 +53,16 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
      * 拦截劝等待
      */
     override fun interceptLeftButton():Boolean{
-        if(sendTag.get() > 0){
-            //已经发送了密码,劝等待
-            if(isAdded){
-                AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.tip)
-                        .setMessage(R.string.ap_device_exit)
-                        .setPositiveButton(android.R.string.ok){ _, _ ->
-                            sendTag.set(0)
-                            super.onNavigatorClick()
-                        }
-                        .setNegativeButton(android.R.string.cancel,null)
-                        .show()
-            }
+        if(sendTag.get() > 0 && isAdded){
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.tip)
+                    .setMessage(R.string.ap_device_exit)
+                    .setPositiveButton(android.R.string.ok){ _, _ ->
+                        sendTag.set(0)
+                        super.onNavigatorClick()
+                    }
+                    .setNegativeButton(android.R.string.cancel,null)
+                    .show()
             return true
         }
         return super.interceptLeftButton()
@@ -72,42 +72,42 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
     private val socketListener = object : ApConfigNetService.SocketListener() {
         override fun onOpen(socket: Socket) {
             //开始发送配置文件
-            sendConfig()
+//            sendConfig()
+//            发送时间戳
+            sendTimestamp()
         }
 
         override fun onClosed(socket: Socket, t: Throwable?) {
             //忽略没有错误的关闭
-//            t ?: return
-//            Logger.e("onClosed:${t},$sendTag")
+            t ?: return
+            Logger.e("onClosed:${t},$sendTag")
 //            //已经发送密码则忽略所有错误
-//            if(sendTag.get() > 1) return
-//            handleRetry()
+            if(sendTag.get() >= 1) return
+            handleRetry()
         }
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {
-            Logger.e("onMessage:$sendTag")
-//            if(sendTag.get() != 1) return
-//            val string = String(byteArray)
-//            if(!string.isNullOrEmpty()){
-//                //检测收到密码，开始等待网络切换并且轮询
-//                if("{\"code\":1}" == string){
-//                    sendTag.set(2)
-//                    val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
-//                    mViewModel?.askDevAuth(authCode!!)
-//                    GlobalScope.launch(Dispatchers.IO) {
-//                        SystemClock.sleep(4000)
-//                        if(!isAdded)
-//                            return@launch
-//                        if(progress.progress >= 100)
-//                            return@launch
-//                        compatProgress(90)
-//                    }
-//                }else{
-//                    handleRetry()
-//                }
-//            }else{
-//                handleRetry()
-//            }
+            val string = String(byteArray)
+            Logger.e("onMessage:$sendTag,$string")
+            if(!string.isNullOrEmpty()){
+                if(string.contains("client_id")){
+                    if(string.contains(ApStepActivity.clientID)){
+                        sendConfig()
+                    }else{
+                        //匹配错误
+                        if(isAdded){
+                            AlertDialog.Builder(requireContext())
+                                    .setTitle(R.string.tip)
+                                    .setMessage(R.string.ap_device_err)
+                                    .setPositiveButton(android.R.string.ok){ _, _ ->
+                                        this@ApStepFragment4.onNavigatorClick()
+                                    }
+                                    .setNegativeButton(android.R.string.cancel,null)
+                                    .show()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -160,10 +160,8 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
             if (service.isConnected() == true) {
                 compatProgress(50)
                 gateWay = NetWorkUtil.getCurrentGateway(requireContext())
-                //发送配置文件，等待返回code=1
-                service.send(json.toString())
                 sendTag.set(1)
-                sendTag.set(2)
+                service.send(json.toString())
                 val authCode = arguments?.getString(PreBindFragment.BIND_AUTH_CODE)
                 mViewModel?.askDevAuth(authCode!!)
                 GlobalScope.launch(Dispatchers.IO) {
@@ -175,6 +173,25 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                     compatProgress(90)
                 }
                 SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+                return
+            } else {
+                handleRetry()
+            }
+        } ?: run {
+            handleRetry()
+        }
+    }
+
+    /**
+     * 发送时间戳
+     */
+    private fun sendTimestamp(){
+        apConfigNetService?.let { service ->
+            if (service.isConnected() == true) {
+                val json = JSONObject().apply {
+                    put("timestamp", System.currentTimeMillis())
+                }
+                service.send(json.toString())
                 return
             } else {
                 handleRetry()
@@ -287,6 +304,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         super.onViewCreated(view, savedInstanceState)
         mBinding.step = "4"
         mBinding.total = "/4"
+        icon_pic.setImageResource(if(ApStepActivity.clientID == "65e8d4f8-da9e-4633-8cac-84b0b47496b6") R.drawable.danjian else R.drawable.xiaodan)
     }
 
     //布局文件

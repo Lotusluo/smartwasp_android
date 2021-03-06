@@ -152,7 +152,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
                             },1000)
                         }else{
                             LoadingUtil.dismiss()
-                            LoadingUtil.showToast(requireContext(),getString(R.string.try_again))
+                            LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                         }
                     })
                 }
@@ -210,7 +210,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
                 putExtra(IFLYOS.DEVICE_ID,it.device_id)
             })
         }?: kotlin.run {
-            LoadingUtil.showToast(requireContext(),getString(R.string.add_device1))
+            LoadingUtil.showToast(SmartApp.app,getString(R.string.add_device1))
         }
     }
 

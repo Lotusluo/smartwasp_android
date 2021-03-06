@@ -6,16 +6,11 @@ import android.content.res.TypedArray
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.View
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeCallback
 import com.kyleduo.switchbutton.VoicePlayingIcon
@@ -23,26 +18,15 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.SmartApp
-import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.databinding.ActivityWebViewBinding
-import com.smartwasp.assistant.app.fragment.MainChildFragment
-import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.IFLYOS
-import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.StatusBarUtil
 import com.smartwasp.assistant.app.viewModel.WebViewViewModel
-import kotlinx.android.synthetic.main.activity_music.*
 import kotlinx.android.synthetic.main.activity_web_view.*
-import kotlinx.android.synthetic.main.activity_web_view.toolbar
-import kotlinx.android.synthetic.main.fragment_music_item.*
-import kotlinx.android.synthetic.main.fragment_music_item.bezelImageView
-import kotlinx.android.synthetic.main.layout_device_header.*
-import kotlinx.android.synthetic.main.layout_toolbar_device.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.io.UnsupportedEncodingException
 
 /**
  * Created by luotao on 2021/1/7 15:00
@@ -58,6 +42,9 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
 
     //注册的webView
     private var webViewTag:String? = null
+
+    //用户协议|隐私政策
+    private var policy:InputStream? = null
 
     //媒体状态
     private val mediaStateObserver: MutableLiveData<StatusBean<MusicStateBean>> = MutableLiveData()
@@ -158,6 +145,40 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             Logger.e("onReceivedError:${error?.description}")
                         }
+                    }
+
+                    /**
+                     * 拦截用户协议与隐私政策
+                     * @param view
+                     * @param request
+                     */
+                    override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                        val url = request?.url.toString()
+                        return when {
+                            url.contains("iflyhome_app_agreement") -> {
+                                policy = assets.open("smartwasp_app_agreement.html")
+                                WebResourceResponse("text/html", "UTF-8", policy)
+                            }
+                            url.contains("iflyhome_app_privacypolicy") -> {
+                                policy = assets.open("smartwasp_app_privacypolicy.html")
+                                WebResourceResponse("text/html", "UTF-8", policy)
+                            }
+                            else -> {
+                                super.shouldInterceptRequest(view, request)
+                            }
+                        }
+                    }
+
+                    /**
+                     * 页面加载结束
+                     * @param view
+                     * @param url
+                     */
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        try {
+                            policy?.close()
+                        }catch (r:Throwable){}
                     }
                 }
             }

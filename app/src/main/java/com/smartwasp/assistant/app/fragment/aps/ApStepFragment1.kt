@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AlertDialog
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.ApStepActivity
@@ -99,13 +98,12 @@ class ApStepFragment1 private constructor():BaseFragment<BaseViewModel,FragmentA
                                 getString(R.string.prev_bind_tittle1),
                                 getString(R.string.prev_bind_subTittle1),
                                 getString(R.string.prev_bind_subTittle_a1),
-                                R.drawable.ic_screen_box1,
+                                if(ApStepActivity.clientID == "65e8d4f8-da9e-4633-8cac-84b0b47496b6") R.drawable.danjian else R.drawable.xiaodan,
                                 2,
-                                "65e8d4f8-da9e-4633-8cac-84b0b47496b6",
                                 "2",
                                 "/4"))
                 }else{
-                    LoadingUtil.showToast(requireContext(),getString(R.string.wifiInfoErr))
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.wifiInfoErr))
                 }
             }
         }

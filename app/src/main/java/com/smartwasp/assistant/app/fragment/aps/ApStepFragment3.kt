@@ -42,12 +42,8 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
          * 静态生成类
          * @param clientID 客户端ID
          */
-        fun newsInstance(clientID:String):ApStepFragment3{
-            val apStepFragment3 = ApStepFragment3()
-            apStepFragment3.arguments = Bundle().apply {
-                putString(PreBindFragment.BIND_CLIENT_ID,clientID)
-            }
-            return apStepFragment3
+        fun newsInstance():ApStepFragment3{
+            return ApStepFragment3()
         }
     }
 

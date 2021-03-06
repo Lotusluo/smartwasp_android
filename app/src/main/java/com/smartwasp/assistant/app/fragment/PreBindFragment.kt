@@ -42,7 +42,6 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
         const val BIND_LOGO_URL:String = "bind_log_url"
         const val BIND_LOGO_STEP:String = "bind_log_step"
         const val BIND_LOGO_TOTAL:String = "bind_log_total"
-        const val BIND_CLIENT_ID:String = "bind_client_id"
         const val BIND_AUTH_CODE:String = "bind_client_id"
         /**
          * 静态生成类
@@ -62,7 +61,6 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
                          subTittle1:String,
                          logo:Any,
                          type:Int,
-                         clientID:String?=null,
                          step:String?=null,
                          total:String?=null):PreBindFragment{
             val preBindFragment = PreBindFragment()
@@ -72,7 +70,6 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
                 putString(BIND_SUB_TITTLE1,subTittle1)
                 putString(BIND_LOGO_STEP, step)
                 putString(BIND_LOGO_TOTAL, total)
-                putString(BIND_CLIENT_ID, clientID)
                 putInt(IFLYOS.EXTRA, type)
                 if(isA<Int>(logo)){
                     putInt(BIND_LOGO_RES, logo as Int)
@@ -153,7 +150,6 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
                         //摄像头权限回调成功,设置等待二维码Code
                         startActivityForResult(Intent(requireContext(),ScanActivity::class.java),ScanActivity.REQUEST_WEB_CONFIG_CODE)
                     }else if(it == 2){
-
                         //获取授权码
                         ApStepActivity.authBean?.let {authBean->
                             //如果有授权码,检测是否过期
@@ -162,11 +158,8 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
                                 ApStepActivity.authBean = null
                                 getAuthCode()
                             }else{
-                                val clientID = arguments?.getString(BIND_CLIENT_ID)
-                                clientID?.let {
-                                    onNavigatorClick()
-                                    requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(clientID))
-                                }
+                                onNavigatorClick()
+                                requireActivity()?.addFragmentByTagWithStack(R.id.container,ApStepFragment3.newsInstance())
                             }
                         } ?: kotlin.run {
                             //没有授权码直接获取
@@ -182,23 +175,22 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
      * 获取授权码
      */
     private fun getAuthCode(){
-        arguments?.getString(BIND_CLIENT_ID)?.let {
-            LoadingUtil.create(requireActivity())
-            mViewModel!!.getAuthCode(it).observe(this, Observer {result->
-                LoadingUtil.dismiss()
-                if(result.isSuccess && null != result.getOrNull()){
-                    ApStepActivity.authBean = result.getOrNull()!!
-                    ApStepActivity.authBean!!.local_created_at = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
-                    onNavigatorClick()
-                    requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance(it))
-                }else{
-                    AlertDialog.Builder(requireContext())
-                            .setTitle(R.string.tip)
-                            .setMessage(R.string.error_ap_auth)
-                            .setPositiveButton(android.R.string.ok,null)
-                            .show()
-                }
-            })
-        }
+        Logger.e("clientID:${ApStepActivity.clientID}")
+        LoadingUtil.create(requireActivity())
+        mViewModel!!.getAuthCode(ApStepActivity.clientID).observe(this, Observer {result->
+            LoadingUtil.dismiss()
+            if(result.isSuccess && null != result.getOrNull()){
+                ApStepActivity.authBean = result.getOrNull()!!
+                ApStepActivity.authBean!!.local_created_at = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
+                onNavigatorClick()
+                requireActivity()?.addFragmentByTagWithStack(R.id.container, ApStepFragment3.newsInstance())
+            }else{
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.tip)
+                        .setMessage(R.string.error_ap_auth)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .show()
+            }
+        })
     }
 }

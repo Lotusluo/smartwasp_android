@@ -147,7 +147,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                                     simpleRecyclerHelper?.notifyDataChanged(bean)
                                 }else{
                                     this@MusicItemFragment.requireContext()?.let {context->
-                                        LoadingUtil.showToast(context,context.getString(R.string.try_again1))
+                                        LoadingUtil.showToast(SmartApp.app,context.getString(R.string.try_again1))
                                     }
                                 }
                     })
@@ -176,7 +176,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
         SmartApp.activity?.currentDevice?.let {
             if(!it.isOnline()){
                 this@MusicItemFragment.requireContext()?.let {context->
-                    LoadingUtil.showToast(context,context.getString(R.string.offline))
+                    LoadingUtil.showToast(SmartApp.app,context.getString(R.string.offline))
                 }
                 return true
             }
@@ -211,7 +211,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                                     simpleRecyclerHelper?.notifyDataChanged()
                                 }else{
                                     this@MusicItemFragment.requireContext()?.let {context->
-                                        LoadingUtil.showToast(context,context.getString(R.string.try_again1))
+                                        LoadingUtil.showToast(SmartApp.app,context.getString(R.string.try_again1))
                                     }
                                 }
                             })
@@ -226,7 +226,7 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
                                         simpleRecyclerHelper?.notifyDataChanged(song)
                                     }else{
                                         this@MusicItemFragment.requireContext()?.let {context->
-                                            LoadingUtil.showToast(context,context.getString(R.string.try_again1))
+                                            LoadingUtil.showToast(SmartApp.app,context.getString(R.string.try_again1))
                                         }
                                     }
                                 })
