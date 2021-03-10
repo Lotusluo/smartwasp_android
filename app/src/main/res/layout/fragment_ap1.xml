@@ -153,6 +153,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:textSize="18sp"
+            android:alpha="0"
             android:clickable="true"
             android:background="@drawable/ripple_background_transparent"
             android:textColor="@color/smartwasp_orange"

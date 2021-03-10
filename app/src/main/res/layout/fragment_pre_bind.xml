@@ -107,6 +107,7 @@
             android:textSize="18sp"
             android:textColor="@color/smartwasp_orange"
             android:clickable="true"
+            android:alpha="0"
             android:background="@drawable/ripple_background_transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
