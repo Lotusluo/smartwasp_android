@@ -1,6 +1,9 @@
 package com.smartwasp.assistant.app.util
 
+import com.smartwasp.assistant.app.bean.PayBean
+import com.smartwasp.assistant.app.bean.PayType
 import com.smartwasp.assistant.app.bean.UpdateBean
+import com.smartwasp.assistant.app.bean.WxPayBean
 import com.smartwasp.assistant.app.bean.test.BaseBean
 import com.smartwasp.assistant.app.bean.test.TimeBean
 import com.smartwasp.assistant.app.bean.test.TimeData
@@ -22,28 +25,28 @@ interface RetrofitApiService {
     /**
      * 获取版本信息
      */
-    @POST("http://box.smartwasp.com.cn:8888/api/checkUpdate")
+    @POST("api/checkUpdate")
     fun update(): Call<BaseBean<UpdateBean>>
 
     /**
      * 注册
      */
     @FormUrlEncoded
-    @POST("http://box.smartwasp.com.cn:8888/api/register")
+    @POST("api/register")
     fun register(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
 
     /**
      * 绑定设备
      */
     @FormUrlEncoded
-    @POST("http://box.smartwasp.com.cn:8888/api/bind")
+    @POST("api/bind")
     fun bindDevice(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
 
     /**
      * 解除绑定设备
      */
     @FormUrlEncoded
-    @POST("http://box.smartwasp.com.cn:8888/api/unbind")
+    @POST("api/unbind")
     fun unBindDevice(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
 
     /**
@@ -54,4 +57,19 @@ interface RetrofitApiService {
     @Streaming
     @GET
     fun download(@Url path:String):Call<ResponseBody>
+
+    /**
+     * 微信下单接口
+     */
+    @FormUrlEncoded
+    @POST("pay/createOrder")
+    fun createWxOrder(@Field("type") type:String = PayType.WXPAY.tag):Call<BaseBean<PayBean<WxPayBean>>>
+
+    /**
+     * 支付宝下单接口
+     */
+    @FormUrlEncoded
+    @POST("pay/createOrder")
+    fun createAliOrder(@Field("type") type:String = PayType.ALIPAY.tag):Call<BaseBean<PayBean<String>>>
+
 }

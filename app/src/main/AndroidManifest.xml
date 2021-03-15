@@ -75,6 +75,11 @@
         <activity android:name=".activity.WifiListActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
         <service android:name=".service.PushService" />
         <service android:name=".service.DownloadService"/>
         <service android:name=".service.ApConfigNetService" />

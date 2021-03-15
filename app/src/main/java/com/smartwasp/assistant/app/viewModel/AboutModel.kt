@@ -15,7 +15,7 @@ import com.smartwasp.assistant.app.bean.UpdateBean
 import com.smartwasp.assistant.app.bean.test.BaseBean
 import com.smartwasp.assistant.app.util.RetrofitApiService
 import com.smartwasp.assistant.app.util.RetrofitManager
-import com.smartwasp.assistant.app.util.retrofit
+import kotlinx.coroutines.Job
 import retrofit2.Call
 import retrofit2.Response
 

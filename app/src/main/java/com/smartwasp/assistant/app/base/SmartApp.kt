@@ -25,6 +25,7 @@ import com.smartwasp.assistant.app.util.CrashCollectHandler
 import com.smartwasp.assistant.app.util.NetWorkUtil
 import com.smartwasp.assistant.app.util.SerializableUtils
 import com.tencent.bugly.crashreport.CrashReport
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import kotlinx.coroutines.*
 import me.jessyan.autosize.AutoSize
 import me.jessyan.autosize.AutoSizeConfig
@@ -159,6 +160,7 @@ class SmartApp : Application() {
             get() {
                 return if(mActivityList.size < 1) null else mActivityList[mActivityList.size - 1]
             }
+
     }
 
     /**
@@ -186,8 +188,8 @@ class SmartApp : Application() {
             override fun onActivityStarted(activity: Activity) {}
             override fun onActivityResumed(activity: Activity) {}
         })
-        //闪退捕捉
-        CrashReport.initCrashReport(app, "cc12a03d8c", true)
+        //将app接入微信
+        WXAPIFactory.createWXAPI(this, ConfigUtils.APP_ID).registerApp(ConfigUtils.APP_ID)
         //设置支持的https协议
         System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3")
         //今日头条适配方案
@@ -216,6 +218,8 @@ class SmartApp : Application() {
             }
         }
         CrashCollectHandler.instance.init(applicationContext)
+        //闪退捕捉
+        CrashReport.initCrashReport(app, "cc12a03d8c", true)
 //        main()
     }
 

@@ -8,6 +8,10 @@ object ConfigUtils {
 
     private const val PREF_NAME = "com.smartwasp.assistant.app.CONFIG"
 
+//    微信支付
+    const val APP_ID = "wxdc88b6d14c6a5d57"
+
+
     const val KEY_USER_ID = "user_id"
     const val KEY_DEVICE_ID = "device_id"
     private var pref: SharedPreferences? = null

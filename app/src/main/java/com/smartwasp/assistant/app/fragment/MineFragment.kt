@@ -2,6 +2,9 @@ package com.smartwasp.assistant.app.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,20 +20,18 @@ import com.smartwasp.assistant.app.activity.*
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
+import com.smartwasp.assistant.app.bean.PayType
 import com.smartwasp.assistant.app.databinding.FragmentMineBinding
 import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBinding
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.WifiUtils
 import com.smartwasp.assistant.app.viewModel.MineModel
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
 import com.youth.banner.util.BannerUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.layout_device_item.view.*
-import java.io.IOException
-import java.lang.RuntimeException
 
 /**
  * Created by luotao on 2021/1/11 15:44
@@ -195,6 +196,49 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
             R.id.btnAbount->{
                 startActivity(Intent(requireActivity(),AboutActivity::class.java))
             }
+//            R.id.wxPay->{
+//                LoadingUtil.create(requireActivity(),{
+//                    mViewModel!!.clearJob()
+//                },true)
+//                mViewModel!!.createWxOrder().observe(this, Observer {
+//                    LoadingUtil.dismiss()
+//                    if(it == IFLYOS.OK){
+//                        //正在拉起微信支付，等待回调WXPayEntryActivity
+//                        Logger.e("正在微信支付")
+//                    }else{
+//                        //请重新下单
+//                        AlertDialog.Builder(requireContext())
+//                                .setTitle(R.string.tip)
+//                                .setMessage(R.string.wx_pay_err)
+//                                .setPositiveButton(android.R.string.ok,null)
+//                                .show()
+//                    }
+//                })
+//            }
+//            R.id.aliPay->{
+//                LoadingUtil.create(requireActivity(),{
+//                    mViewModel!!.clearJob()
+//                },true)
+//                mViewModel!!.createAliOrder().observe(this, Observer {
+//                    LoadingUtil.dismiss()
+//                    if(it.isSuccess){
+//                        it.getOrNull()?.let {map ->
+//                            Logger.e("resultStatus:${map["resultStatus"]}")
+////                            6001取消
+////                            9000支付成功
+//                        }?: kotlin.run {
+//                            //请重新下单
+//                        }
+//                    }else{
+//                        //请重新下单
+//                        AlertDialog.Builder(requireContext())
+//                                .setTitle(R.string.tip)
+//                                .setMessage(R.string.ali_pay_err)
+//                                .setPositiveButton(android.R.string.ok,null)
+//                                .show()
+//                    }
+//                })
+//            }
         }
     }
 
@@ -233,7 +277,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         super.onHiddenChanged(hidden)
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = !hidden
         if(hidden){
-//        不可见的时候取消轮询设备是否在线
+//            不可见的时候取消轮询设备是否在线
         }else{
 //            呈现的时候轮询设备是否在线
         }
@@ -244,8 +288,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      * @param itemView 渲染视图
      * @param viewType 视图渲染类型
      */
-    inner class DeviceViewHolder(itemView:View, private val viewType:Int):
-            RecyclerView.ViewHolder(itemView){
+    inner class DeviceViewHolder(itemView:View, private val viewType:Int): RecyclerView.ViewHolder(itemView){
         private lateinit var deviceBean: DeviceBean
         private var itemViewBinding:LayoutDeviceItemBinding? = null
         init {
