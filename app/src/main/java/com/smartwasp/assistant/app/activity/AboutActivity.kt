@@ -21,6 +21,7 @@ import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.util.NotificationsUtils
 import com.smartwasp.assistant.app.viewModel.AboutModel
 import kotlinx.android.synthetic.main.layout_toolbar.*
+import kotlinx.coroutines.cancel
 
 class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
 
@@ -51,7 +52,9 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
         super.onButtonClick(v)
         when(v.id){
             R.id.btnUpdate->{
-                LoadingUtil.create(this,null)
+                LoadingUtil.create(this, {
+                    mViewModel.clearJob()
+                } ,true)
                 mViewModel.update(versionCode).observe(this, Observer {
                     LoadingUtil.dismiss()
                     var resID = R.string.tip_update_check_ok_least

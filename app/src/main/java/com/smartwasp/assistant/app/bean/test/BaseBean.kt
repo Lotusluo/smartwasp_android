@@ -12,4 +12,4 @@ data class BaseBean<T>(
                        var errCode:Int,
                        @SerializedName(value = "errMsg",alternate = ["msg"])
                        var errMsg:String,
-                       var data: T):Serializable
+                       var data: T?):Serializable

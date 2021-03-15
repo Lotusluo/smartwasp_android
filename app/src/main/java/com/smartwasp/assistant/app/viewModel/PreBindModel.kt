@@ -7,16 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.ResponseCallback
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.bean.AuthBean
-import com.smartwasp.assistant.app.bean.BindDevices
-import com.smartwasp.assistant.app.bean.FindBean
-import com.smartwasp.assistant.app.bean.UpdateBean
-import com.smartwasp.assistant.app.bean.test.BaseBean
-import com.smartwasp.assistant.app.util.RetrofitApiService
-import com.smartwasp.assistant.app.util.RetrofitManager
-import com.smartwasp.assistant.app.util.retrofit
 import retrofit2.Call
 import retrofit2.Response
 

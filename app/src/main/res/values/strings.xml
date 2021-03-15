@@ -27,7 +27,7 @@
     <string name="try_again1">请开通音乐权限或发生未知错误</string>
     <string name="offline">设备处于离线状态</string>
 
-    <string name="bind1tip">无屏音箱扫码授权</string>
+    <string name="bind1tip">有屏音箱扫码授权</string>
 
     <string name="tab_dialog">对话</string>
     <string name="tab_find">发现</string>
@@ -66,6 +66,8 @@
     <string name="unBindTip">是否解除绑定?</string>
     <string name="nextStep">下一步</string>
     <string name="tip">提示</string>
+    <string name="wx_pay_err">微信下单失败,请重试!</string>
+    <string name="ali_pay_err">支付宝下单失败,请重试!</string>
     <string name="tip_update_check_ok_least">当前为最新版本!</string>
     <string name="tip_update_check_ok_new">发现新版本:%s</string>
     <string name="tip_update_check_err">检查更新失败,请重试</string>
