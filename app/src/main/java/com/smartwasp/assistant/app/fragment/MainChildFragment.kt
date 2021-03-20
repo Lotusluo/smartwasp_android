@@ -3,6 +3,7 @@ package com.smartwasp.assistant.app.fragment
 import android.view.View
 import android.view.animation.Animation
 import androidx.databinding.ViewDataBinding
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity

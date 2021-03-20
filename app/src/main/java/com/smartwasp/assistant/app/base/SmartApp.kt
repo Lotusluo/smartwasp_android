@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Process
 import androidx.lifecycle.MutableLiveData
+import cn.jpush.android.api.JPushInterface
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
@@ -16,10 +17,7 @@ import com.iflytek.home.sdk.push.OsPushService
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.activity.MainActivity
-import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.MusicStateBean
-import com.smartwasp.assistant.app.bean.StatusBean
-import com.smartwasp.assistant.app.bean.UserBean
+import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.CrashCollectHandler
 import com.smartwasp.assistant.app.util.NetWorkUtil
@@ -41,6 +39,8 @@ class SmartApp : Application() {
     companion object{
         //登录的用户数据
         var userBean:UserBean? = null
+        //更新版本信息
+        var updateBean:UpdateBean? = null
         //是否已经登录
         fun isLogin():Boolean{
             return null != userBean
@@ -220,6 +220,10 @@ class SmartApp : Application() {
         CrashCollectHandler.instance.init(applicationContext)
         //闪退捕捉
         CrashReport.initCrashReport(app, "cc12a03d8c", true)
+
+        //极光推送
+        JPushInterface.setDebugMode(true)  // 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this)         // 初始化 JPush
 //        main()
     }
 

@@ -4,18 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatButton
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import cn.jpush.android.api.JPushInterface
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
-import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
+import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.databinding.ActivityMainBinding
@@ -48,7 +48,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         initObserver()
         setTabIconStyle()
         login()
-
+        JPushInterface.init(applicationContext)
         AppExecutors.get().netIO().execute {
             SystemClock.sleep(2000)
             if(!NetWorkUtil.isGoodInternet(this)){
@@ -229,7 +229,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                     fragments[index]
         }
         tabFragment?.let {
-            (tabbar as LinearLayout).children.forEach { view->view.isSelected = false}
+            (tabbar as ViewGroup).children.forEach { view->view.isSelected = false}
             if(currentTabID > 0){
                 fragments[currentTabID - 1]?.let {fragment->
                     hideFragment(fragment)
@@ -343,6 +343,11 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
     override fun onResume() {
         super.onResume()
         requestData()
+        SmartApp.updateBean?.let {
+            badge.visibility = if(it.isNewVersion()) View.VISIBLE else View.GONE
+        } ?: kotlin.run {
+            badge.visibility = View.GONE
+        }
     }
 
     /**

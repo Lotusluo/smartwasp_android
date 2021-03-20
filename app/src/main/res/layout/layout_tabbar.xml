@@ -9,59 +9,74 @@
             type="android.view.View.OnClickListener" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/tabbarSize"
-        android:gravity="center"
-        android:layout_gravity="bottom"
-        android:background="@drawable/line_top">
+        android:layout_height="match_parent">
 
-        <!--对话框-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tab_dialog"
-            android:tag="1"
-            android:drawableTop="@drawable/tab_dialog_selector"
-            android:text="@string/tab_dialog"
-            android:onClick="@{onclickListener}"
-            style="@style/TabBarTextStyle"/>
+        <LinearLayout
+            android:id="@+id/tabbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/tabbarSize"
+            android:gravity="center"
+            android:background="@drawable/line_top">
 
-        <!--发现-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tab_find"
-            android:tag="2"
-            android:drawableTop="@drawable/tab_find_selector"
-            android:text="@string/tab_find"
-            android:onClick="@{onclickListener}"
-            style="@style/TabBarTextStyle"/>
+            <!--对话框-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tab_dialog"
+                android:tag="1"
+                android:drawableTop="@drawable/tab_dialog_selector"
+                android:text="@string/tab_dialog"
+                android:onClick="@{onclickListener}"
+                style="@style/TabBarTextStyle"/>
 
-        <!--技能-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tab_skill"
-            android:tag="3"
-            android:drawableTop="@drawable/tab_skill_selector"
-            android:text="@string/tab_skill"
-            android:onClick="@{onclickListener}"
-            style="@style/TabBarTextStyle"/>
+            <!--发现-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tab_find"
+                android:tag="2"
+                android:drawableTop="@drawable/tab_find_selector"
+                android:text="@string/tab_find"
+                android:onClick="@{onclickListener}"
+                style="@style/TabBarTextStyle"/>
 
-        <!--商城-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tab_mall"
-            android:tag="4"
-            android:drawableTop="@drawable/tab_smart_selector"
-            android:text="@string/tab_home"
-            android:onClick="@{onclickListener}"
-            style="@style/TabBarTextStyle"/>
+            <!--技能-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tab_skill"
+                android:tag="3"
+                android:drawableTop="@drawable/tab_skill_selector"
+                android:text="@string/tab_skill"
+                android:onClick="@{onclickListener}"
+                style="@style/TabBarTextStyle"/>
 
-        <!--我的-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tab_mine"
-            android:tag="5"
-            android:drawableTop="@drawable/tab_mine_selector"
-            android:text="@string/tab_mime"
-            android:onClick="@{onclickListener}"
-            style="@style/TabBarTextStyle"/>
+            <!--商城-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tab_mall"
+                android:tag="4"
+                android:drawableTop="@drawable/tab_smart_selector"
+                android:text="@string/tab_home"
+                android:onClick="@{onclickListener}"
+                style="@style/TabBarTextStyle"/>
 
+            <!--我的-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tab_mine"
+                android:tag="5"
+                android:drawableTop="@drawable/tab_mine_selector"
+                android:text="@string/tab_mime"
+                android:onClick="@{onclickListener}"
+                style="@style/TabBarTextStyle"/>
 
-    </LinearLayout>
+        </LinearLayout>
+
+<!--        角标-->
+        <View
+            android:id="@+id/badge"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="right"
+            android:background="@drawable/shape_badge_bg"/>
+
+    </FrameLayout>
 
 </layout>

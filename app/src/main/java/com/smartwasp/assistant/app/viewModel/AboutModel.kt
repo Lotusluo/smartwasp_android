@@ -28,7 +28,7 @@ class AboutModel(application: Application): BaseViewModel(application) {
      * 检查更新
      * @param versionCode 当前客户端版本
      */
-    fun update(versionCode:Long):MutableLiveData<Result<BaseBean<UpdateBean>>>{
+    fun update():MutableLiveData<Result<BaseBean<UpdateBean>>>{
         val updateData = MutableLiveData<Result<BaseBean<UpdateBean>>>()
         retrofit<BaseBean<UpdateBean>> {
             api = RetrofitManager.get().retrofitApiService?.update()

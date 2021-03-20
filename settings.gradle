@@ -1,1 +1,2 @@
-include ':app', ':zxing-core', ':banner', ':switchButton', ':blurredview', ':magicindicator', ':qiniu',':xmltojsonlib'
+
+include ':app', ':zxing-core', ':banner', ':switchButton', ':blurredview', ':magicindicator', ':qiniu',':xmltojsonlib',':jiguang'

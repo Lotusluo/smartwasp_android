@@ -145,20 +145,20 @@
         </LinearLayout>
 
 <!--        遇到问题-->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/qAndA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/qAndA"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:textSize="18sp"
-            android:alpha="0"
-            android:clickable="true"
-            android:background="@drawable/ripple_background_transparent"
-            android:textColor="@color/smartwasp_orange"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout2"/>
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/qAndA"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/qAndA"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:textSize="18sp"-->
+<!--            android:alpha="0"-->
+<!--            android:clickable="true"-->
+<!--            android:background="@drawable/ripple_background_transparent"-->
+<!--            android:textColor="@color/smartwasp_orange"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/linearLayout2"/>-->
 
 <!--        下一步-->
         <androidx.appcompat.widget.AppCompatButton
@@ -166,14 +166,14 @@
             android:onClick="@{onclickListener}"
             android:text="@string/nextStep"
             android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
             android:textSize="18sp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/next_text_color"
             android:background="#FFF"
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/qAndA"/>
+            app:layout_constraintTop_toBottomOf="@id/linearLayout2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
