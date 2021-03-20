@@ -5,6 +5,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.huawei.agconnect'
 repositories {
     flatDir {
         dirs 'libs'
@@ -23,14 +24,20 @@ android {
         applicationId "com.smartwasp.assistant.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 16
-        versionName "1.0.20"
+        versionCode 17
+        versionName "1.0.21"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
             abiFilters 'armeabi-v7a'
         }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY  : "bb514b07ddb7cc046bff2efa",//值来自开发者平台取得的AppKey
+                JPUSH_CHANNEL : "default_developer",
+        ]
     }
 
     androidExtensions {
@@ -128,9 +135,12 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    // SDK 依赖项
+    // 讯飞SDK
     implementation(name: "sdk-release", ext: 'aar')
+    //支付宝支付
     implementation(name: 'alipaysdk-15.8.01.210112203525', ext: 'aar')
+    //微信支付
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     //databinding
     kapt  "com.android.databinding:compiler:3.4.1"
     //图片加载库
@@ -139,7 +149,7 @@ dependencies {
     // 二维码扫描
     implementation project(':zxing-core')
     implementation 'com.google.zxing:core:3.3.2'
-//    自定义控件
+//    自定义
     implementation project(':banner')
     implementation project(':switchButton')
     implementation project(':blurredview')
@@ -148,5 +158,6 @@ dependencies {
     implementation project(':xmltojsonlib')
     //腾讯bugly
     implementation 'com.tencent.bugly:crashreport:2.8.6'
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    // 引入极光 SDK
+    implementation project(':jiguang')
 }

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.BaseViewModel
@@ -57,10 +58,12 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                     val goToSettings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
                     goToSettings.data = Uri.parse("package:$packageName")
                     startActivity(goToSettings)
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.need_open_setting))
                     return
                 }
                 //申请
-                easyPermissions(getString(R.string.ap_per),REQUEST_LOCATION_CODE,
+                easyPermissions(getString(R.string.ap_per),
+                        REQUEST_LOCATION_CODE,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.CHANGE_WIFI_STATE)
             }
@@ -89,7 +92,9 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                                 1))
             }
             REQUEST_LOCATION_CODE ->{
-                startActivity(Intent(this,ApStepActivity::class.java))
+                if(perms.size >= 2){
+                    startActivity(Intent(this,ApStepActivity::class.java))
+                }
             }
         }
     }

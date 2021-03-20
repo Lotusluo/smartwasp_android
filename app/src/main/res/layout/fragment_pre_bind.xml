@@ -97,21 +97,21 @@
                 android:text="@{subTittle1}" />
         </LinearLayout>
 
-<!--        遇到问题-->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/qAndA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/qAndA"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            android:textColor="@color/smartwasp_orange"
-            android:clickable="true"
-            android:alpha="0"
-            android:background="@drawable/ripple_background_transparent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
+<!--&lt;!&ndash;        遇到问题&ndash;&gt;-->
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/qAndA"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/qAndA"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/smartwasp_orange"-->
+<!--            android:clickable="true"-->
+<!--            android:alpha="0"-->
+<!--            android:background="@drawable/ripple_background_transparent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/linearLayout"/>-->
 
 <!--        下一步-->
         <androidx.appcompat.widget.AppCompatButton
@@ -126,7 +126,7 @@
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/qAndA"/>
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

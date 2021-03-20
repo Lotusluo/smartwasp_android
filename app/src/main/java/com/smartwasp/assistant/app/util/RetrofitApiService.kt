@@ -36,20 +36,6 @@ interface RetrofitApiService {
     fun register(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
 
     /**
-     * 绑定设备
-     */
-    @FormUrlEncoded
-    @POST("api/bind")
-    fun bindDevice(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
-
-    /**
-     * 解除绑定设备
-     */
-    @FormUrlEncoded
-    @POST("api/unbind")
-    fun unBindDevice(@FieldMap map:Map<String, String>): Call<BaseBean<String>>
-
-    /**
      * 断点下载
      * RANGE bytes=0-1000
      * @Header("Range") range:String? = null,

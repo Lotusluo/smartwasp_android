@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -18,6 +19,7 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.util.StatusBarUtil
+import com.smartwasp.assistant.app.util.permissionUtil
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.reflect.ParameterizedType
@@ -220,10 +222,15 @@ abstract class BaseFragment<
          * 这时候，需要跳转到设置界面去，让用户手动开启。
          */
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            AppSettingsDialog
-                .Builder(this)
-                .build()
-                .show()
+            AlertDialog
+                    .Builder(requireContext())
+                    .setTitle(R.string.tip)
+                    .setMessage(R.string.need_open_setting)
+                    .setNegativeButton(android.R.string.cancel,null)
+                    .setPositiveButton(android.R.string.ok){_,_->
+                        permissionUtil.GoToSetting(requireActivity())
+                    }
+                    .show()
         }
     }
 

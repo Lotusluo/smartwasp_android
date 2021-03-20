@@ -9,9 +9,11 @@ import android.view.View
 import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.util.RetrofitManager
 import com.smartwasp.assistant.app.util.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_prev_bind.*
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +37,8 @@ class SplashActivity : AppCompatActivity() {
         val controller = ViewCompat.getWindowInsetsController(window.decorView)
         setContentView(R.layout.activity_splash)
         controller?.also {
-            it.hide(WindowInsets.Type.statusBars())
-            it.hide(WindowInsets.Type.navigationBars())
+            it.hide(WindowInsetsCompat.Type.statusBars())
+            it.hide(WindowInsetsCompat.Type.navigationBars())
         }?: kotlin.run {
             val decorView: View = window.decorView
             var uiOptions =
@@ -61,7 +63,13 @@ class SplashActivity : AppCompatActivity() {
 
     //做耗时动作
     private val doWork = {
-        SystemClock.sleep(2000)
+        //检查更新
+        val response = RetrofitManager.get().retrofitApiService?.update()?.execute()
+        response?.let {
+            if(it.isSuccessful && null != it.body() && it.body()!!.errCode == 0){
+                SmartApp.updateBean = it.body()!!.data
+            }
+        }
     }
 
     //进入主界面

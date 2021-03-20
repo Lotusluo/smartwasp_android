@@ -83,21 +83,35 @@
             app:layout_constraintTop_toBottomOf="@id/txtVersion">
             <View
                 style="@style/horizontal_line" />
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/btnUpdate"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/ripple_background_transparent"
-                android:clickable="true"
+                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:onClick="@{onclickListener}"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:text="@string/checkUpdate"
-                android:textColor="#000"
-                android:textSize="16sp"
-                app:drawableTint="#000"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+                android:background="@drawable/ripple_background_transparent"
+                android:clickable="true">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:onClick="@{onclickListener}"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/checkUpdate"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+                
+                <View
+                    android:id="@+id/badge"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/shape_badge_bg" />
+
+            </LinearLayout>
+
             <View
                 style="@style/horizontal_line" />
         </LinearLayout>
@@ -114,6 +128,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

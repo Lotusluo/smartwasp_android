@@ -129,60 +129,47 @@
                         android:paddingEnd="20dp"
                         android:text="@string/ic_content"
                         android:textColor="#000"
-                        android:textSize="18sp"
-                        />
+                        android:textSize="18sp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <LinearLayout
                         android:id="@+id/btnAbount"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/ripple_background"
-                        android:clickable="true"
-                        android:drawableStart="@drawable/icon_about_1"
-                        android:drawableEnd="@drawable/ic_arrow_right_grey_16dp"
-                        android:drawablePadding="20dp"
-                        android:gravity="center_vertical"
-                        android:onClick="@{onclickListener}"
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:text="@string/ic_about"
-                        android:textColor="#000"
-                        android:textSize="18sp"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+                        android:background="@drawable/ripple_background"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:onClick="@{onclickListener}"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" >
 
-<!--                    <androidx.appcompat.widget.AppCompatTextView-->
-<!--                        android:id="@+id/wxPay"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="60dp"-->
-<!--                        android:layout_marginTop="20dp"-->
-<!--                        android:background="@drawable/ripple_background"-->
-<!--                        android:clickable="true"-->
-<!--                        android:drawablePadding="20dp"-->
-<!--                        android:gravity="center"-->
-<!--                        android:onClick="@{onclickListener}"-->
-<!--                        android:paddingStart="20dp"-->
-<!--                        android:paddingEnd="20dp"-->
-<!--                        android:text="微信支付测试"-->
-<!--                        android:textColor="#43A047"-->
-<!--                        android:textSize="18sp"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />-->
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/test"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableStart="@drawable/icon_about_1"
+                            android:drawablePadding="20dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/ic_about"
+                            android:textColor="#000"
+                            android:textSize="18sp"/>
 
-<!--                    <androidx.appcompat.widget.AppCompatTextView-->
-<!--                        android:id="@+id/aliPay"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="60dp"-->
-<!--                        android:background="@drawable/ripple_background"-->
-<!--                        android:clickable="true"-->
-<!--                        android:drawablePadding="20dp"-->
-<!--                        android:gravity="center"-->
-<!--                        android:onClick="@{onclickListener}"-->
-<!--                        android:paddingStart="20dp"-->
-<!--                        android:paddingEnd="20dp"-->
-<!--                        android:text="支付宝支付测试"-->
-<!--                        android:textColor="#277BFA"-->
-<!--                        android:textSize="18sp"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />-->
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/badge"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/shape_badge_bg" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_arrow_right_grey_16dp" />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 

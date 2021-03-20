@@ -27,10 +27,12 @@ import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.util.CrashCollectHandler
 import com.smartwasp.assistant.app.util.FileUtil
 import com.smartwasp.assistant.app.util.StatusBarUtil
+import com.smartwasp.assistant.app.util.permissionUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.jessyan.autosize.AutoSizeCompat
+import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
 import java.io.File
@@ -153,8 +155,15 @@ abstract class BaseActivity<
          * 这时候，需要跳转到设置界面去，让用户手动开启。
          */
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-
-
+            AlertDialog
+                    .Builder(this)
+                    .setTitle(R.string.tip)
+                    .setMessage(R.string.need_open_setting)
+                    .setNegativeButton(android.R.string.cancel,null)
+                    .setPositiveButton(android.R.string.ok){_,_->
+                        permissionUtil.GoToSetting(this)
+                    }
+                    .show()
         }
     }
 
@@ -350,10 +359,8 @@ fun FragmentActivity.addFragmentByTag(frameId: Int,fragment: Fragment){
 fun FragmentActivity.addFragmentByTagWithStack(frameId: Int,fragment:Fragment){
     val tag = fragment::class.java.simpleName
     if(null != supportFragmentManager.findFragmentByTag(tag)){
-        Logger.e("has:${supportFragmentManager.findFragmentByTag(tag)}")
         return
     }
-    Logger.e("add:$fragment")
     supportFragmentManager.inTransaction {
         setCustomAnimations(R.anim.slide_right_in,0,0,R.anim.slide_right_out)
         add(frameId, fragment,tag)

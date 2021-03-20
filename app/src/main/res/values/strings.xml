@@ -11,7 +11,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-
+    <string name="need_open_setting">您禁止了该权限,需要您点击确认跳转权限授权页面进行授权</string>
 
     <string name="error_empty_data">数据为空</string>
     <string name="error_empty_clientid">clientId为空</string>
@@ -46,6 +46,7 @@
     <string name="ap_device_no_net">正在努力切回可用的网络,请稍后!</string>
     <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>
+    <string name="fresh_device1">点击空白区域刷新</string>
     <string name="words1">小黄蜂智能音箱</string>
     <string name="words2">带你进入全新世界</string>
     <string name="camera_per">扫码需要您的授权</string>

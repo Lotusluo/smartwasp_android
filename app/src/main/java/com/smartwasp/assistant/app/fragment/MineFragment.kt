@@ -31,7 +31,9 @@ import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
 import com.youth.banner.util.BannerUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
+import kotlinx.android.synthetic.main.fragment_mine.badge
 import kotlinx.android.synthetic.main.layout_device_item.view.*
+import kotlinx.android.synthetic.main.layout_tabbar.*
 
 /**
  * Created by luotao on 2021/1/11 15:44
@@ -166,6 +168,11 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
     override fun onResume() {
         super.onResume()
         SmartApp.DOS_MINE_FRAGMENT_SHOWN = true
+        SmartApp.updateBean?.let {
+            badge.visibility = if(it.isNewVersion()) View.VISIBLE else View.GONE
+        } ?: kotlin.run {
+            badge.visibility = View.GONE
+        }
     }
 
     /**
@@ -196,49 +203,6 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
             R.id.btnAbount->{
                 startActivity(Intent(requireActivity(),AboutActivity::class.java))
             }
-//            R.id.wxPay->{
-//                LoadingUtil.create(requireActivity(),{
-//                    mViewModel!!.clearJob()
-//                },true)
-//                mViewModel!!.createWxOrder().observe(this, Observer {
-//                    LoadingUtil.dismiss()
-//                    if(it == IFLYOS.OK){
-//                        //正在拉起微信支付，等待回调WXPayEntryActivity
-//                        Logger.e("正在微信支付")
-//                    }else{
-//                        //请重新下单
-//                        AlertDialog.Builder(requireContext())
-//                                .setTitle(R.string.tip)
-//                                .setMessage(R.string.wx_pay_err)
-//                                .setPositiveButton(android.R.string.ok,null)
-//                                .show()
-//                    }
-//                })
-//            }
-//            R.id.aliPay->{
-//                LoadingUtil.create(requireActivity(),{
-//                    mViewModel!!.clearJob()
-//                },true)
-//                mViewModel!!.createAliOrder().observe(this, Observer {
-//                    LoadingUtil.dismiss()
-//                    if(it.isSuccess){
-//                        it.getOrNull()?.let {map ->
-//                            Logger.e("resultStatus:${map["resultStatus"]}")
-////                            6001取消
-////                            9000支付成功
-//                        }?: kotlin.run {
-//                            //请重新下单
-//                        }
-//                    }else{
-//                        //请重新下单
-//                        AlertDialog.Builder(requireContext())
-//                                .setTitle(R.string.tip)
-//                                .setMessage(R.string.ali_pay_err)
-//                                .setPositiveButton(android.R.string.ok,null)
-//                                .show()
-//                    }
-//                })
-//            }
         }
     }
 
