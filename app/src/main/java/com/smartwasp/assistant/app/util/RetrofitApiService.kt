@@ -1,9 +1,6 @@
 package com.smartwasp.assistant.app.util
 
-import com.smartwasp.assistant.app.bean.PayBean
-import com.smartwasp.assistant.app.bean.PayType
-import com.smartwasp.assistant.app.bean.UpdateBean
-import com.smartwasp.assistant.app.bean.WxPayBean
+import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.bean.test.BaseBean
 import com.smartwasp.assistant.app.bean.test.TimeBean
 import com.smartwasp.assistant.app.bean.test.TimeData
@@ -45,17 +42,59 @@ interface RetrofitApiService {
     fun download(@Url path:String):Call<ResponseBody>
 
     /**
+     * 绑定设备
+     */
+    @FormUrlEncoded
+    @POST("api/bind")
+    fun bind(@Field("clientIds") clientIds:String,
+             @Field("deviceIds") deviceIds:String,
+             @Field("uid") uid:String):Call<BaseBean<String>>
+
+    /**
+     * 解绑设备
+     */
+    @FormUrlEncoded
+    @POST("api/unbind")
+    fun unbind(@Field("clientId") clientIds:String,
+             @Field("deviceId") deviceIds:String,
+             @Field("uid") uid:String):Call<BaseBean<String>>
+
+    /**
+     * 获取设备能力
+     */
+    @FormUrlEncoded
+    @POST("api/getSkillList")
+    fun getDeviceRes(@Field("uid") uid:String,
+                       @Field("clientId") clientId:String,
+                       @Field("deviceId") sn:String):Call<BaseBean<List<SkillBean>>>
+
+    /**
+     * 获取设备能力详情
+     */
+    @FormUrlEncoded
+    @POST("api/getShopInfo")
+    fun getDeviceResDetail(@Field("skillId") skillId:Int):Call<BaseBean<List<SkillDetailBean>>>
+
+    /**
      * 微信下单接口
      */
     @FormUrlEncoded
     @POST("pay/createOrder")
-    fun createWxOrder(@Field("type") type:String = PayType.WXPAY.tag):Call<BaseBean<PayBean<WxPayBean>>>
+    fun createWxOrder(@Field("skillId") skillId: String,
+                      @Field("shopId") shopId: String,
+                      @Field("clientId") clientId: String,
+                      @Field("uid") uid: String,
+                      @Field("type") type:String = PayType.WXPAY.tag):Call<BaseBean<PayBean<WxPayBean>>>
 
     /**
      * 支付宝下单接口
      */
     @FormUrlEncoded
     @POST("pay/createOrder")
-    fun createAliOrder(@Field("type") type:String = PayType.ALIPAY.tag):Call<BaseBean<PayBean<String>>>
+    fun createAliOrder(@Field("skillId") skillId: String,
+                       @Field("shopId") shopId: String,
+                       @Field("clientId") clientId: String,
+                       @Field("uid") uid: String,
+                       @Field("type") type:String = PayType.ALIPAY.tag):Call<BaseBean<PayBean<String>>>
 
 }

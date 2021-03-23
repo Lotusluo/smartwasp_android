@@ -10,6 +10,8 @@
     android:drawableRight="@drawable/ic_arrow_right_grey_16dp"
     android:drawableTint="@color/smartwasp_yellow1"
     android:textColor="@color/smartwasp_yellow1"
+    android:maxLines="1"
+    android:singleLine="true"
     android:paddingStart="30dp"
     android:paddingEnd="10dp"
     android:background="@drawable/shape_mask_bg_radius40"

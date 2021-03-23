@@ -16,6 +16,7 @@ import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.push.OsPushService
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.util.ConfigUtils
@@ -217,14 +218,15 @@ class SmartApp : Application() {
                 Logger.d("userBean:$userBean")
             }
         }
-        CrashCollectHandler.instance.init(applicationContext)
-        //闪退捕捉
-        CrashReport.initCrashReport(app, "cc12a03d8c", true)
 
-        //极光推送
-        JPushInterface.setDebugMode(true)  // 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this)         // 初始化 JPush
-//        main()
+        if(!BuildConfig.DEBUG){
+//        闪退捕捉
+            CrashCollectHandler.instance.init(applicationContext)
+            CrashReport.initCrashReport(app, "cc12a03d8c", true)
+            //极光推送
+            JPushInterface.setDebugMode(true)  // 设置开启日志,发布时请关闭日志
+            JPushInterface.init(this)         // 初始化 JPush
+        }
     }
 
     fun main() = runBlocking {

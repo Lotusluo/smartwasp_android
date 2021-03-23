@@ -23,6 +23,10 @@
     <string name="error_ap_connect1">配网遇到问题,请返回重试</string>
     <string name="error_ap_auth">请勿提前连接设备热点,请保证正常联网重试</string>
     <string name="error_request">请求数据错误</string>
+    <string name="error_inner_skill">获取服务失败,请退出重试</string>
+
+
+
     <string name="try_again">请重试</string>
     <string name="try_again1">请开通音乐权限或发生未知错误</string>
     <string name="offline">设备处于离线状态</string>
@@ -69,6 +73,9 @@
     <string name="tip">提示</string>
     <string name="wx_pay_err">微信下单失败,请重试!</string>
     <string name="ali_pay_err">支付宝下单失败,请重试!</string>
+    <string name="cancel_pay_err">您取消了支付宝支付</string>
+    <string name="cancel_pay_err1">您取消了微信支付</string>
+    <string name="yes_pay">支付成功</string>
     <string name="tip_update_check_ok_least">当前为最新版本!</string>
     <string name="tip_update_check_ok_new">发现新版本:%s</string>
     <string name="tip_update_check_err">检查更新失败,请重试</string>
@@ -122,4 +129,11 @@
     <string name="ap_step_3_1">热点</string>
     <string name="ap_step_3_2">刷新</string>
     <string name="ap_step_3_3">没有搜索到热点，请确认设备已进入联网模式</string>
+
+    <string name="pay_type">选择支付类型</string>
+    <string name="alipay">支付宝支付</string>
+    <string name="wechat">微信支付</string>
+    <string name="alipay1">支付宝</string>
+    <string name="wechat1">微信</string>
+    <string name="pay_tip">是否确定购买%s,使用%s支付%s元？</string>
 </resources>

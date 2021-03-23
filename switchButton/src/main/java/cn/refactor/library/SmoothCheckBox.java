@@ -97,6 +97,7 @@ public class SmoothCheckBox extends View implements Checkable {
         mCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_checked, COLOR_CHECKED);
         mUnCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_unchecked, COLOR_UNCHECKED);
         mStrokeWidth = ta.getDimensionPixelSize(R.styleable.SmoothCheckBox_stroke_width, CompatUtils.dp2px(getContext(), 0));
+        boolean canClick = ta.getBoolean(R.styleable.SmoothCheckBox_canClick, true);
         ta.recycle();
 
         mFloorUnCheckedColor = mFloorColor;
@@ -120,19 +121,24 @@ public class SmoothCheckBox extends View implements Checkable {
         mTickPoints[1] = new Point();
         mTickPoints[2] = new Point();
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggle();
-                mTickDrawing = false;
-                mDrewDistance = 0;
-                if (isChecked()) {
-                    startCheckedAnimation();
-                } else {
-                    startUnCheckedAnimation();
+        if(canClick){
+            setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggle();
+                    mTickDrawing = false;
+                    mDrewDistance = 0;
+                    if (isChecked()) {
+                        startCheckedAnimation();
+                    } else {
+                        startUnCheckedAnimation();
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            setEnabled(false);
+            setClickable(false);
+        }
     }
 
     @Override

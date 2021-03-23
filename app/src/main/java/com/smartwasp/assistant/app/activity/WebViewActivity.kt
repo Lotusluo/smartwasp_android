@@ -94,7 +94,7 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        webview.settings.domStorageEnabled = true
 //        webview.settings.javaScriptEnabled = true
 //        webview.settings.blockNetworkImage = false
 //        webview.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW

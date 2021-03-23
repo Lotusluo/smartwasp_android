@@ -133,6 +133,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
         }
         //进入设备详情页与解绑
         startActivity(Intent(requireActivity(),DeviceSetActivity::class.java).apply {
+            putExtra(IFLYOS.GROUP_ID,deviceBean.client_id)
             putExtra(IFLYOS.DEVICE_ID,deviceBean.device_id)
         })
     }

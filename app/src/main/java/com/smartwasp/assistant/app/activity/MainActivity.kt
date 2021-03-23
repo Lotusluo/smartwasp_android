@@ -11,6 +11,7 @@ import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import cn.jpush.android.api.JPushInterface
+import com.iflytek.home.sdk.IFlyHome
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*

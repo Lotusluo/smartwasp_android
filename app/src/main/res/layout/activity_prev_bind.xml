@@ -29,7 +29,7 @@
 
 
 <!--        音箱项目-->
-        <cn.refactor.library.ElasticScrollView
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -158,7 +158,7 @@
 
             </LinearLayout>
 
-        </cn.refactor.library.ElasticScrollView>
+        </ScrollView>
 
 <!--        &lt;!&ndash;设备显示页&ndash;&gt;-->
 <!--        <androidx.cardview.widget.CardView-->

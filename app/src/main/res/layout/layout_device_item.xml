@@ -72,12 +72,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="14dp"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:ellipsize="end"
                 android:text="@{deviceBean.alias}"
                 android:textColor="#000"
                 android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/device_image"
-                app:layout_constraintTop_toTopOf="@+id/device_image" />
+                app:layout_constraintTop_toTopOf="@+id/device_image"/>
 
             <!--        设备状态-->
             <androidx.appcompat.widget.AppCompatTextView

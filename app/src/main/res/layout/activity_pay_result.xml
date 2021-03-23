@@ -9,20 +9,41 @@
             type="android.view.View.OnClickListener" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:background="@color/smartwasp_white"
-        tools:context=".activity.PrevBindActivity">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="29sp"
-            android:gravity="center"
-            android:text="支付结果页面"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/wechat"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                tools:text="支付结果页面"/>
+
+            <!--    确定-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/sheet_confirm_btn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="@android:string/ok"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#FFF"
+                android:background="@drawable/ripple_background_wx"/>
+        </LinearLayout>
+
+    </FrameLayout>
 
 </layout>

@@ -191,7 +191,7 @@ class MusicMoreFragment private constructor(var groupBean: GroupBean):
     private fun initHeader(){
         with(mBinding.toolbar){
             val icBack = resources.getDrawable(R.drawable.ic_navback)
-            DrawableCompat.setTint(icBack,resources.getColor(R.color.smartwasp_blue))
+            DrawableCompat.setTint(icBack,resources.getColor(R.color.smartwasp_orange))
             navigationIcon = icBack
             (layoutParams as ViewGroup.MarginLayoutParams).topMargin = StatusBarUtil.getStatusBarHeight(requireContext())
             setNavigationOnClickListener {
@@ -230,7 +230,7 @@ class MusicMoreFragment private constructor(var groupBean: GroupBean):
                     val linePagerIndicator = LinePagerIndicator(context)
                     linePagerIndicator.mode = LinePagerIndicator.MODE_EXACTLY
                     linePagerIndicator.lineWidth = UIUtil.dip2px(context, 16.0).toFloat()
-                    linePagerIndicator.setColors(resources.getColor(R.color.smartwasp_blue))
+                    linePagerIndicator.setColors(resources.getColor(R.color.smartwasp_orange))
                     return linePagerIndicator
                 }
             }
