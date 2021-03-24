@@ -43,6 +43,10 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      * @param savedInstanceState
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        if(null != savedInstanceState){
+            SmartApp.restart()
+            return
+        }
         super.onCreate(savedInstanceState)
         StatusBarUtil.transparencyBar(this)
         StatusBarUtil.setLightStatusBar(this,true,true)

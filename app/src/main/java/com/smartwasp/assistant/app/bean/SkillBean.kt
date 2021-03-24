@@ -11,4 +11,4 @@ data class SkillBean(val skillId:Int,
                      val shopName:String,
                      val proId:Int,
                      val isBuy:Boolean,
-                     val expireTime:String):Serializable
+                     val expireTime:String = "0"):Serializable

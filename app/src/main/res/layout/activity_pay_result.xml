@@ -32,16 +32,17 @@
             <!--    确定-->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/sheet_confirm_btn"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="@android:string/ok"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple_background_wx"
                 android:clickable="true"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:gravity="center"
+                android:text="@android:string/ok"
                 android:textColor="#FFF"
-                android:background="@drawable/ripple_background_wx"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </FrameLayout>

@@ -22,13 +22,14 @@ import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.databinding.ActivityDeviceSetBinding
 import com.smartwasp.assistant.app.databinding.LayoutDeviceResBinding
-import com.smartwasp.assistant.app.databinding.LayoutFindItemBinding
 import com.smartwasp.assistant.app.fragment.SkillDetailsDialog
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.StatusBarUtil
 import com.smartwasp.assistant.app.viewModel.DeviceSetModel
 import kotlinx.android.synthetic.main.activity_device_set.*
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * Created by luotao on 2021/1/13 18:00
@@ -36,6 +37,13 @@ import kotlinx.android.synthetic.main.activity_device_set.*
  * 设备设置页
  */
 class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>() {
+
+    companion object{
+        private val formatter: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    }
+    init {
+        formatter.timeZone = TimeZone.getTimeZone("GMT+8")
+    }
 
     override val layoutResID: Int = R.layout.activity_device_set
     private var deviceBean:DeviceBean? = null
@@ -165,7 +173,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                         resContainer.addView(itemView)
                         var itemViewBinding: LayoutDeviceResBinding? = DataBindingUtil.bind(itemView)
                         itemViewBinding?.resTittle = skill.shopName
-                        itemViewBinding?.resTip = if(skill.isBuy)skill.expireTime else getString(R.string.tip_music_disEnabled)
+                        itemViewBinding?.resTip = if(skill.isBuy) formatter.format(Date(skill.expireTime.toLong())) else getString(R.string.tip_music_disEnabled)
                         itemView.setOnClickListener {
                             onAskSkillDetail(skill.skillId)
                         }

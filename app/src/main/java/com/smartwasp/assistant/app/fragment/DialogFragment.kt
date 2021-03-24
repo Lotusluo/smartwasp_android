@@ -21,6 +21,7 @@ class DialogFragment private constructor():WebViewMajorFragment<BaseViewModel,Fr
         }
     }
 
+
     //布局文件
     override val layoutResID:Int = R.layout.fragment_dialog
 
