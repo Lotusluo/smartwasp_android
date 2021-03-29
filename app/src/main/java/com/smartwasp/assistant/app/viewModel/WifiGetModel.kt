@@ -47,6 +47,7 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiBeanList = mutableListOf<WifiBean>()
         wifiManager.scanResults.forEach {
+            Logger.e(it.toString())
             if(it.SSID.isNullOrEmpty()){
                 return@forEach
             }

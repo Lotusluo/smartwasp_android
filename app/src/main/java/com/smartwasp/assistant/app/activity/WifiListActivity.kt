@@ -41,7 +41,7 @@ class WifiListActivity : BaseActivity<WifiGetModel,ActivityWifiListBinding>() {
         super.onCreate(savedInstanceState)
         setTittle(getString(R.string.wifi_list))
         media_icon?.visibility = View.GONE
-        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.smartwasp_blue))
+        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.smartwasp_orange))
         swipeRefreshLayout.setOnRefreshListener {
             onRefreshWifi()
         }

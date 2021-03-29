@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Process
 import androidx.lifecycle.MutableLiveData
 import cn.jpush.android.api.JPushInterface
+import cn.jpush.android.api.TagAliasCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
@@ -16,17 +17,18 @@ import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.push.OsPushService
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.bean.*
-import com.smartwasp.assistant.app.util.ConfigUtils
-import com.smartwasp.assistant.app.util.CrashCollectHandler
-import com.smartwasp.assistant.app.util.NetWorkUtil
-import com.smartwasp.assistant.app.util.SerializableUtils
+import com.smartwasp.assistant.app.database.DevicesEntity
+import com.smartwasp.assistant.app.database.SmartDataBase
+import com.smartwasp.assistant.app.util.*
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.jessyan.autosize.AutoSize
-import me.jessyan.autosize.AutoSizeConfig
 import java.io.InputStream
 import java.util.*
 import kotlin.system.exitProcess
@@ -217,38 +219,19 @@ class SmartApp : Application() {
                 Logger.d("userBean:$userBean")
             }
         }
-        CrashCollectHandler.instance.init(applicationContext)
-        //闪退捕捉
-        CrashReport.initCrashReport(app, "cc12a03d8c", true)
+
+        if(!BuildConfig.DEBUG){
+//        闪退捕捉
+            CrashCollectHandler.instance.init(applicationContext)
+            CrashReport.initCrashReport(app, "cc12a03d8c", true)
+        }
 
         //极光推送
-        JPushInterface.setDebugMode(true)  // 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this)         // 初始化 JPush
-//        main()
-    }
-
-    fun main() = runBlocking {
-        val job = launch(Dispatchers.Default) {
-            println("Current Thread : ${Thread.currentThread()}")
-            var nextActionTime = System.currentTimeMillis()
-            var i = 0
-            try {
-                while (isActive) {
-                    if (System.currentTimeMillis() >= nextActionTime) {
-                        println("Job: ${i++}")
-                        delay(5000)
-                    }
-                }
-            }catch (e:CancellationException){
-                println("CancellationException")
-            }finally {
-                println("finally")
-            }
+        JPushInterface.setDebugMode(BuildConfig.DEBUG)  // 设置开启日志,发布时请关闭日志
+        // 初始化 JPush
+        JPushInterface.init(this)
+        if(BuildConfig.DEBUG){
+            JPushInterface.setTags(this,100, setOf("test"))
         }
-        delay(1300)
-        println("hello")
-        job.cancelAndJoin()
-        println("welcome")
     }
-
 }

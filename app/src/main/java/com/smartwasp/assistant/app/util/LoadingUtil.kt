@@ -58,4 +58,13 @@ object LoadingUtil {
         mToast = Toast.makeText(context,text,duration)
         mToast!!.show()
     }
+
+
+    fun openDialog(context: Context,resID:Int){
+        AlertDialog.Builder(context)
+                .setTitle(R.string.tip)
+                .setMessage(resID)
+                .setPositiveButton(android.R.string.ok,null)
+                .show()
+    }
 }

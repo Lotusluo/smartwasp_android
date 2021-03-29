@@ -1,27 +1,35 @@
 package com.smartwasp.assistant.app.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.iflytek.home.sdk.IFlyHome
 import com.kyleduo.switchbutton.VoicePlayingIcon
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.SmartApp
-import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.MusicStateBean
-import com.smartwasp.assistant.app.bean.StatusBean
+import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.databinding.ActivityDeviceSetBinding
+import com.smartwasp.assistant.app.databinding.LayoutDeviceResBinding
+import com.smartwasp.assistant.app.fragment.SkillDetailsDialog
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.StatusBarUtil
 import com.smartwasp.assistant.app.viewModel.DeviceSetModel
 import kotlinx.android.synthetic.main.activity_device_set.*
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * Created by luotao on 2021/1/13 18:00
@@ -29,6 +37,13 @@ import kotlinx.android.synthetic.main.activity_device_set.*
  * 设备设置页
  */
 class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>() {
+
+    companion object{
+        private val formatter: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    }
+    init {
+        formatter.timeZone = TimeZone.getTimeZone("GMT+8")
+    }
 
     override val layoutResID: Int = R.layout.activity_device_set
     private var deviceBean:DeviceBean? = null
@@ -73,6 +88,15 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                 currentMedia = state
             }
         })
+        registerReceiver(wxPayOkReceiver, IntentFilter("DeviceSetActivity.Wx.OK"))
+    }
+
+    private val wxPayOkReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Logger.e("wxPayOkReceiver")
+            LoadingUtil.showToast(SmartApp.app,getString(R.string.yes_pay))
+            innerRefresh()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,14 +133,16 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
             intent.getStringExtra(IFLYOS.DEVICE_ID)?.let {
                 LoadingUtil.create(this,null)
                 mViewModel.askDevStatus(it).observe(this, Observer {result->
-                    SmartApp.NEED_REFRESH_DEVICES_DETAIL = false
                     LoadingUtil.dismiss()
+                    SmartApp.NEED_REFRESH_DEVICES_DETAIL = false
                     if(result.isSuccess){
                         deviceBean = result.getOrNull()?.apply {
                             device_id = it
                             setTittle(name)
                             sb_ios.setCheckedImmediatelyNoEvent(continous_mode)
                             mBinding.setVariable(BR.deviceBean,this)
+                            mBinding.setVariable(BR.resTittle,getString(R.string.tip_music))
+                            innerRefresh()
                         }
                     }else{
                         LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
@@ -125,6 +151,82 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                 })
             }
         }
+    }
+
+    /**
+     *内部服务器请求
+     */
+    private fun innerRefresh(bindCount:Int = 0){
+        val clientId = intent.getStringExtra(IFLYOS.GROUP_ID)
+        var deviceId = intent.getStringExtra(IFLYOS.DEVICE_ID)
+        clientId ?: return
+        deviceId ?: return
+        LoadingUtil.create(this,null)
+        deviceId = deviceId.substring(deviceId.indexOf(".") + 1)
+        mViewModel.askDevSkill(clientId,deviceId).observe(this, Observer {
+            LoadingUtil.dismiss()
+            if(it.isSuccess){
+                it.getOrNull()?.let {rez->
+                    rez.forEach {skill->
+                        resContainer.removeAllViews()
+                        val itemView = LayoutInflater.from(this).inflate(R.layout.layout_device_res,resContainer,false)
+                        resContainer.addView(itemView)
+                        var itemViewBinding: LayoutDeviceResBinding? = DataBindingUtil.bind(itemView)
+                        itemViewBinding?.resTittle = skill.shopName
+                        itemViewBinding?.resTip = if(skill.isBuy) String.format(getString(R.string.tip_music_deadline,formatter.format(Date(skill.expireTime.toLong())))) else getString(R.string.tip_music_disEnabled)
+                        itemView.setOnClickListener {
+                            onAskSkillDetail(skill.skillId)
+                        }
+                    }
+                }
+            }else{
+                it.exceptionOrNull()?.let {err->
+                    if(err.message == "408"){
+                        //先绑定
+                        LoadingUtil.create(this,null)
+                        mViewModel.bind(clientId,deviceId).observe(this, Observer {rez->
+                            LoadingUtil.dismiss()
+                            if(rez == IFLYOS.OK && bindCount == 0){
+                                //继续走刷新能力
+                                innerRefresh(bindCount+1)
+                            }else{
+                                AlertDialog.Builder(this)
+                                        .setTitle(R.string.tip)
+                                        .setMessage(R.string.error_inner_skill)
+                                        .setPositiveButton(android.R.string.ok,null)
+                                        .show()
+                            }
+                        })
+                        return@Observer
+                    }
+                }
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.tip)
+                        .setMessage(R.string.error_inner_skill)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .show()
+            }
+        })
+    }
+
+    /**
+     * 获取能力详情
+     * @param skillId
+     */
+    private fun onAskSkillDetail(skillId: Int) {
+        mViewModel.askDevSkillDetail(skillId).observe(this, Observer {
+            if(it.isSuccess){
+                it.getOrNull()?.let {bean->
+                    SkillDetailsDialog.newsInstance(bean).show(supportFragmentManager,null)
+                }
+            }else{
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.tip)
+                        .setMessage(R.string.retry)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .show()
+            }
+        })
     }
 
     /**
@@ -220,7 +322,19 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                                     when(result){
                                         IFLYOS.OK->{
                                             SmartApp.NEED_MAIN_REFRESH_DEVICES = true
-                                            finish()
+                                            val clientId = intent.getStringExtra(IFLYOS.GROUP_ID)
+                                            var deviceId = intent.getStringExtra(IFLYOS.DEVICE_ID)
+                                            if(!clientId.isNullOrEmpty() && !deviceId.isNullOrEmpty()){
+                                                deviceId = deviceId.substring(deviceId.indexOf(".") + 1)
+                                                LoadingUtil.create(this,null)
+                                                mViewModel.unBind(clientId,deviceId).observe(this, Observer {
+                                                    Logger.d("解绑成功:$deviceId")
+                                                    LoadingUtil.dismiss()
+                                                    finish()
+                                                })
+                                            }else{
+                                                finish()
+                                            }
                                         }
                                         IFLYOS.ERROR->{
                                             LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
@@ -234,6 +348,77 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
             }
         }
     }
+
+    /**
+     * 支付
+     * @param bean
+     * @param payType
+     */
+    fun onPay(bean: SkillDetailBean, payType: PayType) {
+        val clientId = intent.getStringExtra(IFLYOS.GROUP_ID)
+        if(payType == PayType.WXPAY){
+            LoadingUtil.create(this,{
+                mViewModel!!.clearJob()
+            },true)
+            mViewModel!!.createWxOrder(bean.skillId.toString(),bean.id.toString(),clientId!!).observe(this, Observer {
+                LoadingUtil.dismiss()
+                if(it == IFLYOS.OK){
+                    //正在拉起微信支付，等待回调WXPayEntryActivity
+                    Logger.e("正在微信支付")
+                }else{
+                    //请重新下单
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.wx_pay_err)
+                            .setPositiveButton(android.R.string.ok,null)
+                            .show()
+                }
+            })
+        }else{
+            LoadingUtil.create(this,{
+                mViewModel!!.clearJob()
+            },true)
+            mViewModel!!.createAliOrder(bean.skillId.toString(),bean.id.toString(),clientId!!).observe(this, Observer {
+                LoadingUtil.dismiss()
+                if(it.isSuccess){
+                    it.getOrNull()?.let {map ->
+                        Logger.e("resultStatus:${map["resultStatus"]}")
+                        when(map["resultStatus"]){
+                            "6001"->{
+                                //取消
+                                LoadingUtil.openDialog(this,R.string.cancel_pay_err)
+                            }
+                            "9000"->{
+                                //成功
+                                AlertDialog.Builder(this)
+                                        .setTitle(R.string.tip)
+                                        .setMessage(R.string.yes_pay)
+                                        .setPositiveButton(android.R.string.ok,null)
+                                        .show()
+                                innerRefresh()
+                            }
+                            else->{
+                                AlertDialog.Builder(this)
+                                        .setTitle(R.string.tip)
+                                        .setMessage(R.string.ali_pay_err)
+                                        .setPositiveButton(android.R.string.ok,null)
+                                        .show()
+                            }
+                        }
+                    }
+                }else{
+                    //请重新下单
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.ali_pay_err)
+                            .setPositiveButton(android.R.string.ok,null)
+                            .show()
+                }
+            })
+        }
+    }
+
+
 
     /**
      * 停止
@@ -251,5 +436,8 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
         super.onDestroy()
         SmartApp.NEED_REFRESH_DEVICES_DETAIL = true
         SmartApp.removeMediaObserver(mediaStateObserver)
+        try {
+            unregisterReceiver(wxPayOkReceiver)
+        }catch (e:Throwable){}
     }
 }

@@ -2,16 +2,15 @@ package com.smartwasp.assistant.app.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.os.SystemClock
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import cn.jpush.android.api.JPushInterface
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
 import com.smartwasp.assistant.app.bean.BindDevices
@@ -42,13 +41,19 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      * @param savedInstanceState
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.keySet().forEach {key->
+                if(!key.isNullOrEmpty() && key.contains("fragment")){
+                    savedInstanceState.remove(key)
+                }
+            }
+        }
         super.onCreate(savedInstanceState)
         StatusBarUtil.transparencyBar(this)
         StatusBarUtil.setLightStatusBar(this,true,true)
         initObserver()
         setTabIconStyle()
         login()
-        JPushInterface.init(applicationContext)
         AppExecutors.get().netIO().execute {
             SystemClock.sleep(2000)
             if(!NetWorkUtil.isGoodInternet(this)){
@@ -269,7 +274,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 bindDevices?.let {
                     DeviceChooserDialog.newsInstance(it).show(supportFragmentManager,null)
                 }?: kotlin.run {
-                    //todo 暂不确定是否会执行到此处
+
                 }
             }
             R.id.device_add,R.id.sheet_device_add->{

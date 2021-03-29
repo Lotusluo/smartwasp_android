@@ -1,15 +1,14 @@
 package com.smartwasp.assistant.app.util
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Looper
 import androidx.core.text.isDigitsOnly
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.SmartApp
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.*
 import java.net.Inet6Address
 import java.net.InetAddress
@@ -22,6 +21,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSession
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
+
 
 /**
  * Created by luotao on 2020/12/26 15:30
@@ -134,12 +134,16 @@ object NetWorkUtil {
      */
     fun getOkHttpsSSLOkHttpClientForRetrofit(interceptor:Interceptor? = null):OkHttpClient{
         val okHttpsClientBuilder = getOkHttpsSSLOkHttpClient()
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY //这里可以选择拦截级别
+
         return okHttpsClientBuilder.run {
             cache(Cache(File("${SmartApp.app.getExternalFilesDir(null)}/okhttp_cache/"),50 * 1024 * 1024))
             connectTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
             addInterceptor(interceptor)
+            addInterceptor(loggingInterceptor)
             build()
         }
     }

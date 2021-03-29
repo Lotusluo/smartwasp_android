@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="skillDetailBean"
+            type="com.smartwasp.assistant.app.bean.SkillDetailBean" />
+
+    </data>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="70dp"
+       android:gravity="center_vertical"
+       android:clickable="true"
+       android:background="@drawable/ripple_background_white">
+
+       <!--        商品名称-->
+       <androidx.appcompat.widget.AppCompatTextView
+           android:id="@+id/goodName"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:layout_marginStart="20dp"
+           android:text="@{skillDetailBean.shopName}"
+           android:textSize="18sp"
+           android:textStyle="bold"
+           android:textColor="@color/dark_"
+           tools:text="月付"/>
+
+       <!--        价格-->
+       <androidx.appcompat.widget.AppCompatTextView
+           android:id="@+id/goodPrice"
+           android:layout_width="wrap_content"
+           android:layout_height="match_parent"
+           android:textSize="16sp"
+           android:textStyle="bold"
+           android:text="@{skillDetailBean.tranPrice()}"
+           android:textColor="@color/smartwasp_red"
+           android:gravity="right|center_vertical"
+           tools:text="￥10.00"/>
+
+<!--       勾选框-->
+       <cn.refactor.library.SmoothCheckBox
+           android:id="@+id/checkBox"
+           android:layout_width="18dp"
+           android:layout_height="18dp"
+           android:layout_margin="10dp"
+           app:canClick="false"
+           app:color_checked="@color/smartwasp_blue" />
+
+   </LinearLayout>
+
+
+</layout>

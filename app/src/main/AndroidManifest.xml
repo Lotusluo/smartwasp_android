@@ -96,14 +96,6 @@
         </service>
         <!--jpush_config_end-->
 
-        <service
-            android:name="cn.jpush.android.service.PluginHuaweiPlatformsService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
             android:name=".jpush.MyReceiver"
@@ -137,7 +129,11 @@
 
         <meta-data
             android:name="access_token"
-            android:value="smartwasp-eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIxMTQiLCJzdWIiOiJ4aGYtdXNlciIsImlhdCI6MTYxNTAyNDc1NSwiaXNzIjoiY3hnIiwiYXV0aG9yaXRpZXMiOiJbe1wiYXV0aG9yaXR5XCI6XCJST0xFX3hoZi11c2VyXCJ9XSIsInR5cGUiOiJ1c2VyIiwiZXhwIjoyNDc5MDI0NzU2fQ.EDE85l8pgVc3K6viWFWChwBt74P246tmX3BHUhb12O1wR-dskEL4h9nrCxp2E9zN41eeRRHwc49gAv-vzBJN1w"/>
+            android:value="${ACCESS_TOKEN}"/>
+
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

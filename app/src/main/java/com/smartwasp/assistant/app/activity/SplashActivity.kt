@@ -64,12 +64,16 @@ class SplashActivity : AppCompatActivity() {
     //做耗时动作
     private val doWork = {
         //检查更新
-        val response = RetrofitManager.get().retrofitApiService?.update()?.execute()
-        response?.let {
-            if(it.isSuccessful && null != it.body() && it.body()!!.errCode == 0){
-                SmartApp.updateBean = it.body()!!.data
+        try{
+            val response = RetrofitManager.get().retrofitApiService?.update()?.execute()
+            response?.let {
+                if(it.isSuccessful && null != it.body() && it.body()!!.errCode == 0){
+                    SmartApp.updateBean = it.body()!!.data
+                }
             }
-        }
+        }catch (e:Throwable){}
+
+
     }
 
     //进入主界面

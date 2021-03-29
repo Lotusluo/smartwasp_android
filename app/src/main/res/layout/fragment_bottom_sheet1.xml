@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:maxHeight="400dp"
+    android:minHeight="140dp"
+    android:background="@drawable/shape_bottom_sheet">
+
+<!--    设备显示列表-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/icon_device_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pay_type"
+        android:textColor="@color/dark_light"
+        android:layout_marginStart="6dp"
+        android:textSize="14sp"
+        android:gravity="center"/>
+
+<!--    微信支付-->
+    <LinearLayout
+        android:id="@+id/wechatPay"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="6dp"
+        android:clickable="true"
+        android:background="@drawable/ripple_background_white">
+
+        <!--    微信支付-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/wechat"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/wechat"
+            android:textColor="@color/dark_light"
+            android:textSize="14sp"
+            android:gravity="center_vertical"/>
+
+        <!--       勾选框-->
+        <cn.refactor.library.SmoothCheckBox
+            android:id="@+id/wechatPay1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="10dp"
+            app:canClick="false"
+            app:color_checked="@color/smartwasp_blue" />
+
+    </LinearLayout>
+
+<!--    支付宝支付-->
+    <LinearLayout
+        android:id="@+id/aliPay"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:background="@drawable/ripple_background_white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/alipay"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/alipay"
+            android:textColor="@color/dark_light"
+            android:textSize="14sp"
+            android:gravity="center_vertical"/>
+
+ <!--       勾选框-->
+        <cn.refactor.library.SmoothCheckBox
+            android:id="@+id/aliPay1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="10dp"
+            app:canClick="false"
+            app:color_checked="@color/smartwasp_blue" />
+
+    </LinearLayout>
+
+
+
+<!--    确定与取消-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--    取消-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/sheet_cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="@android:string/cancel"
+            android:gravity="center"
+            android:clickable="true"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:background="@drawable/ripple_background"/>
+
+        <View
+            style="@style/vertical_line"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <!--    确定-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/sheet_confirm_btn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="@android:string/ok"
+            android:gravity="center"
+            android:clickable="true"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:background="@drawable/ripple_background"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

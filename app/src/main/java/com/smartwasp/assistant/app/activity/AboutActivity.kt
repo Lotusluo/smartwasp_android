@@ -35,6 +35,9 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
             it.visibility = View.GONE
         }
         mBinding.version = "Version ${packageManager.getPackageInfo(BuildConfig.APPLICATION_ID,0).versionName}"
+        SmartApp.userBean?.let {
+            mBinding.uid = "用户码 ${it.user_id}"
+        }
     }
 
     /**

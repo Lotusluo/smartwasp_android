@@ -1,12 +1,10 @@
 package com.smartwasp.assistant.app.fragment
 
+import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.databinding.ViewDataBinding
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeCallback

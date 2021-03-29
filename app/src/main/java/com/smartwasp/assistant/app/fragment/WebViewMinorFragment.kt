@@ -36,7 +36,7 @@ class WebViewMinorFragment private constructor():WebViewMajorFragment<BaseViewMo
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarIcon(R.drawable.ic_navback,R.color.smartwasp_blue)
+        setToolBarIcon(R.drawable.ic_navback,R.color.smartwasp_orange)
         mType = arguments?.getString(IFLYOS.EXTRA_TYPE)
     }
 

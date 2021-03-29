@@ -28,7 +28,7 @@
             android:layout_height="20dp"
             android:visibility="@{wifiBean.linkType == wifiBean.STATE_LINKING ? View.VISIBLE : View.GONE}"
             android:layout_marginStart="20dp"
-            android:indeterminateTint="@color/smartwasp_blue"
+            android:indeterminateTint="@color/smartwasp_orange"
             android:indeterminateTintMode="src_atop"
             android:layout_gravity="center_vertical"/>
 
@@ -39,7 +39,7 @@
             android:layout_marginStart="20dp"
             android:visibility="@{wifiBean.linkType == wifiBean.STATE_LINKED ? View.VISIBLE : View.GONE}"
             android:src="@drawable/ic_mtrl_chip_checked_circle"
-            app:tint="@color/smartwasp_blue"
+            app:tint="@color/smartwasp_orange"
             android:scaleType="centerInside"
             android:layout_gravity="center_vertical"/>
 

@@ -14,6 +14,7 @@
         <variable
             name="onclickListener"
             type="android.view.View.OnClickListener" />
+        <variable name="resTittle" type="String" />
     </data>
 
     <LinearLayout
@@ -32,181 +33,180 @@
             app:onclickListener="@{onclickListener}"
             layout="@layout/layout_toolbar" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:text="@string/tip_device"
-            android:textSize="12sp"
-            android:textColor="@color/dark_light"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
-<!--        设备名称-->
-        <LinearLayout
-            android:layout_marginTop="10dp"
+<!--        我的滚动页面-->
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="#FFF">
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/tip_device"
-                android:textSize="16sp"
-                android:textColor="#000"
-                android:gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/nameEdit"
-                android:text="@{deviceBean.alias}"
-                android:textSize="14sp"
-                android:textColor="@color/dark_light"
-                android:gravity="center_vertical|right"
-                android:layout_marginEnd="10dp"
-                android:imeOptions="actionDone"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textCursorDrawable="@null"
-                android:background="@null"/>
-        </LinearLayout>
+                android:orientation="vertical">
 
-        <View
-            android:layout_marginStart="10dp"
-            style="@style/horizontal_line"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/tip_device"
+                    android:textSize="12sp"
+                    android:textColor="@color/dark_light"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-<!--        设备位置-->
-        <LinearLayout
-            android:id="@+id/positionBtn"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:clickable="true"
-            android:onClick="@{onclickListener}"
-            android:background="@drawable/ripple_background">
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/tip_zone"
-                android:textSize="16sp"
-                android:textColor="#000"
-                android:gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@{deviceBean.zone}"
-                android:textSize="14sp"
-                android:textColor="@color/dark_light"
-                android:gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/ic_arrow_right_grey_16dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="16dp"
-                android:layout_height="16dp"/>
-        </LinearLayout>
+                <!--        设备名称-->
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:background="#FFF">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:text="@string/tip_device"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/nameEdit"
+                        android:text="@{deviceBean.alias}"
+                        android:textSize="14sp"
+                        android:textColor="@color/dark_light"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginEnd="10dp"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textCursorDrawable="@null"
+                        android:background="@null"/>
+                </LinearLayout>
 
-        <View
-            android:layout_marginStart="10dp"
-            style="@style/horizontal_line"/>
+                <View
+                    android:layout_marginStart="10dp"
+                    style="@style/horizontal_line"/>
 
-<!--        音乐能力-->
-        <LinearLayout
-            android:id="@+id/musicBtn"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:clickable="true"
-            android:onClick="@{onclickListener}"
-            android:background="@drawable/ripple_background">
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/tip_music"
-                android:textSize="16sp"
-                android:textColor="#000"
-                android:gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
-<!--           todo 如何加入字符串 -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@{deviceBean.music.value}"
-                android:textSize="14sp"
-                android:textColor="#FFF"
-                android:ellipsize="end"
-                android:background="@drawable/shape_mask_bg_radius20"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="10dp"
-                android:minWidth="60dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"/>
-        </LinearLayout>
+                <!--        设备位置-->
+                <LinearLayout
+                    android:id="@+id/positionBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:clickable="true"
+                    android:onClick="@{onclickListener}"
+                    android:background="@drawable/ripple_background">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:text="@string/tip_zone"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:text="@{deviceBean.zone}"
+                        android:textSize="14sp"
+                        android:textColor="@color/dark_light"
+                        android:gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_arrow_right_grey_16dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"/>
+                </LinearLayout>
 
-<!--        持续交互-->
-        <FrameLayout
-            android:background="#FFF"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <View
+                    android:layout_marginStart="10dp"
+                    style="@style/horizontal_line"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/keep_wake_up_tip"
-                android:textSize="16sp"
-                android:textColor="#000"
-                android:ellipsize="end"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/sb_ios"
-                style="@style/SwitchButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:kswAnimationDuration="300"
-                android:layout_gravity="right"
-                app:kswBackDrawable="@drawable/ios_back_drawable"
-                app:kswThumbDrawable="@drawable/ios_thumb_selector"
-                app:kswThumbMarginBottom="-8dp"
-                app:kswThumbMarginLeft="-5dp"
-                app:kswThumbMarginRight="-5dp"
-                app:kswThumbMarginTop="-2.5dp"
-                app:kswThumbRangeRatio="1.4"/>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/keep_wake_up"
-                android:textSize="14sp"
-                android:textColor="@color/dark_light"
-                android:layout_marginTop="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </FrameLayout>
+<!--                能力显示容器-->
+                <LinearLayout
+                    android:id="@+id/resContainer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
 
-<!--        解除绑定-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/unBindBtn"
-            android:onClick="@{onclickListener}"
-            android:text="@string/unBind"
-            android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:background="#FFF"
-            android:layout_height="56dp"/>
+                </LinearLayout>
+
+
+                <!--        讯飞音乐能力-->
+                <include
+                    android:id="@+id/musicRes"
+                    app:resTittle="@{resTittle}"
+                    app:resTip="@{deviceBean.music.value}"
+                    layout="@layout/layout_device_res" />
+
+                <!--        持续交互-->
+                <FrameLayout
+                    android:background="#FFF"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:text="@string/keep_wake_up_tip"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:ellipsize="end"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <com.kyleduo.switchbutton.SwitchButton
+                        android:id="@+id/sb_ios"
+                        style="@style/SwitchButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:kswAnimationDuration="300"
+                        android:layout_gravity="right"
+                        app:kswBackDrawable="@drawable/ios_back_drawable"
+                        app:kswThumbDrawable="@drawable/ios_thumb_selector"
+                        app:kswThumbMarginBottom="-8dp"
+                        app:kswThumbMarginLeft="-5dp"
+                        app:kswThumbMarginRight="-5dp"
+                        app:kswThumbMarginTop="-2.5dp"
+                        app:kswThumbRangeRatio="1.4"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:text="@string/keep_wake_up"
+                        android:textSize="14sp"
+                        android:textColor="@color/dark_light"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </FrameLayout>
+
+                <!--        解除绑定-->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/unBindBtn"
+                    android:onClick="@{onclickListener}"
+                    android:text="@string/unBind"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:background="#FFF"
+                    android:layout_height="56dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
 
     </LinearLayout>
 
