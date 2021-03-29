@@ -12,6 +12,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="need_open_setting">您禁止了该权限,需要您点击确认跳转权限授权页面进行授权</string>
+    <string name="need_open_gps">你未打开GPS功能,请打开</string>
 
     <string name="error_empty_data">数据为空</string>
     <string name="error_empty_clientid">clientId为空</string>
@@ -65,6 +66,7 @@
     <string name="tip_music">音乐畅听</string>
     <string name="tip_music_enabled">已开通</string>
     <string name="tip_music_disEnabled">未开通</string>
+    <string name="tip_music_deadline">%s到期</string>
     <string name="keep_wake_up_tip">持续交互</string>
     <string name="keep_wake_up">在一次唤醒后,可以保持一段时间内无需唤醒便可以直接与设备交互,交互跟自然</string>
     <string name="unBind">解除绑定</string>

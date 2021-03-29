@@ -1,13 +1,16 @@
 package com.smartwasp.assistant.app.activity
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.location.LocationManagerCompat
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
@@ -61,6 +64,20 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                     LoadingUtil.showToast(SmartApp.app,getString(R.string.need_open_setting))
                     return
                 }
+
+                //判断是否打开位置信息
+                if(!LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)){
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.need_open_gps)
+                            .setNegativeButton(android.R.string.cancel,null)
+                            .setPositiveButton(android.R.string.ok){_,_->
+                                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            }
+                            .show()
+                    return
+                }
+
                 //申请
                 easyPermissions(getString(R.string.ap_per),
                         REQUEST_LOCATION_CODE,

@@ -30,20 +30,10 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-
 }
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-
-
-    //huawei_dependencies_start
-    //华为请按照厂商文档配置主 gradle 华为镜像依赖和添加 agconnect-services.json 后再打开此依赖
     implementation 'com.huawei.hms:push:5.0.2.300'
-    //huawei_dependencies_end
-
-    //oppo_dependencies_start
-    compileOnly(name: 'com.heytap.msp-push-2.1.0', ext: 'aar')
-    //oppo_dependencies_end
 }
 

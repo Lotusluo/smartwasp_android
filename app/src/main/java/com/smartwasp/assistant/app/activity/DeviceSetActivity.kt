@@ -173,7 +173,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                         resContainer.addView(itemView)
                         var itemViewBinding: LayoutDeviceResBinding? = DataBindingUtil.bind(itemView)
                         itemViewBinding?.resTittle = skill.shopName
-                        itemViewBinding?.resTip = if(skill.isBuy) formatter.format(Date(skill.expireTime.toLong())) else getString(R.string.tip_music_disEnabled)
+                        itemViewBinding?.resTip = if(skill.isBuy) String.format(getString(R.string.tip_music_deadline,formatter.format(Date(skill.expireTime.toLong())))) else getString(R.string.tip_music_disEnabled)
                         itemView.setOnClickListener {
                             onAskSkillDetail(skill.skillId)
                         }
@@ -390,17 +390,29 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                             }
                             "9000"->{
                                 //成功
-                                LoadingUtil.showToast(SmartApp.app,getString(R.string.yes_pay))
+                                AlertDialog.Builder(this)
+                                        .setTitle(R.string.tip)
+                                        .setMessage(R.string.yes_pay)
+                                        .setPositiveButton(android.R.string.ok,null)
+                                        .show()
                                 innerRefresh()
                             }
                             else->{
-                                LoadingUtil.openDialog(this,R.string.ali_pay_err)
+                                AlertDialog.Builder(this)
+                                        .setTitle(R.string.tip)
+                                        .setMessage(R.string.ali_pay_err)
+                                        .setPositiveButton(android.R.string.ok,null)
+                                        .show()
                             }
                         }
                     }
                 }else{
                     //请重新下单
-                    LoadingUtil.openDialog(this,R.string.ali_pay_err)
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.ali_pay_err)
+                            .setPositiveButton(android.R.string.ok,null)
+                            .show()
                 }
             })
         }

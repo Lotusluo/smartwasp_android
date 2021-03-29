@@ -79,7 +79,7 @@ interface RetrofitApiService {
      * 微信下单接口
      */
     @FormUrlEncoded
-    @POST("pay/createOrder")
+    @POST("https://dms.smartwasp.com.cn:8086/pay/createOrder")
     fun createWxOrder(@Field("skillId") skillId: String,
                       @Field("shopId") shopId: String,
                       @Field("clientId") clientId: String,
@@ -90,7 +90,7 @@ interface RetrofitApiService {
      * 支付宝下单接口
      */
     @FormUrlEncoded
-    @POST("pay/createOrder")
+    @POST("https://dms.smartwasp.com.cn:8086/pay/createOrder")
     fun createAliOrder(@Field("skillId") skillId: String,
                        @Field("shopId") shopId: String,
                        @Field("clientId") clientId: String,
