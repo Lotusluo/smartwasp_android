@@ -142,25 +142,8 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      * 左侧导航按钮点击
      */
     override fun onNavigatorClick(){
-        AlertDialog.Builder(requireContext())
-                .setMessage(R.string.exit_confirm)
-                .setNegativeButton(android.R.string.cancel,null)
-                .setPositiveButton(android.R.string.ok) {
-                    _, _ ->
-                    LoadingUtil.create(requireActivity())
-                    mViewModel?.loginOut()?.observe(this, Observer {
-                        if(it == IFLYOS.OK){
-                            ConfigUtils.removeAll()
-                            requireView().postDelayed({
-                                 SmartApp.restart()
-                            },1000)
-                        }else{
-                            LoadingUtil.dismiss()
-                            LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
-                        }
-                    })
-                }
-                .show()
+
+        startActivity(Intent(requireActivity(),UsrActivity::class.java))
     }
 
     /**

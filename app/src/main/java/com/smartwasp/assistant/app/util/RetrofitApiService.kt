@@ -97,4 +97,15 @@ interface RetrofitApiService {
                        @Field("uid") uid: String,
                        @Field("type") type:String = PayType.ALIPAY.tag):Call<BaseBean<PayBean<String>>>
 
+    /**
+     * 意见与建议上报
+     */
+    @FormUrlEncoded
+    @POST("api/userFeed")
+    fun report(
+                      @Field("uid") shopId: String,
+                      @Field("text") text: String,
+                      @Field("mail") email: String,
+                      @Field("proId") skillId: String = "0"):Call<BaseBean<String>>
+
 }

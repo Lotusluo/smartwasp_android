@@ -2,7 +2,6 @@ package com.smartwasp.assistant.app.activity
 
 import android.Manifest
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -35,9 +34,6 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
             it.visibility = View.GONE
         }
         mBinding.version = "Version ${packageManager.getPackageInfo(BuildConfig.APPLICATION_ID,0).versionName}"
-        SmartApp.userBean?.let {
-            mBinding.uid = "用户码 ${it.user_id}"
-        }
     }
 
     /**
@@ -46,6 +42,9 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
     override fun onButtonClick(v: View){
         super.onButtonClick(v)
         when(v.id){
+            R.id.btnReport->{
+                startActivity(Intent(this,ReportActivity::class.java))
+            }
             R.id.btnUpdate->{
                 LoadingUtil.create(this, {
                     mViewModel.clearJob()

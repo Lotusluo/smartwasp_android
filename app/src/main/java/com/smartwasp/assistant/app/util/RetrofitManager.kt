@@ -31,7 +31,7 @@ class RetrofitManager private constructor():Interceptor{
     var retrofitApiService:RetrofitApiService? = null
         private set
 
-    private lateinit var accessToken:String
+    private var accessToken:String
 
     init {
         initHttpRequest()

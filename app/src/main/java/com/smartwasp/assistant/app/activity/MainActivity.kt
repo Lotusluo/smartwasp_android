@@ -11,6 +11,8 @@ import androidx.core.view.children
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import cn.jpush.android.api.JPushInterface
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
 import com.smartwasp.assistant.app.bean.BindDevices
@@ -197,7 +199,10 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         if(time > 1)
             return
         mViewModel.register(SmartApp.userBean!!.user_id).observe(this, Observer {
-            if(it != IFLYOS.OK){
+            if(it == IFLYOS.OK){
+                val filter = SmartApp.userBean!!.user_id.filterNot {c-> c == '-' }
+                JPushInterface.setAlias(this,100,filter)
+            }else{
                 registerUid(time + 1)
             }
         })

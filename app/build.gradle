@@ -24,8 +24,8 @@ android {
         applicationId "com.smartwasp.assistant.app"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 20
-        versionName "1.0.24"
+        versionCode 21
+        versionName "1.0.25"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -35,7 +35,7 @@ android {
 
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY  : "bb514b07ddb7cc046bff2efa",//值来自开发者平台取得的AppKey
+                JPUSH_APPKEY  : "6366073f8c4e4637325810f3",//值来自开发者平台取得的AppKey
                 JPUSH_CHANNEL : "default_developer",
 
                 XIAOMI_APPID  : "2882303761519814982",

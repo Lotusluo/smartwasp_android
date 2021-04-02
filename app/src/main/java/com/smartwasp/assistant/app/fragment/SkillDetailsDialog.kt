@@ -1,8 +1,6 @@
 package com.smartwasp.assistant.app.fragment
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,18 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.DeviceSetActivity
 import com.smartwasp.assistant.app.bean.PayType
 import com.smartwasp.assistant.app.bean.SkillDetailBean
 import com.smartwasp.assistant.app.bean.test.BaseBean
-import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBottom1Binding
+import com.smartwasp.assistant.app.databinding.LayoutPayItemBottomBinding
 import com.smartwasp.assistant.app.util.IFLYOS
-import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_bottom_sheet.recyclerView
-import kotlinx.android.synthetic.main.fragment_bottom_sheet.sheet_cancel_btn
-import kotlinx.android.synthetic.main.fragment_bottom_sheet1.*
+import kotlinx.android.synthetic.main.fragment_bottom_pay.*
 
 /**
  * Created by luotao on 2021/3/23 10:17
@@ -58,7 +52,7 @@ class SkillDetailsDialog private constructor(): BottomSheetDialogFragment() {
      * @param savedInstanceState
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet1,container)
+        return inflater.inflate(R.layout.fragment_bottom_pay,container)
     }
 
     /**
@@ -108,7 +102,7 @@ class SkillDetailsDialog private constructor(): BottomSheetDialogFragment() {
 
     private var details:List<SkillDetailBean>? = null
     /**
-     * 渲染可选的设备
+     * 渲染可选的支付方式
      */
     private fun onRenderDevices() {
         (arguments?.getSerializable(IFLYOS.EXTRA) as BaseBean<List<SkillDetailBean>>?)?.let {
@@ -117,7 +111,7 @@ class SkillDetailsDialog private constructor(): BottomSheetDialogFragment() {
             recyclerView.adapter = object :RecyclerView.Adapter<DeviceViewHolder>(){
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
                     return DeviceViewHolder(LayoutInflater.from(this@SkillDetailsDialog.context).
-                    inflate(R.layout.layout_device_item_bottom1,parent,false))
+                    inflate(R.layout.layout_pay_item_bottom,parent,false))
                 }
                 override fun getItemCount(): Int {
                     return details?.size ?: 0
@@ -164,13 +158,13 @@ class SkillDetailsDialog private constructor(): BottomSheetDialogFragment() {
     private var selectedID:Int = 0
 
     /**
-     * 绑定设备的ViewHolder
+     * 支付类型的ViewHolder
      * @param itemView 渲染视图
      */
     inner class DeviceViewHolder(itemView:View):
             RecyclerView.ViewHolder(itemView){
         private lateinit var skillDetailBean: SkillDetailBean
-        private var itemViewBinding: LayoutDeviceItemBottom1Binding? = null
+        private var itemViewBinding: LayoutPayItemBottomBinding? = null
         init {
             itemViewBinding = DataBindingUtil.bind(itemView)
             itemViewBinding?.skillDetailBean = null

@@ -7,7 +7,6 @@
         <variable name="tittle" type="String" />
         <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
         <variable name="version" type="String" />
-        <variable name="uid" type="String" />
         <variable
             name="onclickListener"
             type="android.view.View.OnClickListener" />
@@ -71,23 +70,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtName"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtUid"
-            android:text="@{uid}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/smartwasp_yellow1"
-            android:layout_marginTop="10dp"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtVersion"
-            tools:text="---------------------"/>
-
-
 <!--        按钮列表-->
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -97,7 +79,7 @@
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtUid">
+            app:layout_constraintTop_toBottomOf="@id/txtVersion">
             <View
                 style="@style/horizontal_line" />
             <LinearLayout
@@ -131,6 +113,26 @@
 
             <View
                 style="@style/horizontal_line" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btnReport"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:onClick="@{onclickListener}"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/usrReport"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:background="@drawable/ripple_background_transparent"
+                android:clickable="true"/>
+
+            <View
+                style="@style/horizontal_line" />
+
+
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -145,9 +147,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
