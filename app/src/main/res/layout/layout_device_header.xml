@@ -40,6 +40,7 @@
             android:text="@{deviceBean.alias}"
             android:textSize="16sp"
             android:padding="4dp"
+            android:maxWidth="250dp"
             android:visibility="@{deviceBean==null?View.GONE:View.VISIBLE}"
             android:drawableRight="@drawable/ic_triangle_down"
             android:textColor="#000"

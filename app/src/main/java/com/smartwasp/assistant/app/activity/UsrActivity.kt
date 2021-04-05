@@ -9,7 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.databinding.ActivityUsrBinding
+import com.smartwasp.assistant.app.fragment.PayRecordFragment
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
@@ -35,7 +37,6 @@ class UsrActivity : BaseActivity<UsrModel,ActivityUsrBinding>() {
         }
         SmartApp.userBean?.let {
             mBinding.phone = it.phone
-            mBinding.uid = it.user_id
         }
     }
 
@@ -45,12 +46,22 @@ class UsrActivity : BaseActivity<UsrModel,ActivityUsrBinding>() {
     override fun onButtonClick(v: View){
         super.onButtonClick(v)
         when(v.id){
-            R.id.copyBtn->{
-                //获取剪贴板管理器：
-                val cm: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val mClipData: ClipData = ClipData.newPlainText("Label", mBinding.uid )
-                cm.setPrimaryClip(mClipData)
-                LoadingUtil.showToast(SmartApp.app,"已经复制到剪贴板")
+            R.id.usrPayBtn->{
+                addFragmentByTagWithStack(R.id.container,PayRecordFragment.newsInstance())
+            }
+            R.id.usrCodeBtn->{
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.usrCenterId)
+                        .setMessage(SmartApp.userBean!!.user_id)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .setNegativeButton(R.string.usrCopy){_,_->
+                            //获取剪贴板管理器：
+                            val cm: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val mClipData: ClipData = ClipData.newPlainText("Label", SmartApp.userBean!!.user_id)
+                            cm.setPrimaryClip(mClipData)
+                            LoadingUtil.showToast(SmartApp.app,getString(R.string.usrCopyTip))
+                        }
+                        .show()
             }
             R.id.exitBtn->{
                 AlertDialog.Builder(this)

@@ -234,5 +234,6 @@ class SmartApp : Application() {
             val filter = it.user_id.filterNot {c-> c == '-' }
             JPushInterface.setAlias(this,100,filter)
         }
+
     }
 }

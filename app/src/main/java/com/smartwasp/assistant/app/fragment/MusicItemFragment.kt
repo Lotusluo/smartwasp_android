@@ -125,7 +125,6 @@ class MusicItemFragment private constructor(var itemBean: ItemBean): MainChildFr
             }
             notifyDataChanged(SmartApp.activity?.mediaState?.data?.music)
             loadMoreInit()
-
         }
     }private var simpleRecyclerHelper:SimpleRecyclerHelper<SongBean,LayoutSongItemBinding,SongViewHolder>? = null
 
