@@ -17,7 +17,10 @@ import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBottomBinding
 import com.smartwasp.assistant.app.util.IFLYOS
-import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_bottom_device.*
+import kotlinx.android.synthetic.main.fragment_bottom_pay.*
+import kotlinx.android.synthetic.main.fragment_bottom_pay.recyclerView
+import kotlinx.android.synthetic.main.fragment_bottom_pay.sheet_cancel_btn
 
 /**
  * Created by luotao on 2021/1/14 16:13
@@ -46,7 +49,7 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
      * 产生布局
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet,container)
+        return inflater.inflate(R.layout.fragment_bottom_device,container)
     }
 
     /**

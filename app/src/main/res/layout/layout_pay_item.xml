@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="bean2"
+            type="com.smartwasp.assistant.app.bean.PayRecordBean" />
+        <variable
+            name="bean2Pos"
+            type="String" />
+        <import type="android.view.View" alias="View"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/ripple_background">
+<!--        显示int position-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@{bean2Pos}"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/dark_"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:text="1"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@{bean2.getPayTittle}"
+                    android:textSize="16sp"
+                    android:textColor="@color/song_text_color"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="党建专辑(月付)"/>
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@{bean2.createTime}"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/smartwasp_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="2021-03-26 14:56:24"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@{bean2.getPayTypeChinese()}"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/smartwasp_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="微信支付"/>
+
+        </LinearLayout>
+<!--        操作-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnPlayer"
+            android:src="@drawable/ic_more"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            app:tint="@color/smartwasp_dark"/>
+    </LinearLayout>
+</layout>

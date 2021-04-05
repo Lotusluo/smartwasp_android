@@ -25,23 +25,6 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
  * E-Mail Address：gtkrockets@163.com
  */
 class MineModel(application: Application): BaseViewModel(application) {
-    /**
-     * 更登出
-     */
-    fun loginOut(): LiveData<String> {
-        val data = MutableLiveData<String>()
-        val result = IFlyHome.logout(object : IFlyHomeLogoutCallback {
-            override fun onLogoutSuccess() {
-                data.postValue(IFLYOS.OK)
-            }
-            override fun onLogoutFailed(t: Throwable?) {
-                data.postValue(IFLYOS.ERROR)
-            }
-        })
-        if(result != IFlyHome.RESULT_OK){
-            data.postValue(IFLYOS.ERROR)
-        }
-        return data
-    }
+
 
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/smartwasp_white"
+        tools:context=".activity.SearchActivity">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/appCompatImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ripple_background_transparent"
+            android:src="@drawable/ic_navback"
+            android:tint="@color/smartwasp_orange"
+            android:onClick="onButtonClick"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/searchTxt"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textCursorDrawable="@null"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:hint="@string/searchHint"
+            app:layout_constraintTop_toTopOf="@id/appCompatImageButton"
+            app:layout_constraintStart_toEndOf="@+id/appCompatImageButton"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <View
+            style="@style/horizontal_line"
+            android:layout_margin ="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchTxt"/>
+
+
+        <!--        搜索列表-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="7dp"
+            app:layout_constraintTop_toBottomOf="@id/searchTxt"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

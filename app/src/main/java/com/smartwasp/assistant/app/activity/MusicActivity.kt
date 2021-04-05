@@ -44,7 +44,7 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
         }
 
     /**
-     * 狗赞
+     * 构造
      * @param savedInstanceState
      */
     override fun onCreate(savedInstanceState: Bundle?) {

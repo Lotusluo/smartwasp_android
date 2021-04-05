@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
+import com.smartwasp.assistant.app.activity.SearchActivity
 import com.smartwasp.assistant.app.activity.WebViewActivity
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTag
@@ -84,6 +85,13 @@ class FindFragment private constructor():MainChildFragment<FindModel,FragmentFin
                         putExtra(IFLYOS.EXTRA_URL, it?.redirect_url)
                         putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_PAGE)
                     })
+                }
+            }
+            R.id.iconSearch ->{
+                SmartApp.activity?.currentDevice?.let {
+                    startActivity(Intent(requireActivity(),SearchActivity::class.java))
+                }?: kotlin.run {
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.empty_devices))
                 }
             }
         }

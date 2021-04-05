@@ -230,8 +230,10 @@ class SmartApp : Application() {
         JPushInterface.setDebugMode(BuildConfig.DEBUG)  // 设置开启日志,发布时请关闭日志
         // 初始化 JPush
         JPushInterface.init(this)
-        if(BuildConfig.DEBUG){
-            JPushInterface.setTags(this,100, setOf("test"))
+        userBean?.let {
+            val filter = it.user_id.filterNot {c-> c == '-' }
+            JPushInterface.setAlias(this,100,filter)
         }
+
     }
 }

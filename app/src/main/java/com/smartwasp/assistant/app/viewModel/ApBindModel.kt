@@ -12,11 +12,10 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.AuthCheckBean
-import com.smartwasp.assistant.app.bean.BindDevices
-import com.smartwasp.assistant.app.bean.DeviceBean
-import com.smartwasp.assistant.app.bean.FindBean
+import com.smartwasp.assistant.app.bean.test.BaseBean
 import com.smartwasp.assistant.app.util.AppExecutors
 import com.smartwasp.assistant.app.util.IFLYOS
+import com.smartwasp.assistant.app.util.RetrofitManager
 import retrofit2.Call
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicInteger
@@ -78,9 +77,34 @@ class ApBindModel(application: Application): BaseViewModel(application) {
                         cancelAskDevStatus()
                         askDeferred.postValue(IFLYOS.OK)
                     }
+                }else{
+                    Logger.e(response.errorBody()?.string()!!)
                 }
             }
             override fun onFailure(call: Call<String>, t: Throwable) {}
         })
+    }
+
+    /**
+     * 绑定
+     * @param clientId 项目
+     * @param deviceId 设备
+     */
+    fun bind(clientId:String,deviceId:String):LiveData<String>{
+        val bindData = MutableLiveData<String>()
+        retrofit<BaseBean<String>> {
+            api = RetrofitManager.get().retrofitApiService?.bind(clientId,deviceId,SmartApp.userBean!!.user_id)
+            onSuccess {
+                if(it.errCode == 0){
+                    bindData.postValue(IFLYOS.OK)
+                }else{
+                    bindData.postValue(IFLYOS.ERROR)
+                }
+            }
+            onFail { _, _ ->
+                bindData.postValue(IFLYOS.ERROR)
+            }
+        }
+        return bindData
     }
 }

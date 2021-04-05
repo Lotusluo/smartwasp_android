@@ -93,7 +93,6 @@ class SimpleRecyclerHelper<
                 }
             }
         })
-        recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
     }
 
@@ -101,6 +100,9 @@ class SimpleRecyclerHelper<
      * 初始化加载
      */
     fun loadMoreInit(){
+        if(null == recyclerView.adapter){
+            recyclerView.adapter = adapter
+        }
         requestFun?.invoke(1,FIRST_PAGE * ONE_PAGE_SIZE,true)
     }
 

@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smartwasp.assistant.app.R
-import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.bean.SongBean
 import com.smartwasp.assistant.app.util.IFLYOS
-import kotlinx.android.synthetic.main.fragment_bottom_sheet.sheet_cancel_btn
 import kotlinx.android.synthetic.main.fragment_bottom_song.*
 
 /**

@@ -56,8 +56,8 @@ interface RetrofitApiService {
     @FormUrlEncoded
     @POST("api/unbind")
     fun unbind(@Field("clientId") clientIds:String,
-             @Field("deviceId") deviceIds:String,
-             @Field("uid") uid:String):Call<BaseBean<String>>
+               @Field("deviceId") deviceIds:String,
+               @Field("uid") uid:String):Call<BaseBean<String>>
 
     /**
      * 获取设备能力
@@ -65,8 +65,8 @@ interface RetrofitApiService {
     @FormUrlEncoded
     @POST("api/getSkillList")
     fun getDeviceRes(@Field("uid") uid:String,
-                       @Field("clientId") clientId:String,
-                       @Field("deviceId") sn:String):Call<BaseBean<List<SkillBean>>>
+                     @Field("clientId") clientId:String,
+                     @Field("deviceId") sn:String):Call<BaseBean<List<SkillBean>>>
 
     /**
      * 获取设备能力详情
@@ -96,5 +96,24 @@ interface RetrofitApiService {
                        @Field("clientId") clientId: String,
                        @Field("uid") uid: String,
                        @Field("type") type:String = PayType.ALIPAY.tag):Call<BaseBean<PayBean<String>>>
+
+    /**
+     * 意见与建议上报
+     */
+    @FormUrlEncoded
+    @POST("api/userFeed")
+    fun report(@Field("uid") shopId: String,
+               @Field("text") text: String,
+               @Field("mail") email: String,
+               @Field("proId") skillId: String = "0"):Call<BaseBean<String>>
+
+    /**
+     * 获取设备能力
+     */
+    @FormUrlEncoded
+    @POST("api/getBoughtInfo")
+    fun getPayRecords(@Field("uid") uid:String,
+                      @Field("pageNum") pageNum:Int,
+                      @Field("pageSize") pageSize:Int):Call<BaseBean<PayRecordsBean>>
 
 }

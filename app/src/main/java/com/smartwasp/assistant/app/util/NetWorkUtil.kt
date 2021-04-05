@@ -144,15 +144,14 @@ object NetWorkUtil {
             writeTimeout(10, TimeUnit.SECONDS)
             addInterceptor(interceptor)
             addInterceptor(loggingInterceptor)
+            retryOnConnectionFailure(true)
             build()
         }
     }
 
     fun getCurrentGateway(context: Context): String {
         val wm = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
         val dhcpInfo = wm.dhcpInfo
-
         return ipToString(dhcpInfo.gateway)
     }
 

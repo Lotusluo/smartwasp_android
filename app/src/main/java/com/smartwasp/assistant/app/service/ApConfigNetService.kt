@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Binder
 import android.os.IBinder
+import android.os.SystemClock
 import android.util.Log
 import com.smartwasp.assistant.app.util.AppExecutors
 import java.io.*
@@ -77,6 +78,8 @@ class ApConfigNetService : Service() {
 
                     val bytes = ByteArray(1024)
                     while (socket.isConnected && !socket.isClosed) {
+                        if(stream.available() > 0)
+                            SystemClock.sleep(500)
                         var size = stream.read(bytes)
                         if (size != 0 && size != -1) {
                             if (size < bytes.size) {

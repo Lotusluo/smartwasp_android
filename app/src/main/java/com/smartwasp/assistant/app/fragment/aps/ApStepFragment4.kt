@@ -1,6 +1,10 @@
 package com.smartwasp.assistant.app.fragment.aps
 
-import android.content.*
+import android.R.id.message
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -8,18 +12,23 @@ import android.os.SystemClock
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.ApStepActivity
-import com.smartwasp.assistant.app.base.*
+import com.smartwasp.assistant.app.base.BaseFragment
+import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.bean.ApBean
 import com.smartwasp.assistant.app.databinding.FragmentAp4Binding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
 import com.smartwasp.assistant.app.service.ApConfigNetService
-import com.smartwasp.assistant.app.util.*
+import com.smartwasp.assistant.app.util.AppExecutors
+import com.smartwasp.assistant.app.util.IFLYOS
+import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.NetWorkUtil
 import com.smartwasp.assistant.app.viewModel.ApBindModel
-import kotlinx.android.synthetic.main.fragment_ap1.*
 import kotlinx.android.synthetic.main.fragment_ap1.tvSubTittle
-import kotlinx.android.synthetic.main.fragment_ap3.*
 import kotlinx.android.synthetic.main.fragment_ap3.progress
 import kotlinx.android.synthetic.main.fragment_ap4.*
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.net.Socket
 import java.util.concurrent.atomic.AtomicInteger
+
 
 /**
  * Created by luotao on 2021/2/21 11:57
@@ -87,11 +97,14 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         }
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {
-            val string = String(byteArray)
+            var string = String(byteArray)
             Logger.e("onMessage:$sendTag,$string")
             if(!string.isNullOrEmpty()){
                 if(string.contains("client_id")){
                     if(string.contains(ApStepActivity.clientID)){
+                        //获取sn号与projectID
+                        apBean = Gson().fromJson(string)
+                        Logger.d(apBean.toString())
                         sendConfig()
                     }else{
                         //匹配错误
@@ -110,6 +123,8 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
             }
         }
     }
+
+    private var apBean:ApBean? = null
 
     //socket服务
     private var apConfigNetService: ApConfigNetService? = null
@@ -213,6 +228,12 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
         mViewModel?.askDeferred!!.observe(this, Observer {
             if(it == IFLYOS.OK){
                 compatProgress(100)
+                //向后台授权
+                apBean?.let {apBean->
+                    if(!apBean.client_id.isNullOrEmpty() && !apBean.did.isNullOrEmpty()){
+                        mViewModel!!.bind(apBean.client_id,apBean.did).observe(this, Observer {})
+                    }
+                }
                 var count = 6
                 AppExecutors.get().diskIO().execute {
                     while (count-->=0){
@@ -309,4 +330,8 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
 
     //布局文件
     override val layoutResID:Int = R.layout.fragment_ap4
+}
+
+inline fun <reified T : Any> Gson.fromJson(json: String): T {
+    return Gson().fromJson(json, T::class.java)
 }
