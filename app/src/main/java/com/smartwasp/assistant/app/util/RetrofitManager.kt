@@ -1,13 +1,18 @@
 package com.smartwasp.assistant.app.util
 
 import android.content.pm.PackageManager
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.base.SmartApp
 import okhttp3.Interceptor
 import okhttp3.Response
+import okhttp3.internal.http.HttpHeaders
+import okhttp3.logging.HttpLoggingInterceptor
+import okio.Buffer
+import okio.GzipSource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by luotao on 2021/1/8 15:14
@@ -49,16 +54,22 @@ class RetrofitManager private constructor():Interceptor{
         retrofitApiService = retrofit!!.create(RetrofitApiService::class.java)
     }
 
+
     /**
      * http请求拦截
      * @param chain
      * @return 响应
      */
+    @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
                 .addHeader("access_token",accessToken)
                 .addHeader("Cache-Control","no-cache, max-age=0")
                 .build()
-        return chain.proceed(request)
+        try{
+            return chain.proceed(request)
+        }catch (e:IOException){
+            throw e
+        }
     }
 }
