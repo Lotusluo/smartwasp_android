@@ -60,6 +60,7 @@ class SmartApp : Application() {
                 finish(0)
             }
         }
+
         //首页是否需要刷新绑定的设备
         var NEED_MAIN_REFRESH_DEVICES:Boolean = true
         //是否需要刷新绑定的设备的详细信息
