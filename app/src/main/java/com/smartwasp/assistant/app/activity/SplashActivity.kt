@@ -50,10 +50,12 @@ class SplashActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             doWork()
 //            GlobalScope.launch(Dispatchers.Main) {
+            //非阻塞
 //                SystemClock.sleep(1000)
 //                toMain()
 //            }
             suspend {
+                //阻塞
                 withContext(Dispatchers.Main) {
                     SystemClock.sleep(1000)
                     toMain()

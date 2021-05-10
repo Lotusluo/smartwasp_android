@@ -217,7 +217,7 @@ class WifiGetModel(application: Application):BaseViewModel(application) {
                     if(it.SSID.isNullOrEmpty()){
                         return@forEach
                     }
-                    if(!it.SSID.startsWith("LA_00")){
+                    if(!it.SSID.startsWith("LA")){
                         return@forEach
                     }
                     val wifiBean = WifiBean(it.SSID,it.BSSID, it.capabilities,WifiManager.calculateSignalLevel(it.level,4))

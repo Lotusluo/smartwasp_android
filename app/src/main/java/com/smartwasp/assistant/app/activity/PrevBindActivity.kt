@@ -77,7 +77,6 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                             .show()
                     return
                 }
-
                 //申请
                 easyPermissions(getString(R.string.ap_per),
                         REQUEST_LOCATION_CODE,

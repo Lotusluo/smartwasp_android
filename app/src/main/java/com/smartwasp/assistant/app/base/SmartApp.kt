@@ -88,8 +88,7 @@ class SmartApp : Application() {
                         mediaStateObservers.forEach {
                             it.postValue(stateBeans)
                         }
-                    }catch (e:Throwable){
-                    }
+                    }catch (e:Throwable){ }
                 }
             }
 

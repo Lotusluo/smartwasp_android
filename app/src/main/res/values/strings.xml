@@ -47,7 +47,7 @@
     <string name="ap_device">党建AP配网</string>
     <string name="ap_device_ok">AP配网授权成功,请稍等%d秒</string>
     <string name="ap_device_exit">正在努力检测授权,是否退出?</string>
-    <string name="ap_device_err">设备匹配失败</string>
+
     <string name="ap_device_no_net">正在努力切回可用的网络,请稍后!</string>
     <string name="qAndA">遇到问题?</string>
     <string name="fresh_device">刷新设备</string>
@@ -156,4 +156,10 @@
     <string name="alipay1">支付宝</string>
     <string name="wechat1">微信</string>
     <string name="pay_tip">是否确定购买%s,使用%s支付%s元？</string>
+
+
+    <string name="ap_device_err">请选择正确的产品</string>
+    <string name="ap_device_err1">请联系厂商添加设备白名单</string>
+    <string name="ap_device_err2">授权超时,请保证网络正常或联系客服</string>
+
 </resources>

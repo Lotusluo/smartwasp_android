@@ -59,11 +59,12 @@ class ApBindModel(application: Application): BaseViewModel(application) {
     }
 
     /**
-     * 询问设备状态动作
+     * 询问设备状态动作FF
      */
     private var askDevAuthJob = Runnable {
         if(count.incrementAndGet() >= 60){
             cancelAskDevStatus()
+            askDeferred.postValue(IFLYOS.EXTRA)
             Logger.d("cancelAskDevStatus")
             return@Runnable
         }
@@ -73,12 +74,25 @@ class ApBindModel(application: Application): BaseViewModel(application) {
             override fun onResponse(response: Response<String>) {
                 if(response.isSuccessful){
                     val authCheckCode = Gson().fromJson<AuthCheckBean>(response.body(), object: TypeToken<AuthCheckBean>(){}.type)
+                    Logger.d("authCheckCode:${authCheckCode}")
                     if(authCheckCode.code == "0000"){
                         cancelAskDevStatus()
                         askDeferred.postValue(IFLYOS.OK)
                     }
                 }else{
-                    Logger.e(response.errorBody()?.string()!!)
+                    response.errorBody()?.let {
+                        try {
+                            val json = it.string()
+                            Logger.e("error:$json")
+                            val error = Gson().fromJson<AuthCheckBean>(json, object: TypeToken<AuthCheckBean>(){}.type)
+                            if(error.code == "3001"){
+                                cancelAskDevStatus()
+                                askDeferred.postValue(IFLYOS.ERROR)
+                            }
+                        }catch (e:Throwable){
+                            Logger.e(e.toString())
+                        }
+                    }
                 }
             }
             override fun onFailure(call: Call<String>, t: Throwable) {}

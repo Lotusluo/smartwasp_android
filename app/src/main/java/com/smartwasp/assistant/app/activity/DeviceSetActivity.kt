@@ -161,11 +161,13 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
         var deviceId = intent.getStringExtra(IFLYOS.DEVICE_ID)
         clientId ?: return
         deviceId ?: return
-        LoadingUtil.create(this,null)
+        if(bindCount == 0){
+            LoadingUtil.create(this,null)
+        }
         deviceId = deviceId.substring(deviceId.indexOf(".") + 1)
         mViewModel.askDevSkill(clientId,deviceId).observe(this, Observer {
-            LoadingUtil.dismiss()
             if(it.isSuccess){
+                LoadingUtil.dismiss()
                 it.getOrNull()?.let {rez->
                     rez.forEach {skill->
                         resContainer.removeAllViews()
@@ -183,13 +185,13 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                 it.exceptionOrNull()?.let {err->
                     if(err.message == "408"){
                         //先绑定
-                        LoadingUtil.create(this,null)
+//                        LoadingUtil.create(this,null)
                         mViewModel.bind(clientId,deviceId).observe(this, Observer {rez->
-                            LoadingUtil.dismiss()
                             if(rez == IFLYOS.OK && bindCount == 0){
                                 //继续走刷新能力
                                 innerRefresh(bindCount+1)
                             }else{
+                                LoadingUtil.dismiss()
                                 AlertDialog.Builder(this)
                                         .setTitle(R.string.tip)
                                         .setMessage(R.string.error_inner_skill)
@@ -200,6 +202,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                         return@Observer
                     }
                 }
+                LoadingUtil.dismiss()
                 AlertDialog.Builder(this)
                         .setTitle(R.string.tip)
                         .setMessage(R.string.error_inner_skill)

@@ -98,7 +98,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
 
         override fun onMessage(socket: Socket, byteArray: ByteArray) {
             var string = String(byteArray)
-            Logger.e("onMessage:$sendTag,$string")
+            Logger.d("onMessage:$sendTag,$string")
             if(!string.isNullOrEmpty()){
                 if(string.contains("client_id")){
                     if(string.contains(ApStepActivity.clientID)){
@@ -115,6 +115,7 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                                     .setPositiveButton(android.R.string.ok){ _, _ ->
                                         this@ApStepFragment4.onNavigatorClick()
                                     }
+                                    .setCancelable(false)
                                     .setNegativeButton(android.R.string.cancel,null)
                                     .show()
                         }
@@ -247,6 +248,34 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                         }
                         SystemClock.sleep(1000)
                     }
+                }
+            }else if(it == IFLYOS.ERROR){
+                //3001
+                if(isAdded){
+                    AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.ap_device_err1)
+                            .setPositiveButton(android.R.string.ok){ _, _ ->
+                                sendTag.set(0)
+                                this@ApStepFragment4.onNavigatorClick()
+                            }
+                            .setCancelable(false)
+                            .setNegativeButton(android.R.string.cancel,null)
+                            .show()
+                }
+            }else{
+                //超时
+                if(isAdded){
+                    AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.ap_device_err2)
+                            .setPositiveButton(android.R.string.ok){ _, _ ->
+                                sendTag.set(0)
+                                this@ApStepFragment4.onNavigatorClick()
+                            }
+                            .setCancelable(false)
+                            .setNegativeButton(android.R.string.cancel,null)
+                            .show()
                 }
             }
         })

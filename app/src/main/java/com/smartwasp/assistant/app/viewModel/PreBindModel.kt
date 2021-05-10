@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.ResponseCallback
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.bean.AuthBean
 import retrofit2.Call
@@ -28,6 +29,7 @@ class PreBindModel(application: Application): BaseViewModel(application) {
             override fun onResponse(response: Response<String>) {
                 if(response.isSuccessful){
                     val authBean = Gson().fromJson<AuthBean>(response.body(), object: TypeToken<AuthBean>(){}.type)
+                    Logger.d("authBean:$authBean")
                     authData.postValue(Result.success(authBean))
                 }else{
                     authData.postValue(Result.failure(Throwable("Err")))

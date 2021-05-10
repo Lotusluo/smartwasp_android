@@ -77,6 +77,7 @@ public class PushMessageReceiver extends JPushMessageReceiver{
     @Override
     public void onTagOperatorResult(Context context,JPushMessage jPushMessage) {
         super.onTagOperatorResult(context, jPushMessage);
+        Log.e(TAG,jPushMessage.toString());
     }
     @Override
     public void onCheckTagOperatorResult(Context context,JPushMessage jPushMessage){
