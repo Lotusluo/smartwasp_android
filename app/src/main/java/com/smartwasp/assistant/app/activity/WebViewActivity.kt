@@ -1,14 +1,18 @@
 package com.smartwasp.assistant.app.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.TypedArray
 import android.graphics.Color
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.iflytek.home.sdk.IFlyHome
@@ -22,6 +26,8 @@ import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.databinding.ActivityWebViewBinding
 import com.smartwasp.assistant.app.util.IFLYOS
+import com.smartwasp.assistant.app.util.NotificationsUtils
+import com.smartwasp.assistant.app.util.Rom
 import com.smartwasp.assistant.app.viewModel.WebViewViewModel
 import kotlinx.android.synthetic.main.activity_web_view.*
 import java.io.ByteArrayInputStream
@@ -93,7 +99,6 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         webview.settings.domStorageEnabled = true
 //        webview.settings.javaScriptEnabled = true
 //        webview.settings.blockNetworkImage = false

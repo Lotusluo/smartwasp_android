@@ -250,6 +250,7 @@ object WifiUtils {
      * 获取当前连接的wifi mac地址
      * @param context
      */
+    @SuppressLint("MissingPermission")
     fun getConnectedBssid(context: Context?): String? {
         (context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {

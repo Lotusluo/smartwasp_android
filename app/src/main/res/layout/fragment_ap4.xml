@@ -91,33 +91,12 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="32dp"
-            android:text="1:设备接收密码后,请保证手机正常切回能够使用的网络"
+            android:text="设备接收密码后,请保证手机切换回来的网络能够正常联网"
             android:textSize="14sp"
+            android:textColor="@android:color/holo_red_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSubTittle" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="32dp"
-            android:text="2:设备如长时间没有提示联网成功,请重启设备再试"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/txt1"
-            app:layout_constraintTop_toBottomOf="@+id/txt1" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="32dp"
-            android:text="3:设备提示联网成功,手机进度条长时间卡在90%,则请重启软件"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/txt1"
-            app:layout_constraintTop_toBottomOf="@+id/txt2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

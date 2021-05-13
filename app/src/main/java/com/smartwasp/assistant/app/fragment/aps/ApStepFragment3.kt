@@ -1,8 +1,11 @@
 package com.smartwasp.assistant.app.fragment.aps
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -91,6 +94,11 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        AppExecutors.get().mainThread().removeCallbacks(delayToCheck)
+    }
+
     /**
      * 开始wifi连接
      * @param link
@@ -103,6 +111,9 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
                 it.linkType = if(it.bssid == linkingMac.bssid) WifiBean.STATE_LINKING else WifiBean.STATE_IDLE
             }
             recyclerView.adapter?.notifyDataSetChanged()
+            AppExecutors.get().mainThread().removeCallbacks(delayToCheck)
+            AppExecutors.get().mainThread().executeDelay(delayToCheck,11 * 1000)
+            Logger.d("准备联网超时检测")
         }
     }
 
@@ -120,6 +131,8 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             }
             recyclerView.adapter?.notifyDataSetChanged()
         }
+        AppExecutors.get().mainThread().removeCallbacks(delayToCheck)
+        Logger.d("取消联网超时检测")
     }
 
     /**
@@ -136,6 +149,24 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             linked(it)
         }
         linking(link)
+    }
+
+    private val delayToCheck = Runnable {
+        Logger.d("联网超时!")
+        if(isAdded){
+            val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            wifiManager?.let {
+                linked(it.connectionInfo.bssid)
+                if(!stepBtn.isEnabled){
+                    AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.long_wifi_no)
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok ,null)
+                            .show()
+                }
+            }
+        }
     }
 
     /**

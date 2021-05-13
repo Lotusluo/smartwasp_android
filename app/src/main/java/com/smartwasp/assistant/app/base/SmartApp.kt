@@ -1,13 +1,17 @@
 package com.smartwasp.assistant.app.base
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import android.webkit.WebView
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import cn.jpush.android.api.JPushInterface
-import cn.jpush.android.api.TagAliasCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
@@ -20,8 +24,6 @@ import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.activity.MainActivity
 import com.smartwasp.assistant.app.bean.*
-import com.smartwasp.assistant.app.database.DevicesEntity
-import com.smartwasp.assistant.app.database.SmartDataBase
 import com.smartwasp.assistant.app.util.*
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -48,7 +50,7 @@ class SmartApp : Application() {
             return null != userBean
         }
 
-        fun finish(cmd:Int = 0){
+        fun finish(cmd: Int = 0){
             Process.killProcess(Process.myPid())
             exitProcess(cmd)
         }
@@ -83,12 +85,12 @@ class SmartApp : Application() {
                 Logger.e("onMediaStateMessage:$message")
                 if(!message.isNullOrEmpty()){
                     try {
-                        val stateBeans = Gson().fromJson<StatusBean<MusicStateBean>>(message, object: TypeToken<StatusBean<MusicStateBean>>(){}.type)
+                        val stateBeans = Gson().fromJson<StatusBean<MusicStateBean>>(message, object : TypeToken<StatusBean<MusicStateBean>>() {}.type)
                         stateBeans.data.device_id = deviceId
                         mediaStateObservers.forEach {
                             it.postValue(stateBeans)
                         }
-                    }catch (e:Throwable){ }
+                    }catch (e: Throwable){ }
                 }
             }
 
@@ -102,11 +104,11 @@ class SmartApp : Application() {
                 Logger.e("onDeviceStateMessage:$message")
                 if(!message.isNullOrEmpty()){
                     try {
-                        val stateBeans = Gson().fromJson<StatusBean<DeviceBean>>(message, object: TypeToken<StatusBean<DeviceBean>>(){}.type)
+                        val stateBeans = Gson().fromJson<StatusBean<DeviceBean>>(message, object : TypeToken<StatusBean<DeviceBean>>() {}.type)
                         devStateObservers.forEach {
                             it.postValue(stateBeans)
                         }
-                    }catch (e:Throwable){
+                    }catch (e: Throwable){
 
                     }
                 }
@@ -171,19 +173,24 @@ class SmartApp : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
-        app.registerActivityLifecycleCallbacks(object :ActivityLifecycleCallbacks{
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            webViewSetPath(this)
+        }
+        app.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 mActivityList.add(activity)
-                if(activity is MainActivity){
+                if (activity is MainActivity) {
                     SmartApp.activity = activity
                 }
             }
+
             override fun onActivityDestroyed(activity: Activity) {
                 mActivityList.remove(activity)
-                if(activity is MainActivity){
+                if (activity is MainActivity) {
                     SmartApp.activity = null
                 }
             }
+
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
             override fun onActivityStopped(activity: Activity) {}
             override fun onActivityPaused(activity: Activity) {}
@@ -207,13 +214,13 @@ class SmartApp : Application() {
         ConfigUtils.init(app)
         //讯飞初始化
         IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.STANDARD)
-        //模拟
+//        //模拟
 //        IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
 //        val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")
 //        SmartApp.userBean = userBean
         //恢复用户ID
         GlobalScope.launch(Dispatchers.IO) {
-            val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID,null)
+            val keyUserId = ConfigUtils.getString(ConfigUtils.KEY_USER_ID, null)
             keyUserId?.let {
                 userBean = SerializableUtils.readObject(it) as UserBean?
                 Logger.d("userBean:$userBean")
@@ -231,9 +238,27 @@ class SmartApp : Application() {
         // 初始化 JPush
         JPushInterface.init(this)
         userBean?.let {
-            val filter = it.user_id.filterNot {c-> c == '-' }
-            JPushInterface.setAlias(this,100,filter)
+            val filter = it.user_id.filterNot { c-> c == '-' }
+            JPushInterface.setAlias(this, 100, filter)
         }
-
     }
+    private fun webViewSetPath(context: Context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val processName = getProcessName(context)
+            if (null != processName && applicationContext.packageName != processName) {
+                WebView.setDataDirectorySuffix(processName)
+            }
+        }
+    }
+    private fun getProcessName(context: Context?): String? {
+        if (context == null) return null
+        val manager: ActivityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (processInfo in manager.runningAppProcesses) {
+            if (processInfo.pid === Process.myPid()) {
+                return processInfo.processName
+            }
+        }
+        return null
+    }
+
 }

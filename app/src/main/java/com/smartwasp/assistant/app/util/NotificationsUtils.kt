@@ -3,6 +3,7 @@ package com.smartwasp.assistant.app.util
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 
@@ -39,6 +40,28 @@ object NotificationsUtils {
                 data = uri
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             })
+        }
+    }
+
+
+    /**
+     * 判断定位服务是否开启
+     * @param
+     * @return true 表示开启
+     */
+    fun isLocationEnabled(context: Context): Boolean {
+        var locationMode = 0
+        val locationProviders: String
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            locationMode = try {
+                Settings.Secure.getInt(context.contentResolver, Settings.Secure.LOCATION_MODE)
+            } catch (e: Settings.SettingNotFoundException) {
+                e.printStackTrace()
+                return false
+            }
+            locationMode != Settings.Secure.LOCATION_MODE_OFF
+        } else {
+            true
         }
     }
 }

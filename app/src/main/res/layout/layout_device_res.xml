@@ -7,6 +7,9 @@
     <data>
         <variable name="resTittle" type="String" />
         <variable name="resTip" type="String" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout
@@ -14,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:clickable="true"
+        android:onClick="@{onclickListener}"
         android:background="@drawable/ripple_background">
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@{resTittle}"

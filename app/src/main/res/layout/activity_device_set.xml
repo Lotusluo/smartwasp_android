@@ -142,6 +142,7 @@
                 <!--        讯飞音乐能力-->
                 <include
                     android:id="@+id/musicRes"
+                    app:onclickListener="@{onclickListener}"
                     app:resTittle="@{resTittle}"
                     app:resTip="@{deviceBean.music.value}"
                     layout="@layout/layout_device_res" />

@@ -11,7 +11,6 @@ import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.location.LocationManagerCompat
-import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.BaseViewModel
@@ -19,11 +18,10 @@ import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.databinding.ActivityPrevBindBinding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
-import com.smartwasp.assistant.app.util.LoadingUtil
-import com.smartwasp.assistant.app.util.RomUtils
+import com.smartwasp.assistant.app.util.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 
-class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
+class PrevBindActivity : BaseActivity<BaseViewModel, ActivityPrevBindBinding>() {
 
     override val layoutResID: Int = R.layout.activity_prev_bind
 
@@ -39,44 +37,58 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
     override fun onButtonClick(v: View){
         super.onButtonClick(v)
         when(v.id){
-            R.id.scanBtn ->{
+            R.id.scanBtn -> {
                 //申请摄像头权限
-                if(!RomUtils.isAndroidMOrAbove() && !RomUtils.isCameraCanUse()){
+                if (!RomUtils.isAndroidMOrAbove() && !RomUtils.isCameraCanUse()) {
                     //部分国产机在6.0以下做了权限处理
                     AlertDialog.Builder(this)
                             .setTitle(R.string.tip)
                             .setMessage(R.string.camera_per1)
-                            .setPositiveButton(android.R.string.ok,null)
+                            .setPositiveButton(android.R.string.ok, null)
                             .show()
-                }else{
-                    easyPermissions(getString(R.string.camera_per),ScanActivity.REQUEST_CAMERA_CODE,
+                } else {
+                    easyPermissions(getString(R.string.camera_per), ScanActivity.REQUEST_CAMERA_CODE,
                             Manifest.permission.CAMERA)
                 }
             }
-            R.id.danjian,R.id.xiaodan ->{
-                ApStepActivity.clientID = if(v.id == R.id.danjian) "65e8d4f8-da9e-4633-8cac-84b0b47496b6" else "cddcdf2d-f300-4616-922c-d46a9905c09f"
+            R.id.danjian, R.id.xiaodan -> {
+                ApStepActivity.clientID = if (v.id == R.id.danjian) "65e8d4f8-da9e-4633-8cac-84b0b47496b6" else "cddcdf2d-f300-4616-922c-d46a9905c09f"
                 //android6.0/6.0.1在任何情况下android.permission.CHANGE_NETWORK_STATE都是拒绝的
-                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M && !Settings.System.canWrite(applicationContext)){
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && !Settings.System.canWrite(applicationContext)) {
                     //打开修改系统设置权限
                     val goToSettings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
                     goToSettings.data = Uri.parse("package:$packageName")
                     startActivity(goToSettings)
-                    LoadingUtil.showToast(SmartApp.app,getString(R.string.need_open_setting))
+                    LoadingUtil.showToast(SmartApp.app, getString(R.string.need_open_setting))
                     return
                 }
 
                 //判断是否打开位置信息
-                if(!LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)){
+                //适用于原生权限判断系统,不适用Vivo
+                if (!LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)) {
                     AlertDialog.Builder(this)
                             .setTitle(R.string.tip)
                             .setMessage(R.string.need_open_gps)
-                            .setNegativeButton(android.R.string.cancel,null)
-                            .setPositiveButton(android.R.string.ok){_,_->
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
                                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                             }
                             .show()
                     return
                 }
+                if(Rom.isVivo() && !NotificationsUtils.isLocationEnabled(this) && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+                    //提示用户去设置页打开定位服务
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.need_open_gps_vivo)
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            }
+                            .show()
+                    return
+                }
+
                 //申请
                 easyPermissions(getString(R.string.ap_per),
                         REQUEST_LOCATION_CODE,
@@ -98,7 +110,7 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
      */
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
         when(requestCode){
-            ScanActivity.REQUEST_CAMERA_CODE ->{
+            ScanActivity.REQUEST_CAMERA_CODE -> {
                 addFragmentByTagWithStack(R.id.container,
                         PreBindFragment.newsInstance(
                                 getString(R.string.prev_bind_tittle),
@@ -107,9 +119,9 @@ class PrevBindActivity : BaseActivity<BaseViewModel,ActivityPrevBindBinding>() {
                                 R.drawable.ic_screen_box,
                                 1))
             }
-            REQUEST_LOCATION_CODE ->{
-                if(perms.size >= 2){
-                    startActivity(Intent(this,ApStepActivity::class.java))
+            REQUEST_LOCATION_CODE -> {
+                if (perms.size >= 2) {
+                    startActivity(Intent(this, ApStepActivity::class.java))
                 }
             }
         }

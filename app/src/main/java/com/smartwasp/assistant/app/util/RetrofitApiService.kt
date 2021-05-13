@@ -13,6 +13,7 @@ import retrofit2.http.*
  * E-Mail Address：gtkrockets@163.com
  */
 interface RetrofitApiService {
+    //https://box.smartwasp.com.cn:8082/
     /**
      * 同步时间
      */

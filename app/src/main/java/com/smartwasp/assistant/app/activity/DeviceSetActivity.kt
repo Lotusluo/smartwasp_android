@@ -142,7 +142,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                             sb_ios.setCheckedImmediatelyNoEvent(continous_mode)
                             mBinding.setVariable(BR.deviceBean,this)
                             mBinding.setVariable(BR.resTittle,getString(R.string.tip_music))
-                            innerRefresh()
+//                            innerRefresh()
                         }
                     }else{
                         LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
@@ -296,7 +296,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                     })
                 }
             }
-            R.id.musicBtn ->{
+            R.id.musicRes ->{
                 //进入音乐链接
                 deviceBean?.let {
                     startActivity(Intent(this@DeviceSetActivity,WebViewActivity::class.java).apply {

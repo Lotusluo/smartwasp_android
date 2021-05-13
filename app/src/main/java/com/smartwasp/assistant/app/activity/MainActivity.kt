@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import cn.jpush.android.api.JPushInterface
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.*
@@ -66,6 +67,15 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                             .setPositiveButton(android.R.string.ok,null)
                             .show()
                 }
+            }
+        }
+        SmartApp.updateBean?.let {
+            if(it.isNewVersion()){
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.updateTip)
+                        .setMessage(it.describe)
+                        .setPositiveButton(R.string.yesOk,null)
+                        .show()
             }
         }
     }

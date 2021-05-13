@@ -8,10 +8,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkInfo
 import android.net.NetworkRequest
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
