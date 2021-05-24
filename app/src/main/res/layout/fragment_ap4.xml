@@ -91,9 +91,9 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="32dp"
-            android:text="设备接收密码后,请保证手机切换回来的网络能够正常联网"
+            android:text="请保证手机切换回来的网络能够正常联网"
             android:textSize="14sp"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@android:color/darker_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSubTittle" />

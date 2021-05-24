@@ -121,7 +121,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
      * 完成wifi连接
      * @param mac
      */
-    private fun linked(mac:String){
+    private fun linked(mac:String?){
         if(!mac.isNullOrEmpty()){
             wifiBeans.forEach {
                 it.linkType = if(it.bssid == mac) WifiBean.STATE_LINKED else WifiBean.STATE_IDLE
@@ -252,6 +252,7 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
         fun invalidate(data: WifiBean){
             this.data = data
             itemViewBinding?.wifiBean = data
+
         }
     }
 }

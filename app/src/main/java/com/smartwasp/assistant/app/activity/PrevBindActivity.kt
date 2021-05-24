@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.location.LocationManagerCompat
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.BaseViewModel
@@ -60,6 +62,19 @@ class PrevBindActivity : BaseActivity<BaseViewModel, ActivityPrevBindBinding>() 
                     goToSettings.data = Uri.parse("package:$packageName")
                     startActivity(goToSettings)
                     LoadingUtil.showToast(SmartApp.app, getString(R.string.need_open_setting))
+                    return
+                }
+                //判断Wifi是否打开
+                val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                if(!wifiManager.isWifiEnabled){
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.tip)
+                            .setMessage(R.string.need_open_wifi)
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+                            }
+                            .show()
                     return
                 }
 

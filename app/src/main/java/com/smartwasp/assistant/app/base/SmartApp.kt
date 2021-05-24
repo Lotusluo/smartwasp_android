@@ -214,6 +214,7 @@ class SmartApp : Application() {
         ConfigUtils.init(app)
         //讯飞初始化
         IFlyHome.init(this, "28e49106-5d37-45fd-8ac8-c8d1f21356f5", IFlyHome.LoginWay.STANDARD)
+
 //        //模拟
 //        IFlyHome.setCustomToken("jK-vgRVzprcAv7s-nQ6xwbcFK-dSFEmEVDjIiW8fHbLNtd2L0nmHT0Z5Ib2Dr-O9")
 //        val userBean = UserBean(false,"135****9417","7c97c06e-f4c1-44ce-b087-ecf2ac2f7b49")

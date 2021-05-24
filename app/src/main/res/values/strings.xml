@@ -13,6 +13,7 @@
     <string name="add_widget">Add widget</string>
     <string name="need_open_setting">您禁止了该权限,需要您点击确认跳转权限授权页面进行授权</string>
     <string name="need_open_gps">你未打开GPS功能,请打开</string>
+    <string name="need_open_wifi">你未打开WIFI功能,请打开</string>
     <string name="need_open_gps_vivo">亲爱的vivo用户,我们需要您前往设置页面暂时打开定位服务以获取附近网络。</string>
     <string name="long_wifi_no">连接热点过久,请检查通知栏是否存在"此网络无法访问互联网"并点击授权允许连接，或退出重试。</string>
     <string name="error_empty_data">数据为空</string>
