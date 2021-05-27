@@ -100,8 +100,7 @@ object NetWorkUtil {
                 }
             }
         }
-        catch (e:IOException){}
-        catch (e:InterruptedException){}
+        catch (e:Exception){}
         finally {
             ipProcess?.destroy();
             runtime.gc();

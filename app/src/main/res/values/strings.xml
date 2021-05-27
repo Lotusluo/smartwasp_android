@@ -26,7 +26,7 @@
     <string name="error_ap_connect1">配网遇到问题,请返回重试</string>
     <string name="error_ap_auth">请勿提前连接设备热点,请保证正常联网重试</string>
     <string name="error_request">请求数据错误</string>
-    <string name="error_inner_skill">获取服务失败,请退出重试</string>
+    <string name="error_inner_skill">未发现技能</string>
 
 
 
@@ -116,6 +116,7 @@
     <string name="ic_routines">快捷指令</string>
     <string name="ic_alarm">我的闹钟</string>
     <string name="ic_about">关于我们</string>
+    <string name="ic_skill_detail">技能详情</string>
     <string name="ic_about_content">小黄蜂在线</string>
     <string name="ic_content">内容账号</string>
     <string name="music_disEnabled">请开通音乐</string>

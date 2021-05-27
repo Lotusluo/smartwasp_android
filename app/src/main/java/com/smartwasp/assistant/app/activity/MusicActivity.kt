@@ -33,9 +33,7 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
     private val mediaStateObserver: MutableLiveData<StatusBean<MusicStateBean>> = MutableLiveData()
 
     //当前的设备
-    private val currentDevice by lazy {
-        intent.getSerializableExtra(IFLYOS.DEVICE_ID) as DeviceBean
-    }
+    private lateinit var currentDevice:DeviceBean
     //当前的媒体状态
     private var currentMedia:StatusBean<MusicStateBean>? = null
         set(value) {
@@ -49,32 +47,37 @@ class MusicActivity : BaseActivity<MusicBindModel,ActivityMusicBinding>() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        intent.getSerializableExtra(IFLYOS.DEVICE_ID) ?: finish()
-        mViewModel.deviceID = currentDevice.device_id
-        media_icon.visibility = View.GONE
-        mBinding.deviceBean = currentDevice
-        icon_device_status.isSelected = currentDevice.isOnline()
-        currentMedia = SmartApp.activity?.mediaState
-        initObserver()
-        mViewModel.deviceID = currentDevice.device_id
-        mViewModel.mediaControl.observe(this, Observer {
-            if(it.isSuccess){
+        intent.getSerializableExtra(IFLYOS.DEVICE_ID)?.let {
+            currentDevice = it as DeviceBean
+            mViewModel.deviceID = currentDevice.device_id
+            media_icon.visibility = View.GONE
+            mBinding.deviceBean = currentDevice
+            icon_device_status.isSelected = currentDevice.isOnline()
+            currentMedia = SmartApp.activity?.mediaState
+            initObserver()
+            mViewModel.deviceID = currentDevice.device_id
+            mViewModel.mediaControl.observe(this, Observer {aa->
+                if(aa.isSuccess){
 
-            }else{
-                LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
-            }
-        })
-        seekBar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if(fromUser){
-                    if(checkOffline())
-                        return
-                    mViewModel.mediaControlFun(VOLUME,progress.toString())
+                }else{
+                    LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                 }
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+            })
+            seekBar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if(fromUser){
+                        if(checkOffline())
+                            return
+                        mViewModel.mediaControlFun(VOLUME,progress.toString())
+                    }
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+        }?: kotlin.run {
+            LoadingUtil.showToast(SmartApp.app,"暂无音乐资源")
+            finish()
+        }
     }
 
     /**

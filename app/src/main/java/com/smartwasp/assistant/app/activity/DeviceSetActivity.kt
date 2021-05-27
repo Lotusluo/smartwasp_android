@@ -19,6 +19,7 @@ import com.smartwasp.assistant.app.BR
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.bean.*
 import com.smartwasp.assistant.app.databinding.ActivityDeviceSetBinding
 import com.smartwasp.assistant.app.databinding.LayoutDeviceResBinding
@@ -142,7 +143,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                             sb_ios.setCheckedImmediatelyNoEvent(continous_mode)
                             mBinding.setVariable(BR.deviceBean,this)
                             mBinding.setVariable(BR.resTittle,getString(R.string.tip_music))
-//                            innerRefresh()
+                            innerRefresh()
                         }
                     }else{
                         LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
@@ -174,10 +175,16 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                         val itemView = LayoutInflater.from(this).inflate(R.layout.layout_device_res,resContainer,false)
                         resContainer.addView(itemView)
                         var itemViewBinding: LayoutDeviceResBinding? = DataBindingUtil.bind(itemView)
+                        itemViewBinding?.busyBtn?.visibility = View.GONE
+                        itemViewBinding?.arrowRight?.visibility = View.VISIBLE
                         itemViewBinding?.resTittle = skill.shopName
                         itemViewBinding?.resTip = if(skill.isBuy) String.format(getString(R.string.tip_music_deadline,formatter.format(Date(skill.expireTime.toLong())))) else getString(R.string.tip_music_disEnabled)
-                        itemView.setOnClickListener {
-                            onAskSkillDetail(skill.skillId)
+                        itemViewBinding?.onclickListener = View.OnClickListener {view->
+//                            if(view.id == R.id.busyBtn){
+//
+//                                return@OnClickListener
+//                            }
+                            onAskSkillDetail(skill)
                         }
                     }
                 }
@@ -192,44 +199,42 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                                 innerRefresh(bindCount+1)
                             }else{
                                 LoadingUtil.dismiss()
-                                AlertDialog.Builder(this)
-                                        .setTitle(R.string.tip)
-                                        .setMessage(R.string.error_inner_skill)
-                                        .setPositiveButton(android.R.string.ok,null)
-                                        .show()
                             }
                         })
                         return@Observer
                     }
                 }
                 LoadingUtil.dismiss()
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.tip)
-                        .setMessage(R.string.error_inner_skill)
-                        .setPositiveButton(android.R.string.ok,null)
-                        .show()
+                LoadingUtil.showToast(SmartApp.app,getString(R.string.error_inner_skill))
             }
         })
     }
 
     /**
      * 获取能力详情
-     * @param skillId
+     * @param skill
      */
-    private fun onAskSkillDetail(skillId: Int) {
-        mViewModel.askDevSkillDetail(skillId).observe(this, Observer {
-            if(it.isSuccess){
-                it.getOrNull()?.let {bean->
-                    SkillDetailsDialog.newsInstance(bean).show(supportFragmentManager,null)
-                }
-            }else{
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.tip)
-                        .setMessage(R.string.retry)
-                        .setPositiveButton(android.R.string.ok,null)
-                        .show()
-            }
+    private fun onAskSkillDetail(skill: SkillBean) {
+        if(skill.hitTextS.isEmpty()){
+            LoadingUtil.showToast(SmartApp.app,"暂无技能对话")
+            return
+        }
+        startActivity(Intent(this,SkillDetailActivity::class.java).apply {
+            putExtra(IFLYOS.EXTRA,skill)
         })
+//        mViewModel.askDevSkillDetail(skillId).observe(this, Observer {
+//            if(it.isSuccess){
+//                it.getOrNull()?.let {bean->
+//                    SkillDetailsDialog.newsInstance(bean).show(supportFragmentManager,null)
+//                }
+//            }else{
+//                AlertDialog.Builder(this)
+//                        .setTitle(R.string.tip)
+//                        .setMessage(R.string.retry)
+//                        .setPositiveButton(android.R.string.ok,null)
+//                        .show()
+//            }
+//        })
     }
 
     /**
