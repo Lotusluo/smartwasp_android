@@ -326,7 +326,6 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                             intent.getStringExtra(IFLYOS.DEVICE_ID)?.let {
                                 LoadingUtil.create(this,null)
                                 mViewModel.unBind(it).observe(this, Observer {result->
-                                    LoadingUtil.dismiss()
                                     when(result){
                                         IFLYOS.OK->{
                                             SmartApp.NEED_MAIN_REFRESH_DEVICES = true
@@ -334,17 +333,21 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
                                             var deviceId = intent.getStringExtra(IFLYOS.DEVICE_ID)
                                             if(!clientId.isNullOrEmpty() && !deviceId.isNullOrEmpty()){
                                                 deviceId = deviceId.substring(deviceId.indexOf(".") + 1)
-                                                LoadingUtil.create(this,null)
-                                                mViewModel.unBind(clientId,deviceId).observe(this, Observer {
-                                                    Logger.d("解绑成功:$deviceId")
+                                                mViewModel.unBind(clientId,deviceId).observe(this, Observer {res->
                                                     LoadingUtil.dismiss()
+                                                    if(res == IFLYOS.OK){
+                                                        Logger.d("解绑成功:$deviceId")
+                                                    }
                                                     finish()
                                                 })
                                             }else{
+                                                LoadingUtil.dismiss()
+                                                LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                                                 finish()
                                             }
                                         }
                                         IFLYOS.ERROR->{
+                                            LoadingUtil.dismiss()
                                             LoadingUtil.showToast(SmartApp.app,getString(R.string.try_again))
                                         }
                                     }

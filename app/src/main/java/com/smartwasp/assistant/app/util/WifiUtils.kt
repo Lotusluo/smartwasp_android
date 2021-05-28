@@ -8,6 +8,7 @@ import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.util.Log
+import com.orhanobut.logger.Logger
 import java.io.BufferedReader
 import java.io.FileReader
 import java.lang.Exception
@@ -72,8 +73,12 @@ object WifiUtils {
             val iterator = wm.configuredNetworks.iterator()
             while (iterator.hasNext()) {
                 val configuration = iterator.next()
-                iterator.remove()
-                wm.removeNetwork(configuration.networkId)
+                val ssid = configuration.SSID
+                if(!ssid.isNullOrEmpty() && ssid.contains("LA_")) {
+                    Logger.d("delete:${configuration.SSID}")
+                    iterator.remove()
+                    wm.removeNetwork(configuration.networkId)
+                }
             }
             return false
         }

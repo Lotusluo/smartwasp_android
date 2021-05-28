@@ -1,6 +1,7 @@
 package com.smartwasp.assistant.app.util
 
 import android.content.pm.PackageManager
+import com.orhanobut.logger.Logger
 import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.base.SmartApp
 import okhttp3.Interceptor
@@ -60,16 +61,15 @@ class RetrofitManager private constructor():Interceptor{
      * @param chain
      * @return 响应
      */
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override fun intercept(chain: Interceptor.Chain): Response? {
         val request = chain.request().newBuilder()
                 .addHeader("access_token",accessToken)
                 .addHeader("Cache-Control","no-cache, max-age=0")
                 .build()
-        try{
-            return chain.proceed(request)
+        return try{
+            chain.proceed(request)
         }catch (e:IOException){
-            throw e
+            null
         }
     }
 }

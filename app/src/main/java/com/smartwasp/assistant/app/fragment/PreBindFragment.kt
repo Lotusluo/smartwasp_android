@@ -3,6 +3,7 @@ package com.smartwasp.assistant.app.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_pre_bind.*
 import kotlinx.android.synthetic.main.fragment_pre_bind.stepBtn
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 /**
  * Created by luotao on 2021/1/28 17:30
@@ -110,8 +112,7 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
 
     //布局文件
     override val layoutResID:Int = R.layout.fragment_pre_bind
-
-
+    private var qrCode:String? = ""
     /**
      * 等待绑定成功回调
      * @param requestCode 请求码
@@ -123,16 +124,37 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
         //请求二维码结果
         if(requestCode == ScanActivity.REQUEST_WEB_CONFIG_CODE && resultCode == Activity.RESULT_OK && null != data){
             startActivityForResult(Intent(requireActivity(), WebViewActivity::class.java).apply {
-                putExtra(IFLYOS.EXTRA_URL,data!!.getStringExtra(IFLYOS.EXTRA))
+                var tempCode = data!!.getStringExtra(IFLYOS.EXTRA)
+                qrCode = tempCode?.replace(Regex("^XHF"),"")
+                Logger.d("qrCode:$qrCode")
+                putExtra(IFLYOS.EXTRA_URL,qrCode)
                 putExtra(IFLYOS.EXTRA_TYPE, IFLYOS.TYPE_BIND)
+                //XHFhttps://auth.iflyos.cn/oauth/device?user_code=366652&sn=4c00141194130861e0e&mac=94B82170E022&ctei=&proId=65&t=1622103784855&clientId=8a43df58-71d2-4e63-a733-6077dc1c3c3f
             }, PrevBindActivity.REQUEST_BIND_RESULT_CODE)
             return
         }
         //请求绑定成功
         if(requestCode == PrevBindActivity.REQUEST_BIND_RESULT_CODE && resultCode == Activity.RESULT_OK){
-            //开始设置绑定的设备
-            SmartApp.NEED_MAIN_REFRESH_DEVICES = true
-            requireActivity().finish()
+            //请求服务器开始绑定,已提交服务器绑定成功为标准
+            val uri = Uri.parse(qrCode)
+            val sn = uri.getQueryParameter("sn")
+            val clientId = uri.getQueryParameter("clientId")
+            if(null != sn && null != clientId){
+                mViewModel!!.bind(clientId,sn).observe(this, Observer {
+                    if(it == IFLYOS.OK){
+                        SmartApp.NEED_MAIN_REFRESH_DEVICES = true
+                        requireActivity().finish()
+                    }else{
+                        //绑定失败
+//                        LoadingUtil.showToast(SmartApp.app,"数据错误,请重试")
+                        requireActivity().finish()
+                    }
+                })
+            }else{
+                //绑定失败
+//                LoadingUtil.showToast(SmartApp.app,"数据错误,请重试")
+                requireActivity().finish()
+            }
             return
         }
     }

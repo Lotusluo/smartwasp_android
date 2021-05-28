@@ -228,6 +228,9 @@ class SmartApp : Application() {
             }
         }
 
+
+        Logger.e(applicationInfo.nativeLibraryDir)
+
         if(!BuildConfig.DEBUG){
 //        闪退捕捉
             CrashCollectHandler.instance.init(applicationContext)

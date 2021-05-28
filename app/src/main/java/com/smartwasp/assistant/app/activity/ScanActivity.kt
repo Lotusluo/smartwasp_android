@@ -123,7 +123,7 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             finish()
         } else {
             AlertDialog.Builder(this)
-                    .setMessage("二维码数据不合法")
+                    .setMessage("请重新扫码")
                     .setPositiveButton(android.R.string.yes, null)
                     .setOnDismissListener {
                         qrView.resumeCameraPreview(this)

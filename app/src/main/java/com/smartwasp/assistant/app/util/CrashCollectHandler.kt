@@ -48,7 +48,7 @@ class CrashCollectHandler : Thread.UncaughtExceptionHandler {
                 Looper.prepare()
                 AlertDialog.Builder(it)
                         .setTitle("提示")
-                        .setMessage("抱歉,程序崩溃了,小黄蜂在线将尽力修复,APP即将重启!")
+                        .setMessage("APP即将重新打开")
                         .setPositiveButton(android.R.string.ok,null)
                         .show()
                 Looper.loop()
