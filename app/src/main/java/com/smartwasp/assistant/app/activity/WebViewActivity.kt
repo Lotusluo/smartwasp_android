@@ -19,6 +19,7 @@ import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.IFlyHomeCallback
 import com.kyleduo.switchbutton.VoicePlayingIcon
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.SmartApp
@@ -159,6 +160,15 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
                      */
                     override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                         val url = request?.url.toString()
+                        //拦截登录页面logo
+                        mType?.let {
+                            if(BuildConfig.FLAVOR == "xiaodan"
+                                    && url.contains("fdfs")
+                                    && url.contains(".jpeg")){
+                                policy = assets.open("xiaodan.png")
+                                return WebResourceResponse("image/png", "UTF-8", policy)
+                            }
+                        }
                         return when {
                             url.contains("iflyhome_app_agreement") -> {
                                 policy = assets.open("smartwasp_app_agreement.html")

@@ -25,6 +25,11 @@ interface RetrofitApiService {
      */
     @POST("api/checkUpdate")
     fun update(): Call<BaseBean<UpdateBean>>
+    /**
+     * 获取版本信息
+     */
+    @GET("https://smartwasp.bj.bcebos.com/xiaodan/xiaodan")
+    fun updateForXiaodan(): Call<BaseBean<UpdateBean>>
 
     /**
      * 注册

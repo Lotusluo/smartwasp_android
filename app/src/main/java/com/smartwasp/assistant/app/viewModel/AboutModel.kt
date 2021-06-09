@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.iflytek.home.sdk.IFlyHome
 import com.iflytek.home.sdk.callback.ResponseCallback
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.base.BaseViewModel
 import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.bean.FindBean
@@ -31,7 +32,11 @@ class AboutModel(application: Application): BaseViewModel(application) {
     fun update():MutableLiveData<Result<BaseBean<UpdateBean>>>{
         val updateData = MutableLiveData<Result<BaseBean<UpdateBean>>>()
         retrofit<BaseBean<UpdateBean>> {
-            api = RetrofitManager.get().retrofitApiService?.update()
+            api = if(BuildConfig.FLAVOR == "xiaodan"){
+                RetrofitManager.get().retrofitApiService?.updateForXiaodan()
+            } else{
+                RetrofitManager.get().retrofitApiService?.update()
+            }
             onSuccess {
                 if(it.errCode == 0){
                     updateData.postValue(Result.success(it))

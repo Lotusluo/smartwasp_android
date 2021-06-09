@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--快速启动-->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#8b0d11</item>
+        <item name="android:windowActionModeOverlay">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+</resources>

@@ -10,6 +10,7 @@ import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import com.orhanobut.logger.Logger
 import com.qiniu.android.utils.Etag
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.BaseActivity
 import com.smartwasp.assistant.app.base.SmartApp
@@ -103,10 +104,14 @@ class DownloadService : IntentService("DownService"){
                             finally {
                                 val apk = File(saveFile.parent, "update.apk")
                                 if(mTotal == mLength && saveFile.renameTo(apk)){
-                                    if(Etag.file(apk).trim() == md5.trim()) {
+                                    if(BuildConfig.FLAVOR == "xiaodan"){
                                         (SmartApp.topActivity as? BaseActivity<*,*>)?.onPreInstall(apk)
-                                    }else
-                                        showErrNotification(1)
+                                    }else{
+                                        if(Etag.file(apk).trim() == md5.trim()) {
+                                            (SmartApp.topActivity as? BaseActivity<*,*>)?.onPreInstall(apk)
+                                        }else
+                                            showErrNotification(1)
+                                    }
                                 }
                                 else showErrNotification(2)
                             }

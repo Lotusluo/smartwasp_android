@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="deviceBean"
+            type="com.smartwasp.assistant.app.bean.DeviceBean" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+
+        <import type="android.view.View" alias="View"/>
+        <import type="com.smartwasp.assistant.app.R" alias="R"/>
+
+    </data>
+
+    <!--设备显示页-->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="#FFF">
+<!--        android6颜色不一致 up-->
+
+        <!--添加主控设备页-->
+        <FrameLayout
+            android:id="@+id/type1Container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:visibility="@{deviceBean.isHeader() ? View.VISIBLE : View.GONE}"
+            android:background="@drawable/shape_add_device">
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/danjian"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/type1Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/add_device"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/smartwasp_dark"/>
+            </LinearLayout>
+
+
+
+        </FrameLayout>
+
+        <!--设备显示页-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/type2Container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{deviceBean.isHeader() ? View.GONE : View.VISIBLE}">
+
+            <!--        设备图片-->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/device_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="26dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--        设备名称-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/device_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="14dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="@{deviceBean.alias}"
+                android:textColor="#000"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/device_image"
+                app:layout_constraintTop_toTopOf="@+id/device_image"/>
+
+            <!--        设备状态-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/device_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@{deviceBean.getStatusWords()}"
+                android:textColor="#000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/icon_device_status"
+                app:layout_constraintTop_toBottomOf="@+id/device_name" />
+
+            <!--            设备状态图标-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/icon_device_status"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/abc_btn_radio_to_on_mtrl_000"
+                android:backgroundTint="@color/device_status_color"
+                app:layout_constraintBottom_toBottomOf="@+id/device_status"
+                app:layout_constraintStart_toStartOf="@+id/device_name"
+                app:layout_constraintTop_toTopOf="@+id/device_status" />
+
+            <!--        竖线-->
+            <View
+                android:id="@+id/vline"
+                style="@style/vertical_line"
+                android:layout_height="14dp"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/device_status"
+                app:layout_constraintLeft_toRightOf="@id/device_status"
+                app:layout_constraintTop_toTopOf="@id/device_status" />
+
+            <!--        设备应用场景-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/device_stage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@{deviceBean.zone}"
+                android:textColor="@color/dark_light"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/vline"
+                app:layout_constraintLeft_toRightOf="@id/vline"
+                app:layout_constraintTop_toTopOf="@id/vline" />
+
+            <com.smartwasp.assistant.app.widget.BiasView
+                android:id="@+id/biasView"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:text="@{deviceBean.music.enable ? R.string.music_enabled : R.string.music_disEnabled}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</layout>

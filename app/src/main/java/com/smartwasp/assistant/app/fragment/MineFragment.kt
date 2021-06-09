@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iflytek.home.sdk.IFlyHome
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.*
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.addFragmentByTagWithStack
 import com.smartwasp.assistant.app.bean.DeviceBean
 import com.smartwasp.assistant.app.bean.BindDevices
 import com.smartwasp.assistant.app.bean.PayType
@@ -26,6 +28,7 @@ import com.smartwasp.assistant.app.databinding.LayoutDeviceItemBinding
 import com.smartwasp.assistant.app.util.ConfigUtils
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.LoadingUtil
+import com.smartwasp.assistant.app.util.NoScreenPerUtil
 import com.smartwasp.assistant.app.viewModel.MineModel
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.listener.OnPageChangeListener
@@ -61,7 +64,7 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      */
     private fun onRenderBindDevices(devices: BindDevices?) {
         deviceBeans =  ArrayList()
-        devices?.user_devices?.let {
+        devices?.getUser_devices()?.let {
             deviceBeans!!.addAll(it)
         }
         deviceBeans!!.add(0,DeviceBean())
@@ -127,8 +130,13 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
      */
     private fun onBindDeviceClick(deviceBean: DeviceBean){
         if(deviceBean.isHeader()){
-            //跳转扫码主控设备
-            startActivity(Intent(requireActivity(),PrevBindActivity::class.java))
+            if(BuildConfig.FLAVOR == "xiaodan"){
+                ApStepActivity.clientID = "65e8d4f8-da9e-4633-8cac-84b0b47496b6"
+                NoScreenPerUtil.perCheck(this)
+            }else{
+                //跳转扫码主控设备
+                startActivity(Intent(requireActivity(),PrevBindActivity::class.java))
+            }
             return
         }
         //进入设备详情页与解绑
@@ -136,6 +144,19 @@ class MineFragment private constructor():MainChildFragment<MineModel,FragmentMin
             putExtra(IFLYOS.GROUP_ID,deviceBean.client_id)
             putExtra(IFLYOS.DEVICE_ID,deviceBean.device_id)
         })
+    }
+
+    /**
+     * 权限回调
+     */
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        when(requestCode){
+            PrevBindActivity.REQUEST_LOCATION_CODE -> {
+                if (perms.size >= 2) {
+                    startActivity(Intent(requireActivity(), ApStepActivity::class.java))
+                }
+            }
+        }
     }
 
     /**

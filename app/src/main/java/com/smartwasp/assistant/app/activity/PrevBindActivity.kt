@@ -55,60 +55,7 @@ class PrevBindActivity : BaseActivity<BaseViewModel, ActivityPrevBindBinding>() 
             }
             R.id.danjian, R.id.xiaodan -> {
                 ApStepActivity.clientID = if (v.id == R.id.danjian) "65e8d4f8-da9e-4633-8cac-84b0b47496b6" else "cddcdf2d-f300-4616-922c-d46a9905c09f"
-                //android6.0/6.0.1在任何情况下android.permission.CHANGE_NETWORK_STATE都是拒绝的
-                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && !Settings.System.canWrite(applicationContext)) {
-                    //打开修改系统设置权限
-                    val goToSettings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-                    goToSettings.data = Uri.parse("package:$packageName")
-                    startActivity(goToSettings)
-                    LoadingUtil.showToast(SmartApp.app, getString(R.string.need_open_setting))
-                    return
-                }
-                //判断Wifi是否打开
-                val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                if(!wifiManager.isWifiEnabled){
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.tip)
-                            .setMessage(R.string.need_open_wifi)
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .setPositiveButton(android.R.string.ok) { _, _ ->
-                                startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-                            }
-                            .show()
-                    return
-                }
-
-                //判断是否打开位置信息
-                //适用于原生权限判断系统,不适用Vivo
-                if (!LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)) {
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.tip)
-                            .setMessage(R.string.need_open_gps)
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .setPositiveButton(android.R.string.ok) { _, _ ->
-                                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }
-                            .show()
-                    return
-                }
-                if(Rom.isVivo() && !NotificationsUtils.isLocationEnabled(this) && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-                    //提示用户去设置页打开定位服务
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.tip)
-                            .setMessage(R.string.need_open_gps_vivo)
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .setPositiveButton(android.R.string.ok) { _, _ ->
-                                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }
-                            .show()
-                    return
-                }
-
-                //申请
-                easyPermissions(getString(R.string.ap_per),
-                        REQUEST_LOCATION_CODE,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.CHANGE_WIFI_STATE)
+                NoScreenPerUtil.perCheck(this)
             }
         }
     }

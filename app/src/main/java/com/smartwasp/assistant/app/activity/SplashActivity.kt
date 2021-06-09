@@ -11,11 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.BuildConfig
 import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.util.RetrofitManager
 import com.smartwasp.assistant.app.util.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_prev_bind.*
+import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -68,15 +70,17 @@ class SplashActivity : AppCompatActivity() {
     private val doWork = {
         //检查更新
         try{
-            val response = RetrofitManager.get().retrofitApiService?.update()?.execute()
+            val response = if(BuildConfig.FLAVOR == "xiaodan"){
+                RetrofitManager.get().retrofitApiService?.updateForXiaodan()?.execute()
+            } else{
+                RetrofitManager.get().retrofitApiService?.update()?.execute()
+            }
             response?.let {
                 if(it.isSuccessful && null != it.body() && it.body()!!.errCode == 0){
                     SmartApp.updateBean = it.body()!!.data
                 }
             }
         }catch (e:Throwable){}
-
-
     }
 
     //进入主界面

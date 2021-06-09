@@ -15,7 +15,9 @@ import com.smartwasp.assistant.app.service.DownloadService
 import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.util.NotificationsUtils
 import com.smartwasp.assistant.app.viewModel.AboutModel
+import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.layout_tabbar.*
+import kotlinx.android.synthetic.main.layout_tabbar.badge
 import kotlinx.android.synthetic.main.layout_toolbar.*
 
 class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
@@ -25,6 +27,9 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTittle(getString(R.string.ic_about))
+        if(BuildConfig.FLAVOR == "xiaodan"){
+            copyRight.text = ""
+        }
         SmartApp.updateBean?.let {
             badge.visibility = if(it.isNewVersion()) View.VISIBLE else View.GONE
         } ?: kotlin.run {
@@ -63,7 +68,7 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
                                         .setNegativeButton(android.R.string.cancel,null)
                                         .setPositiveButton(R.string.update){_,_->
                                             badge.visibility = if(updateBean.isNewVersion()) View.VISIBLE else View.GONE
-//
+
 //                                            val uri = Uri.parse("market://details?id=$packageName")
 //                                            val intent = Intent(Intent.ACTION_VIEW, uri)
 //                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

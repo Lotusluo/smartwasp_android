@@ -113,7 +113,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
         SmartApp.addMediaObserver(mediaStateObserver)
         devicesStateObserver.observe(this, Observer {state->
             //与本地的设备列表比较,更新离在线状态
-            bindDevices?.user_devices?.forEach {
+            bindDevices?.getUser_devices()?.forEach {
                 if(it.device_id == state.data.device_id){
                     if(it.timestamp.toLong() < state.timestamp.toLong()){
                         //通知有设备的状态改变
@@ -293,8 +293,13 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 }
             }
             R.id.device_add,R.id.sheet_device_add->{
-                //跳转扫码主控设备
-                startActivity(Intent(this,PrevBindActivity::class.java))
+                if(BuildConfig.FLAVOR == "xiaodan"){
+                    ApStepActivity.clientID = "65e8d4f8-da9e-4633-8cac-84b0b47496b6"
+                    NoScreenPerUtil.perCheck(this)
+                }else{
+                    //跳转扫码主控设备
+                    startActivity(Intent(this,PrevBindActivity::class.java))
+                }
             }
             R.id.media_icon->{
                 turnToMusic()
@@ -302,6 +307,20 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
             R.id.device_fresh->{
                 //刷新设备列表
                 askBindDevices()
+            }
+        }
+    }
+
+
+    /**
+     * 权限回调
+     */
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        when(requestCode){
+            PrevBindActivity.REQUEST_LOCATION_CODE -> {
+                if (perms.size >= 2) {
+                    startActivity(Intent(this, ApStepActivity::class.java))
+                }
             }
         }
     }
@@ -391,8 +410,8 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
             LoadingUtil.dismiss()
             if(it.isSuccess){
                 bindDevices = it.getOrNull()
-                bindDevices?.user_devices?.let {deviceList->
-                    if(deviceList.size>0){
+                bindDevices?.getUser_devices()?.let {deviceList->
+                    if(deviceList.isNotEmpty()){
                         currentDevice?.let {cur->
                             if(!deviceList.contains(cur)){
                                 //如果不为空并且不在设备列表中默认选择最后一个

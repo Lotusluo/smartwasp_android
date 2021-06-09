@@ -81,11 +81,11 @@ class DeviceChooserDialog private constructor(): BottomSheetDialogFragment() {
                 }
 
                 override fun getItemCount(): Int {
-                    return it.user_devices?.size ?: 0
+                    return it.getUser_devices()?.size ?: 0
                 }
 
                 override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
-                    it.user_devices?.let {lists->
+                    it.getUser_devices()?.let {lists->
                         holder.invalidate(lists[position])
                     }
                 }

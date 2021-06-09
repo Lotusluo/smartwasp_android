@@ -63,6 +63,7 @@ class SmartApp : Application() {
             }
         }
 
+
         //首页是否需要刷新绑定的设备
         var NEED_MAIN_REFRESH_DEVICES:Boolean = true
         //是否需要刷新绑定的设备的详细信息
@@ -234,17 +235,20 @@ class SmartApp : Application() {
         if(!BuildConfig.DEBUG){
 //        闪退捕捉
             CrashCollectHandler.instance.init(applicationContext)
-            CrashReport.initCrashReport(app, "cc12a03d8c", true)
+            CrashReport.initCrashReport(app, if(BuildConfig.FLAVOR == "xiaodan") {"18d4878409"} else {"cc12a03d8c"}, true)
         }
 
-        //极光推送
-        JPushInterface.setDebugMode(BuildConfig.DEBUG)  // 设置开启日志,发布时请关闭日志
-        // 初始化 JPush
-        JPushInterface.init(this)
-        userBean?.let {
-            val filter = it.user_id.filterNot { c-> c == '-' }
-            JPushInterface.setAlias(this, 100, filter)
+        if(BuildConfig.PUSH_SUPPORT){
+            //极光推送
+            JPushInterface.setDebugMode(BuildConfig.DEBUG)  // 设置开启日志,发布时请关闭日志
+            // 初始化 JPush
+            JPushInterface.init(this)
+            userBean?.let {
+                val filter = it.user_id.filterNot { c-> c == '-' }
+                JPushInterface.setAlias(this, 100, filter)
+            }
         }
+
     }
     private fun webViewSetPath(context: Context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
