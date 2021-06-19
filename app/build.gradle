@@ -41,8 +41,8 @@ android {
     productFlavors {
         smartwasp{
             applicationId "com.smartwasp.assistant.app"
-            versionCode 33
-            versionName "1.0.37"
+            versionCode 34
+            versionName "1.0.38"
             buildConfigField "boolean","PUSH_SUPPORT","true"
             manifestPlaceholders = [
                     JPUSH_PKGNAME : applicationId,
@@ -51,8 +51,8 @@ android {
         }
         xiaodan{
             applicationId "com.xiaodan.assistant.app"
-            versionCode 2
-            versionName "1.0.2"
+            versionCode 6
+            versionName "1.0.6"
             manifestPlaceholders = [
                     JPUSH_PKGNAME : applicationId,
             ]
@@ -60,6 +60,14 @@ android {
             dimension "flavor"
         }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
 
     androidExtensions {
         experimental = true
@@ -190,6 +198,7 @@ dependencies {
     //引入数据库
     implementation 'androidx.room:room-runtime:latest.release'
     annotationProcessor 'androidx.room:room-compiler:latest.release'
+
     kapt "android.arch.persistence.room:compiler:latest.release"
 }
 

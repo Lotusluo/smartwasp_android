@@ -30,6 +30,7 @@ import com.smartwasp.assistant.app.viewModel.DeviceSetModel
 import kotlinx.android.synthetic.main.activity_device_set.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -215,7 +216,7 @@ class DeviceSetActivity : BaseActivity<DeviceSetModel,ActivityDeviceSetBinding>(
      * @param skill
      */
     private fun onAskSkillDetail(skill: SkillBean) {
-        if(skill.hitTextS.isEmpty()){
+        if(skill.hitTextS == null || skill.hitTextS.isEmpty()){
             LoadingUtil.showToast(SmartApp.app,"暂无技能对话")
             return
         }

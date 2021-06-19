@@ -24,19 +24,16 @@
             android:text="@string/fresh_device"
             android:textColor="@color/smartwasp_white" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/device_add"
+            android:onClick="@{onclickListener}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/device_add"
-                android:onClick="@{onclickListener}"
-                android:layout_width="320dp"
-                android:layout_height="205dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/icon_empty_device" />
-
-        </androidx.cardview.widget.CardView>
+            android:layout_gravity="center"
+            app:fabCustomSize="80dp"
+            android:scaleType="center"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:backgroundTint="@color/cc"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -46,7 +43,6 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="10dp"
             android:text="@string/fresh_device1"/>
-
 
     </FrameLayout>
 

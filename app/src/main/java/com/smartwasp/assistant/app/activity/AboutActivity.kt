@@ -14,6 +14,7 @@ import com.smartwasp.assistant.app.databinding.ActivityAboutBinding
 import com.smartwasp.assistant.app.service.DownloadService
 import com.smartwasp.assistant.app.util.LoadingUtil
 import com.smartwasp.assistant.app.util.NotificationsUtils
+import com.smartwasp.assistant.app.util.Rom
 import com.smartwasp.assistant.app.viewModel.AboutModel
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.layout_tabbar.*
@@ -75,14 +76,23 @@ class AboutActivity : BaseActivity<AboutModel,ActivityAboutBinding>() {
 //                                            startActivity(intent)
 
                                             //检测权限
-                                            if (!NotificationsUtils.isNotificationEnabled(this@AboutActivity)) {
-                                                NotificationsUtils.toNotificationSetting(this@AboutActivity)
+                                            if (!NotificationsUtils.isNotificationEnabled(this)) {
+                                                if(Rom.isOppo()) {
+                                                    AlertDialog.Builder(this)
+                                                            .setTitle(R.string.tip)
+                                                            .setMessage("尊敬的OPPO用户,请点击应用圆标->通知管理->允许通知")
+                                                            .setPositiveButton(android.R.string.ok){_,_->
+                                                                NotificationsUtils.toNotificationSetting(this)
+                                                            }
+                                                            .show()
+                                                }else{
+                                                    NotificationsUtils.toNotificationSetting(this)
+                                                }
                                             } else {
                                                 easyPermissions(getString(R.string.write_per),
                                                         REQUEST_ACCESS_FILE,
                                                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                             }
-
                                         }
                                         .show()
                                 return@Observer

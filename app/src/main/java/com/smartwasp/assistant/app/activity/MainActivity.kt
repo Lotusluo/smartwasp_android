@@ -1,5 +1,6 @@
 package com.smartwasp.assistant.app.activity
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -446,13 +447,30 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                 }
                 mViewModel.initBinder(this)
             }else{
-                bindDevices?.let {
-                    LoadingUtil.showToast(SmartApp.app,getString(R.string.get_devices_err))
-                }?: kotlin.run {
+                var errMsg = "err"
+                it.exceptionOrNull()?.let { th->
+                    errMsg = it.toString()
+                }
+                if(errMsg.contains("401")){
                     AlertDialog.Builder(this)
-                            .setMessage(R.string.get_devices_err)
-                            .setPositiveButton(android.R.string.ok,null)
+                            .setMessage("需要您重登录,请点击确认进行重登录")
+                            .setPositiveButton(android.R.string.ok){_,_->
+                                ConfigUtils.removeAll()
+                                root.postDelayed({
+                                    SmartApp.restart()
+                                },200)
+                            }
                             .show()
+                    Logger.e("无效用户")
+                }else{
+                    bindDevices?.let {
+                        LoadingUtil.showToast(SmartApp.app,getString(R.string.get_devices_err))
+                    }?: kotlin.run {
+                        AlertDialog.Builder(this)
+                                .setMessage(R.string.get_devices_err)
+                                .setPositiveButton(android.R.string.ok,null)
+                                .show()
+                    }
                 }
             }
             //初始设置后，设置默认点击的tab

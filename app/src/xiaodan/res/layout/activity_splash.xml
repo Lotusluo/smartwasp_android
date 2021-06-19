@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8b0d11"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
@@ -7,5 +14,40 @@
         android:scaleType="centerCrop"
         android:layout_gravity="center"
         android:src="@drawable/splash" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        android:layout_marginTop="20dp"
+        app:cardElevation="10dp"
+        android:layout_gravity="center">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/xiaodanicon" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:text="1921 - 2021"
+        android:textSize="24sp"
+        android:layout_gravity="center_horizontal|bottom"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="26dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:text="热烈庆祝中国共产党成立100周年"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal|bottom"/>
 
 </merge>

@@ -138,7 +138,11 @@ class MainViewModel(application: Application): BaseViewModel(application) {
                         bindDevicesData.postValue(Result.failure(Throwable("Err")))
                     }
                 }else{
-                    bindDevicesData.postValue(Result.failure(Throwable("empty")))
+                    var errMsg = "err"
+                    response.errorBody()?.string().let { err->
+                        errMsg = err.toString()
+                    }
+                    bindDevicesData.postValue(Result.failure(Throwable(errMsg)))
                 }
             }
         })

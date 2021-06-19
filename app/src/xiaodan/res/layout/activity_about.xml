@@ -35,15 +35,14 @@
             android:layout_marginTop="30dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scaleType="fitXY"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/xiaodanicon" />
         </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -53,6 +52,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="#000"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"/>

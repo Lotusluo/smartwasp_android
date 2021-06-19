@@ -172,10 +172,18 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
                         return when {
                             url.contains("iflyhome_app_agreement") -> {
                                 policy = assets.open("smartwasp_app_agreement.html")
+                                val iconMedia = findViewById<VoicePlayingIcon>(R.id.media_icon)
+                                iconMedia?.let { v->
+                                    v.visibility = View.GONE
+                                }
                                 WebResourceResponse("text/html", "UTF-8", policy)
                             }
                             url.contains("iflyhome_app_privacypolicy") -> {
                                 policy = assets.open("smartwasp_app_privacypolicy.html")
+                                val iconMedia = findViewById<VoicePlayingIcon>(R.id.media_icon)
+                                iconMedia?.let { v->
+                                    v.visibility = View.GONE
+                                }
                                 WebResourceResponse("text/html", "UTF-8", policy)
                             }
                             else -> {

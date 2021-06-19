@@ -229,13 +229,16 @@ class SmartApp : Application() {
             }
         }
 
-
         Logger.e(applicationInfo.nativeLibraryDir)
 
         if(!BuildConfig.DEBUG){
 //        闪退捕捉
             CrashCollectHandler.instance.init(applicationContext)
-            CrashReport.initCrashReport(app, if(BuildConfig.FLAVOR == "xiaodan") {"18d4878409"} else {"cc12a03d8c"}, true)
+            if(BuildConfig.FLAVOR == "xiaodan"){
+                CrashReport.initCrashReport(app,"18d4878409",true)
+            }else{
+                CrashReport.initCrashReport(app,"cc12a03d8c",true)
+            }
         }
 
         if(BuildConfig.PUSH_SUPPORT){
