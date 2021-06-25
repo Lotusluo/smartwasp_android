@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_web_view.*
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
+import java.lang.Exception
 
 /**
  * Created by luotao on 2021/1/7 15:00
@@ -171,18 +172,23 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
                         }
                         return when {
                             url.contains("iflyhome_app_agreement") -> {
-                                policy = assets.open("smartwasp_app_agreement.html")
-                                val iconMedia = findViewById<VoicePlayingIcon>(R.id.media_icon)
-                                iconMedia?.let { v->
-                                    v.visibility = View.GONE
+                                try{
+                                    policy = assets.open("smartwasp_app_agreement.html")
+                                    val iconMedia = findViewById<VoicePlayingIcon>(R.id.media_icon)
+                                    iconMedia?.post {
+                                        iconMedia.visibility = View.GONE
+                                    }
+                                    WebResourceResponse("text/html", "UTF-8", policy)
+                                }catch (err:Exception){
+                                    Logger.e(err.toString())
+                                    super.shouldInterceptRequest(view, request)
                                 }
-                                WebResourceResponse("text/html", "UTF-8", policy)
                             }
                             url.contains("iflyhome_app_privacypolicy") -> {
                                 policy = assets.open("smartwasp_app_privacypolicy.html")
                                 val iconMedia = findViewById<VoicePlayingIcon>(R.id.media_icon)
-                                iconMedia?.let { v->
-                                    v.visibility = View.GONE
+                                iconMedia?.post {
+                                    iconMedia.visibility = View.GONE
                                 }
                                 WebResourceResponse("text/html", "UTF-8", policy)
                             }

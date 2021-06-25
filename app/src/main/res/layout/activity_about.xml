@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="tittle" type="String" />
+        <variable name="leftIcon" type="android.graphics.drawable.Drawable" />
+        <variable name="version" type="String" />
+        <variable
+            name="onclickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/smartwasp_white"
+        tools:context=".activity.PrevBindActivity">
+
+<!--        toobar-->
+        <include
+            android:id="@+id/toolbar"
+            app:tittle="@{tittle}"
+            app:leftIcon="@{leftIcon}"
+            app:onclickListener="@{onclickListener}"
+            layout="@layout/layout_toolbar" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtName"
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtVersion"
+            android:text="@{version}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/smartwasp_dark"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtName"/>
+
+<!--        按钮列表-->
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtVersion">
+            <View
+                style="@style/horizontal_line" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/ripple_background_transparent"
+                android:clickable="true">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:onClick="@{onclickListener}"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/checkUpdate"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+                
+                <View
+                    android:id="@+id/badge"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/shape_badge_bg" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btnReport"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:onClick="@{onclickListener}"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/usrReport"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:background="@drawable/ripple_background_transparent"
+                android:clickable="true"/>
+
+            <View
+                style="@style/horizontal_line" />
+
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/copyRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="©2021 小黄蜂人工智能(深圳)有限公司版权所有"
+            android:textColor="#000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
