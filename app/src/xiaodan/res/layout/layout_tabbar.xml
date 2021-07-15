@@ -29,6 +29,15 @@
                 android:onClick="@{onclickListener}"
                 style="@style/TabBarTextStyle"/>
 
+            <!--党建音源-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tab_dan"
+                android:tag="6"
+                android:drawableTop="@drawable/tab_dan_selector"
+                android:text="@string/tab_dan"
+                android:onClick="@{onclickListener}"
+                style="@style/TabBarTextStyle"/>
+
             <!--发现-->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tab_find"
@@ -47,14 +56,14 @@
                 android:onClick="@{onclickListener}"
                 style="@style/TabBarTextStyle"/>
 
-            <!--商城-->
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tab_mall"
-                android:tag="4"
-                android:drawableTop="@drawable/tab_smart_selector"
-                android:text="@string/tab_home"
-                android:onClick="@{onclickListener}"
-                style="@style/TabBarTextStyle"/>
+<!--            &lt;!&ndash;商城&ndash;&gt;-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/tab_mall"-->
+<!--                android:tag="4"-->
+<!--                android:drawableTop="@drawable/tab_smart_selector"-->
+<!--                android:text="@string/tab_home"-->
+<!--                android:onClick="@{onclickListener}"-->
+<!--                style="@style/TabBarTextStyle"/>-->
 
             <!--我的-->
             <androidx.appcompat.widget.AppCompatButton

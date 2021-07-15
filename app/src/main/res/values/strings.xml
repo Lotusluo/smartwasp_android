@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">小黄蜂管家</string>
     <string name="wifi_list">选择网络</string>
     <!-- Strings used for fragments for navigation -->
@@ -31,12 +31,13 @@
 
 
     <string name="try_again">请重试</string>
-    <string name="try_again1">请开通音乐权限或发生未知错误</string>
+    <string name="try_again1">请开通音乐权限或重试</string>
     <string name="offline">设备处于离线状态</string>
 
     <string name="bind1tip">有屏音箱扫码授权</string>
 
     <string name="tab_dialog">对话</string>
+    <string name="tab_dan">党建</string>
     <string name="tab_find">发现</string>
     <string name="tab_skill">技能</string>
     <string name="tab_home">家居</string>
@@ -104,7 +105,7 @@
     <string name="test_crash">内测中,容易出现问题,很抱歉，软件需要重启。</string>
     <string name="play_all">播放全部</string>
     <string name="no_more">------已经到底了------</string>
-    <string name="err_">加载失败,请退出重试</string>
+    <string name="err_">请退出重试</string>
     <string name="plz_add">请先添加设备</string>
     <string name="plz_wait">请稍后</string>
     <string name="login_err">登录失败,请重试</string>
@@ -166,5 +167,12 @@
     <string name="ap_device_err">请选择正确的产品</string>
     <string name="ap_device_err1">请联系厂商添加设备白名单</string>
     <string name="ap_device_err2">授权超时,请保证网络正常或联系客服</string>
+
+    <string name="screen_zoom_summary_custom">"自定义 (<xliff:g id="DENSITYDPI">%d</xliff:g>)"</string>
+    <string name="screen_zoom_summary_default">"默认"</string>
+    <string name="screen_zoom_summary_small">"小"</string>
+    <string name="screen_zoom_summary_large">"大"</string>
+    <string name="screen_zoom_summary_very_large">"较大"</string>
+    <string name="screen_zoom_summary_extremely_large">"最大"</string>
 
 </resources>

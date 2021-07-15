@@ -18,16 +18,21 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:background="@drawable/ripple_background">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="10dp"
+            android:src="@mipmap/ic_launcher"/>
 <!--        歌曲名称-->
 <!--        显示int position-->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:text="@{bean2Pos}"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:textColor="@color/smartwasp_dark"
-            android:layout_marginStart="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:text="@{bean2Pos}"-->
+<!--            android:textSize="16sp"-->
+<!--            android:gravity="center"-->
+<!--            android:textColor="@color/smartwasp_dark"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"/>-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -38,7 +43,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_name"
                 android:text="@{bean2.name}"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textColor="@color/song_text_color"
                 android:maxLines="2"
                 android:ellipsize="end"
@@ -47,7 +52,7 @@
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatTextView
                 android:text="@{bean2.artist}"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:layout_marginTop="6dp"
                 android:textColor="@color/smartwasp_dark"
                 android:layout_width="match_parent"

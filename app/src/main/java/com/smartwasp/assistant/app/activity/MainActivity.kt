@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.SystemClock
+import android.view.Display
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -78,6 +79,16 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
                         .setPositiveButton(R.string.yesOk,null)
                         .show()
             }
+        }
+
+        val density = DisplayDensityUtils(this)
+        val values = density.getValues()
+        val targetIndex = values.size - 3
+        if (targetIndex != density.getCurrentIndex()) {
+            DisplayDensityUtils.setForcedDisplayDensity(
+                    Display.DEFAULT_DISPLAY,
+                    values[targetIndex]
+            )
         }
     }
 
@@ -236,6 +247,14 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
     private fun onAttachTabClick(tabID:Int,tabResID:Int) {
         if(currentTabID == tabID)
             return
+        if(tabID == 6){
+            SmartApp.activity?.currentDevice?.let {
+                startActivity(Intent(this,SearchDanActivity::class.java))
+            }?: kotlin.run {
+                LoadingUtil.showToast(SmartApp.app,getString(R.string.empty_devices))
+            }
+            return
+        }
         val index = tabID - 1
         val tabFragment:MainChildFragment<*,*>? =
                 fragments[index] ?: kotlin.run {
@@ -274,7 +293,7 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
      */
     override fun onButtonClick(v: View) {
         val tagInt:Int? = v.tag?.toString()?.toInt()
-        if(tagInt in 1..5){
+        if(tagInt in 1..6){
             onAttachTabClick(tagInt!!,v.id)
             return
         }

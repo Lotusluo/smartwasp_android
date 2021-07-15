@@ -18,6 +18,7 @@ abstract class SmartDataBase:RoomDatabase(){
                 synchronized(SmartDataBase::class){
                     instance = Room.databaseBuilder(context, SmartDataBase::class.java, DB_NAME)
                             .fallbackToDestructiveMigration()
+                            .addMigrations()
                             .build()
                 }
             }
