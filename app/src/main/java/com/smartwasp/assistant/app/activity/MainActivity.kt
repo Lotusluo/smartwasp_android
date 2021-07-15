@@ -1,16 +1,12 @@
 package com.smartwasp.assistant.app.activity
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.os.SystemClock
-import android.view.Display
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import cn.jpush.android.api.JPushInterface
@@ -81,15 +77,15 @@ class MainActivity : BaseActivity<MainViewModel , ActivityMainBinding>() {
             }
         }
 
-        val density = DisplayDensityUtils(this)
-        val values = density.getValues()
-        val targetIndex = values.size - 3
-        if (targetIndex != density.getCurrentIndex()) {
-            DisplayDensityUtils.setForcedDisplayDensity(
-                    Display.DEFAULT_DISPLAY,
-                    values[targetIndex]
-            )
-        }
+//        val density = DisplayDensityUtils(this)
+//        val values = density.getValues()
+//        val targetIndex = values.size - 3
+//        if (targetIndex != density.getCurrentIndex()) {
+//            DisplayDensityUtils.setForcedDisplayDensity(
+//                    Display.DEFAULT_DISPLAY,
+//                    values[targetIndex]
+//            )
+//        }
     }
 
     /**

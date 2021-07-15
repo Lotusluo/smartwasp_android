@@ -26,6 +26,7 @@ import com.smartwasp.assistant.app.base.SmartApp
 import com.smartwasp.assistant.app.bean.MusicStateBean
 import com.smartwasp.assistant.app.bean.StatusBean
 import com.smartwasp.assistant.app.databinding.ActivityWebViewBinding
+import com.smartwasp.assistant.app.fragment.SensitiveTipDialog
 import com.smartwasp.assistant.app.util.IFLYOS
 import com.smartwasp.assistant.app.util.NotificationsUtils
 import com.smartwasp.assistant.app.util.Rom
@@ -216,6 +217,8 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
         //设置toolbar可见与否
         toolbar.visibility = when(mType){
             IFLYOS.TYPE_LOGIN->{
+                //如果是登录页面，弹出敏感信息搜集提示框
+                SensitiveTipDialog.newsInstance().show(supportFragmentManager, SensitiveTipDialog.TAG)
                 View.GONE
             }
             else->{
@@ -236,6 +239,8 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
             //类型
             val type:String? = intent.getStringExtra(IFLYOS.EXTRA_TYPE)
 
+
+
             //准备跳转到URL地址
             if(!mayBeUrl.isNullOrEmpty()){
                 readyToUrl(mayBeUrl,type!!)
@@ -247,6 +252,8 @@ class WebViewActivity : BaseActivity<WebViewViewModel, ActivityWebViewBinding>()
                 readyToDefault(mayBePage,type!!,webViewTag!!,mayBeDeviceID)
                 return
             }
+
+
         }
     }
 

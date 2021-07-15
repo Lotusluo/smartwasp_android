@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_mask_bg_radius10_dark">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/titleTxt"
+        android:text="@string/sensitiveTip"
+        android:layout_width="301dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="@color/smartwasp_orange" />
+
+    <View
+        android:id="@+id/view"
+        style="@style/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sensitiveTip1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_light"
+        android:text="@string/sensitiveTip1"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:padding="10dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sensitiveTip2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_light"
+        android:text="@string/sensitiveTip2"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:padding="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/noBtn"
+            android:text="不同意"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_width="150dp"
+            android:textColor="@color/dark_"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:background="@drawable/ripple_background_transparent"/>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="match_parent"
+            style="@style/vertical_line"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/yesBtn"
+            android:text="同意并继续"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_width="150dp"
+            android:onClick="onClick"
+            android:textColor="@color/smartwasp_orange"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:background="@drawable/ripple_background_transparent"/>
+    </LinearLayout>
+
+</LinearLayout>

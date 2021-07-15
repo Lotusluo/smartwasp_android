@@ -57,6 +57,11 @@
         <item name="android:backgroundDimAmount">.4</item>
     </style>
 
+    <!-- 敏感信息收集弹出框样式 -->
+    <style name="CommonWindowStyle.SensitiveDialog">
+        <item name="android:backgroundDimAmount">.5</item>
+    </style>
+
 <!--    tabbar字体样式-->
     <style name="TabBarTextStyle">
         <item name="android:layout_width">0dp</item>

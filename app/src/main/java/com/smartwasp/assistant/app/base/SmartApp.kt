@@ -50,6 +50,7 @@ class SmartApp : Application() {
             return null != userBean
         }
 
+        //先清空activity再执行该方法
         fun finish(cmd: Int = 0){
             Process.killProcess(Process.myPid())
             exitProcess(cmd)

@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_dialog.*
  * Created by luotao on 2021/1/15 13:39
  * E-Mail Address：gtkrockets@163.com
  */
-class DialogFragment private constructor():WebViewMajorFragment<BaseViewModel,FragmentDialogBinding>() {
+open class DialogFragment private constructor():WebViewMajorFragment<BaseViewModel,FragmentDialogBinding>() {
 
     companion object{
         fun newsInstance():DialogFragment{
