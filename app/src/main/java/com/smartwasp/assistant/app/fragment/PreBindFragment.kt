@@ -197,7 +197,6 @@ class PreBindFragment private constructor():BaseFragment<PreBindModel,FragmentPr
      * 获取授权码
      */
     private fun getAuthCode(){
-        Logger.e("clientID:${ApStepActivity.clientID}")
         LoadingUtil.create(requireActivity())
         mViewModel!!.getAuthCode(ApStepActivity.clientID).observe(this, Observer {result->
             LoadingUtil.dismiss()

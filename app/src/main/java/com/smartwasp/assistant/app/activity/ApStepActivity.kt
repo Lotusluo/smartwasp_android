@@ -1,5 +1,6 @@
 package com.smartwasp.assistant.app.activity
 
+import android.net.Network
 import android.os.Bundle
 import android.view.View
 import com.smartwasp.assistant.app.R
@@ -26,6 +27,7 @@ class ApStepActivity : BaseActivity<BaseViewModel,ActivityApStepBinding>() {
         var CUR_WIFI_SSID:String? = null
         var CUR_WIFI_BSSID:String? = null
         var CUR_WIFI_PWD:String? = null
+        var CUR_AP_NETWORK:Network? = null
         //授权码
         var authBean: AuthBean? = null
         lateinit var clientID:String

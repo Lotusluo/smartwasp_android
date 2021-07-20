@@ -19,6 +19,7 @@ import com.smartwasp.assistant.app.R
 import com.smartwasp.assistant.app.activity.ApStepActivity
 import com.smartwasp.assistant.app.base.BaseFragment
 import com.smartwasp.assistant.app.base.SmartApp
+import com.smartwasp.assistant.app.base.removeFragment
 import com.smartwasp.assistant.app.bean.ApBean
 import com.smartwasp.assistant.app.databinding.FragmentAp4Binding
 import com.smartwasp.assistant.app.fragment.PreBindFragment
@@ -92,7 +93,9 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
             t ?: return
             Logger.e("onClosed:${t},$sendTag")
 //            //已经发送密码则忽略所有错误
-            if(sendTag.get() >= 1) return
+            if(sendTag.get() >= 1) {
+                return
+            }
             handleRetry()
         }
 
@@ -182,6 +185,10 @@ class ApStepFragment4 private constructor():BaseFragment<ApBindModel,FragmentAp4
                 mViewModel?.askDevAuth(authCode!!)
                 GlobalScope.launch(Dispatchers.IO) {
                     SystemClock.sleep(4000)
+                    var fragment = requireActivity()?.supportFragmentManager.findFragmentByTag(ApStepFragment3::class.java.simpleName) as ApStepFragment3?
+                    fragment?.let {
+                        requireActivity()?.removeFragment(it)
+                    }
                     if(!isAdded)
                         return@launch
                     if(progress.progress >= 100)

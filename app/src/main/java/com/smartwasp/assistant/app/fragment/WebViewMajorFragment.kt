@@ -62,7 +62,7 @@ abstract class WebViewMajorFragment<
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                            onReceivedError:net::ERR_NAME_NOT_RESOLVED
                             errorCode = error?.errorCode ?: 0
-                            Logger.e("errorCode:$errorCode")
+//                            Logger.e("errorCode:$errorCode")
                         }
                     }
                 }

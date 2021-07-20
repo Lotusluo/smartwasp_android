@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -89,6 +90,21 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
                     //有wifi连接成功
                     //清除其它多余连接
                     linked(it.getOrThrow())
+                }else{
+                    if(isAdded) {
+                        val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                        wifiManager?.let {w->
+                            linked(w.connectionInfo.bssid)
+                            if (!stepBtn.isEnabled) {
+                                AlertDialog.Builder(requireContext())
+                                        .setTitle(R.string.tip)
+                                        .setMessage(R.string.long_wifi_err)
+                                        .setCancelable(false)
+                                        .setPositiveButton(android.R.string.ok, null)
+                                        .show()
+                            }
+                        }
+                    }
                 }
             })
         }
@@ -110,10 +126,14 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             wifiBeans.forEach {
                 it.linkType = if(it.bssid == linkingMac.bssid) WifiBean.STATE_LINKING else WifiBean.STATE_IDLE
             }
-            recyclerView.adapter?.notifyDataSetChanged()
-            AppExecutors.get().mainThread().removeCallbacks(delayToCheck)
-            AppExecutors.get().mainThread().executeDelay(delayToCheck,11 * 1000)
-            Logger.d("准备联网超时检测")
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+                recyclerView.adapter?.notifyDataSetChanged()
+                AppExecutors.get().mainThread().removeCallbacks(delayToCheck)
+                AppExecutors.get().mainThread().executeDelay(delayToCheck,11 * 1000)
+                Logger.d("准备联网超时检测")
+            }else{
+                //等待连接失败回调
+            }
         }
     }
 
@@ -233,6 +253,8 @@ class ApStepFragment3 private constructor():BaseFragment<WifiGetModel,FragmentAp
             }
         }
     }
+
+
 
     /**
      * group 中itemholder

@@ -3,11 +3,16 @@ package com.smartwasp.assistant.app.service
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.net.wifi.WifiNetworkSuggestion
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
+import com.orhanobut.logger.Logger
+import com.smartwasp.assistant.app.activity.ApStepActivity
 import com.smartwasp.assistant.app.util.AppExecutors
 import java.io.*
 import java.net.InetAddress
@@ -65,8 +70,17 @@ class ApConfigNetService : Service() {
             var socket: Socket? = null
             try {
                 socket = Socket()
-
+                ApStepActivity.CUR_AP_NETWORK?.let {
+                    it.bindSocket(socket)
+                    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        connectivityManager.bindProcessToNetwork(it)
+                    } else {
+                        ConnectivityManager.setProcessDefaultNetwork(it)
+                    }
+                }
                 socket.connect(InetSocketAddress(InetAddress.getByName(gateway), 8080))
+
 
                 if (socket.isConnected) {
                     onOpen(socket)
@@ -157,6 +171,22 @@ class ApConfigNetService : Service() {
         }catch (e:Throwable){}
         if (this.socket == socket) {
             this.socket = null
+        }
+        ApStepActivity.CUR_AP_NETWORK = null
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            connectivityManager.bindProcessToNetwork(null)
+        } else {
+            ConnectivityManager.setProcessDefaultNetwork(null)
+        }
+        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            val suggestionOpen = WifiNetworkSuggestion.Builder().run {
+                setSsid(ApStepActivity.CUR_WIFI_SSID!!)
+                build()
+            }
+            val networkSuggestions = listOf(suggestionOpen)
+            wifiManager.removeNetworkSuggestions(networkSuggestions)
         }
 
         AppExecutors.get().mainThread().execute {

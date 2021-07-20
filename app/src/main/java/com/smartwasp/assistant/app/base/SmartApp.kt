@@ -252,7 +252,6 @@ class SmartApp : Application() {
                 JPushInterface.setAlias(this, 100, filter)
             }
         }
-
     }
     private fun webViewSetPath(context: Context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

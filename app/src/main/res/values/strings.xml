@@ -8,7 +8,7 @@
     <string name="previous">Previous</string>
 
     <string name="sensitiveTip">用户使用须知</string>
-    <string name="sensitiveTip1">(1)我们需要获取您手机的设备信息以实现账号体系相关的功能。</string>
+    <string name="sensitiveTip1">(1)我们需要获取您手机的设备信息及个人信息以实现账号体系相关的功能。</string>
     <string name="sensitiveTip2">(2)我们仅与我们的一个合作伙伴SDK进行了数据分享并严格对您的数据进行保密。</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
@@ -20,6 +20,7 @@
     <string name="need_open_wifi">你未打开WIFI功能,请打开</string>
     <string name="need_open_gps_vivo">亲爱的vivo用户,我们需要您前往设置页面暂时打开定位服务以获取附近网络。</string>
     <string name="long_wifi_no">连接热点过久,请检查通知栏是否存在"此网络无法访问互联网"并点击授权允许连接，或退出重试。</string>
+    <string name="long_wifi_err">连接热点失败,请重试。</string>
     <string name="error_empty_data">数据为空</string>
     <string name="error_empty_clientid">clientId为空</string>
     <string name="error_empty_request">空请求</string>

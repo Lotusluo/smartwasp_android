@@ -9,8 +9,6 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.util.Log
 import com.orhanobut.logger.Logger
-import java.io.BufferedReader
-import java.io.FileReader
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.Inet4Address
@@ -222,32 +220,21 @@ object WifiUtils {
     }
 
     fun getConnectedSsid(context: Context?): String? {
-        (context?.applicationContext?.getSystemService(Context.WIFI_SERVICE)
-            as? WifiManager)?.let {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                val configuredNetworks = it.configuredNetworks
-                if (configuredNetworks?.isNotEmpty() == true)
-                    for (config in configuredNetworks) {
-                        val ssid = config.SSID.substring(1, config.SSID.length - 1)
-
-                        if (config.status == WifiConfiguration.Status.CURRENT) {
-                            println("ssid: $ssid")
-                            return ssid
-                        }
-                    }
-            } else {
-                val connManager = context.applicationContext
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                if (networkInfo!!.isConnected) {
-                    val wifiInfo = it.connectionInfo
-                    val ssid = wifiInfo.ssid
-                    println("ssid: $ssid")
-                    return ssid.substring(1, ssid.length - 1)
-                }
+        var ssid = "unknown"
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O || Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            val wifiManager = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            assert(wifiManager != null)
+            val wifiInfo = wifiManager.connectionInfo
+            ssid = if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) wifiInfo.ssid else wifiInfo.ssid.replace("\"", "")
+        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1){
+            val connManager = context?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            assert(connManager != null)
+            val networkInfo = connManager.activeNetworkInfo
+            if(networkInfo?.isConnected == true && null != networkInfo.extraInfo){
+                ssid = networkInfo.extraInfo.replace("\"","")
             }
         }
-        return null
+        return ssid
     }
 
 
@@ -257,23 +244,24 @@ object WifiUtils {
      */
     @SuppressLint("MissingPermission")
     fun getConnectedBssid(context: Context?): String? {
-        (context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                val configuredNetworks = it.configuredNetworks
-                if (configuredNetworks?.isNotEmpty() == true)
-                    for (config in configuredNetworks) {
-                        val bssid = config.BSSID
-                        if (config.status == WifiConfiguration.Status.CURRENT) {
-                            return bssid
-                        }
+        val wifiManager = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            return wifiManager.connectionInfo.bssid
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            val configuredNetworks = wifiManager.configuredNetworks
+            if (configuredNetworks?.isNotEmpty() == true)
+                for (config in configuredNetworks) {
+                    val bssid = config.BSSID
+                    if (config.status == WifiConfiguration.Status.CURRENT) {
+                        return bssid
                     }
-            } else {
-                val connManager = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                if (networkInfo!!.isConnected) {
-                    val wifiInfo = it.connectionInfo
-                    return wifiInfo.bssid
                 }
+        } else {
+            val connManager = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            if (networkInfo!!.isConnected) {
+                val wifiInfo = wifiManager.connectionInfo
+                return wifiInfo.bssid
             }
         }
         return null

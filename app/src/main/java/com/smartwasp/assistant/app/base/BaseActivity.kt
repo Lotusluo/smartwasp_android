@@ -368,6 +368,13 @@ fun FragmentActivity.addFragmentByTagWithStack(frameId: Int,fragment:Fragment){
     }
 }
 
+fun FragmentActivity.removeFragment(tag:String){
+    val fragment = supportFragmentManager.findFragmentByTag(tag)
+    fragment?.let {
+        removeFragment(it)
+    }
+}
+
 fun FragmentActivity.removeFragment(fragment: Fragment) {
     val tag = fragment::class.java.simpleName
     if(null == supportFragmentManager.findFragmentByTag(tag))

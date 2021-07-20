@@ -47,7 +47,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:gravity="center"
         android:layout_height="50dp"
         android:layout_marginTop="10dp">
         <androidx.appcompat.widget.AppCompatTextView
@@ -59,18 +58,16 @@
             android:textColor="@color/dark_"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:visibility="gone"
             android:onClick="onClick"
             android:background="@drawable/ripple_background_transparent"/>
         <View
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_height="match_parent"
-            android:visibility="gone"
             style="@style/vertical_line"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/yesBtn"
-            android:text="已了解"
+            android:text="同意并继续"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_width="150dp"

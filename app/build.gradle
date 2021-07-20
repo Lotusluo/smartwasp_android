@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 29
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'armeabi-v7a'
@@ -36,13 +36,13 @@ android {
         ]
     }
 
-    flavorDimensions "flavor"
+    flavorDimensions "flavor","vendor"
 
     productFlavors {
         smartwasp{
             applicationId "com.smartwasp.assistant.app"
-            versionCode 35
-            versionName "1.0.40"
+            versionCode 37
+            versionName "1.0.41"
             buildConfigField "boolean","PUSH_SUPPORT","true"
             manifestPlaceholders = [
                     JPUSH_PKGNAME : applicationId,
@@ -58,6 +58,12 @@ android {
             ]
             buildConfigField "boolean","PUSH_SUPPORT","false"
             dimension "flavor"
+        }
+        xiaomi{
+            dimension "vendor"
+        }
+        otherVendor{
+            dimension "vendor"
         }
     }
 
